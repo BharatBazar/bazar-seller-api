@@ -13,7 +13,7 @@ import rateLimit from 'express-rate-limit';
 import bodyParser from 'body-parser';
 /* Add more usefull middleware if needed */
 
-import { requestLogger } from './requestLogger';
+import { requestLogger } from '../lib/utils/requestLogger';
 
 import { configCors, rateLimitConfig } from '../config';
 
@@ -62,7 +62,7 @@ export const requestLimiter = (router: Router) => {
     // Enable if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
     // see https://expressjs.com/en/guide/behind-proxies.html
     // app.set('trust proxy', 1);s
-    const limiter: rateLimit.RateLimit = new rateLimit({
+    const limiter: rateLimit.RateLimit = rateLimit({
         windowMs: +rateLimitConfig.inTime, // 1 minutes
         max: +rateLimitConfig.maxRequest, // limit each IP to 12 requests per windowMs,
         message: {
@@ -75,3 +75,14 @@ export const requestLimiter = (router: Router) => {
     });
     router.use(limiter);
 };
+
+const middleware = [
+    useHelmet,
+    handleCompression,
+    requestLimiter,
+    reqConsoleLogger,
+    handleBodyRequestParsing,
+    allowCors,
+];
+
+export default middleware;

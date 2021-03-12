@@ -1,5 +1,7 @@
-import express from 'express';
+import { config } from 'dotenv';
 
-const app: express.Application = express();
+// Initializing the dot env file very early of this project to use every where
+config();
 
-app.listen('3000');
+// calling app to create server :: Our logics will belong to this app.
+import './app';
