@@ -1,5 +1,6 @@
 import express from 'express';
 import { log } from 'util';
+import dbConnection from './lib/helpers/dbConnection';
 
 /* Error Handlers */
 // These error handlers will caught any unhandled exceptions or rejections
@@ -25,6 +26,9 @@ import errorMiddleware from './middleware/error.middleware';
 
 applyMiddleware(middleware, app);
 
+//Opened mongoose connection
+dbConnection.mongoConnection();
+
 /*---------------------------------------
 | API VERSIONS CONFIGURATION [START]
 |---------------------------------------*/
@@ -35,9 +39,9 @@ applyMiddleware(middleware, app);
 | API VERSIONS CONFIGURATION [END]
 |---------------------------------------*/
 
-//Error middleware
-
+//Initializing error middleware
 applyMiddleware(errorMiddleware, app);
+
 const PORT: number = process.env.PORT ? +process.env.PORT : 3000;
 
 app.listen(PORT, () => {
