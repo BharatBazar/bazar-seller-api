@@ -13,9 +13,9 @@ import rateLimit from 'express-rate-limit';
 import bodyParser from 'body-parser';
 /* Add more usefull middleware if needed */
 
-import { requestLogger } from '../lib/utils/requestLogger';
+import { requestLogger } from '../utils/requestLogger';
 
-import { configCors, rateLimitConfig } from '../config';
+import { configCors, rateLimitConfig } from '../../config';
 
 export const useHelmet = (router: Router) => {
     router.use(helmet());

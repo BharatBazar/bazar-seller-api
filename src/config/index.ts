@@ -28,3 +28,8 @@ export const mongoUrl = (): string => {
 export enum pagignationConfig {
     MAX_SHOPKEEPER = 30,
 }
+
+export const commonConfig = {
+    jwtSecretKey: process.env.SECRET_KEY || 'some-secret-key',
+    pageSizeLimit: 15,
+};
