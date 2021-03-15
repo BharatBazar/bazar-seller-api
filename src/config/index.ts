@@ -24,3 +24,7 @@ export const mongoUrl = (): string => {
     }
     return `mongodb+srv://${configs.user}:${configs.pass}@${configs.cluster}.mongodb.net/${configs.db}?retryWrites=true`;
 };
+
+export enum pagignationConfig {
+    MAX_SHOPKEEPER = 30,
+}
