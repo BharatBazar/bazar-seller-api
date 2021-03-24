@@ -1,5 +1,5 @@
 import { Schema, Model, model } from 'mongoose';
-import { IShopModel } from './shopinterface';
+import { IShopModel } from './shop.interface';
 
 const{ ObjectId } = Schema.Types;
 export const ShopSchema: Schema = new Schema({

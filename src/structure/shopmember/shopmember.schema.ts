@@ -1,6 +1,7 @@
 import { IShopMemberModel } from './shopmember.interface';
 import { Schema, model, Model } from 'mongoose';
-import { ObjectId } from '../../datatypes';
+
+const { ObjectId } = Schema.Types;
 
 const ShopMemberSchema: Schema = new Schema({
     name: String,

@@ -1,5 +1,7 @@
 import {  Document, ObjectId, Schema } from "mongoose";
 export enum shopMemberRole {coOwner='coOwner',owner='owner',worker='worker'};
+
+
 interface shopMemberInterface {
     name:string;
     photo: [{_id:ObjectId}];

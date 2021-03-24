@@ -3,7 +3,8 @@ import jwt from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
 import { model } from 'mongoose';
 import { commonConfig } from '../../config';
-import { ShopKeeperModel } from '../../structure/shop/shopinterface';
+import { IShopModel } from '../../structure/shop/shop.interface';
+
 
 interface IUserToken {
     user?: object;
@@ -19,7 +20,7 @@ export const Authorization = async (req: Request, res: Response, next: NextFunct
     try {
         if (req.header('Authorization')) {
             const token: string = req.header('Authorization') || '';
-            const data: ShopKeeperModel = (await handleToken(token)) || '';
+            const data: IShopModel = (await handleToken(token)) || '';
             if (data) {
                 // req.userId = data._id;
                 // req.role = data.role;
@@ -69,7 +70,7 @@ const handleToken = async (token: string) => {
         const userData: IUserToken = ((await jwt.verify(token, commonConfig.jwtSecretKey)) as object) || { user: {} };
 
         const userDetails: IUserTokenDetails = userData.user as object;
-        const data: ShopKeeperModel | null = await model<ShopKeeperModel>('User').findOne({
+        const data: IShopModel | null = await model<IShopModel>('User').findOne({
             _id: userDetails._id,
             tokens: { $in: [token] },
         });
