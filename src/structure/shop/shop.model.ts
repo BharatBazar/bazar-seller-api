@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+import { Schema, Types } from 'mongoose';
 import { ShopMember } from '../shopmember/shopmember.schema';
 import { Shop } from './shop.schema';
 import { IShopModel } from './shop.interface';
@@ -12,29 +12,23 @@ export class ShopModel {
 
     createShop = async (body: IShopModel) => {
         
-        const createShopMember = (member:any,index:number,field:string) =>{
-            const id: IShopMemberModel = new ShopMember(member);
-            id.save()
-            body[field][index] = {_id:id._id};
-        }
-        
-        if(body.owner.length>0) {
-           createShopMember(body.owner[0],0, 'owner')
-        }
+        const shopId = Types.ObjectId();
 
-        if(body.coOwner.length>0) {
-            body.coOwner.map((coOwner,index) => {
-                createShopMember(coOwner,index,'coOwner')
-            })
-        } 
-
-        if(body.worker.length>0) {
-            body.worker.map((worker,index) => {
-               createShopMember(worker,index,'worker')
+        const createShopMember = (field: (keyof IShopModel)) =>{
+            if(typeof body == 'object' && field in body) {
+            body[field].map((fieldDetail:IShopMemberModel,index:number) => {
+                const shopMember: IShopMemberModel = new ShopMember({...fieldDetail,shopId:shopId});
+                shopMember.save()
+                body[field][index] = {_id:shopMember._id};
             })
         }
+        }
 
-        const shop: IShopModel = new Shop(body);
+        createShopMember("owner");
+        createShopMember("coOwner");
+        createShopMember("worker")
+
+        const shop: IShopModel = new Shop({...body,_id:shopId});
         const data:IShopModel = await shop.addNewShop();
         return data;
     }
