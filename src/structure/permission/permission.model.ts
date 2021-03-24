@@ -1,5 +1,5 @@
 import { IPermissionModel, permissionSchemaInterface } from './permission.interface';
-import Permissions from './permission.schema';
+import {Permissions } from './permission.schema';
 import { shopMemberRole } from "../shopmember/shopmember.interface";
 
 export class PermissionModel {

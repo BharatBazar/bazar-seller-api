@@ -2,8 +2,15 @@ import ShopKeeperController from './shop.controller';
 
 export default [
     {
-        path: '/shopkeeper/create',
+        path: '/shop/create',
         method: 'post',
+        escapeAuth:true,
         handler: [ShopKeeperController.create],
+    },
+      {
+        path: '/shop/get',
+        method: 'get',
+        escapeAuth:true,
+        handler: [ShopKeeperController.getShop],
     },
 ];

@@ -1,20 +1,19 @@
-import { IPermissionModel, permissionSchemaInterface } from './permission.interface';
+import { IPermissionModel } from './permission.interface';
 import { Schema, model, Model } from 'mongoose';
 
-const permission = {type: Boolean, default:false};
 const PermissionSchema:Schema = new Schema({
-    createProduct: permission,
-    editProduct: permission,
-    rollOutProduct: permission,
-    talkToCustomer: permission,
-    bookingNotifiation: permission,
-    createBill: permission
+    createProduct: {type: Boolean, default:false},
+    editProduct: {type: Boolean, default:false},
+    rollOutProduct: {type: Boolean, default:false},
+    talkToCustomer: {type: Boolean, default:false},
+    bookingNotifiation: {type: Boolean, default:false},
+    createBill: {type: Boolean, default:false}
+},{
+    timestamps:true
 });
 
 PermissionSchema.methods.addPermission = async function () {
     return this.save();
 }
 
-const Permissions: Model<IPermissionModel> = model<IPermissionModel>('permissions',PermissionSchema);
-
-export default Permissions;
+export const Permissions: Model<IPermissionModel> = model<IPermissionModel>('permission',PermissionSchema);

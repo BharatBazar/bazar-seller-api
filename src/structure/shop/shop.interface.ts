@@ -26,5 +26,5 @@ export const ShopFields = {
 };
 
 export interface IShopModel extends Shop, Document {
-    addNewShop(): { _id: ObjectId };
+    addNewShop(): IShopModel;
 }

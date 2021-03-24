@@ -1,3 +1,4 @@
+
 import ShopModel from './shop.model';
 import { user } from '../../lib/helpers/customMessage';
 import { NextFunction, Request, Response } from 'express';
@@ -15,6 +16,16 @@ class ShopKeeperController {
             next(responseHandler.sendError(error));
         }
     };
+    
+    public getShop = async (req: Request, res: Response, next: NextFunction) => {
+        const responsHandler = new ResponseHandler();
+
+        try {
+            responsHandler.reqRes(req,res).onFetch(user.FETCH_ALL, await ShopModel.getShop(req.body)).send();
+        } catch(error) {
+            next(responsHandler.sendError(error))
+        }
+    }
 }
 
 export default new ShopKeeperController();
