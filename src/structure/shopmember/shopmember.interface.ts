@@ -9,5 +9,5 @@ interface shopMemberInterface {
     role: ['coOwner','owner','worker']
 }
 
-export interface ShopMemberModelI extends shopMemberInterface, Document {
+export interface IShopMemberModel extends shopMemberInterface, Document {
 }

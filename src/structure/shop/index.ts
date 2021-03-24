@@ -1,4 +1,4 @@
-import ShopKeeperController from './shopkeeper.controller';
+import ShopKeeperController from './shop.controller';
 
 export default [
     {

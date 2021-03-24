@@ -1,8 +1,8 @@
-import { ShopMemberModelI } from './shopmember.interface';
+import { IShopMemberModel } from './shopmember.interface';
 import { Schema, model, Model } from 'mongoose';
 import { ObjectId } from '../../datatypes';
 
-const ShopMemberRSchema: Schema = new Schema({
+const ShopMemberSchema: Schema = new Schema({
     name: String,
     phoneNumber: [{type:String}],
     role: {type: String, enum: ['owner','coOwner', 'worker'] },
@@ -11,4 +11,4 @@ const ShopMemberRSchema: Schema = new Schema({
     photo: {_id: ObjectId, ref: 'photo'}
 });
 
-export const ShopMember: Model<ShopMemberModelI> = model<ShopMemberModelI>('shopMember', ShopMemberRSchema);
+export const ShopMember: Model<IShopMemberModel> = model<IShopMemberModel>('shopMember', ShopMemberSchema);

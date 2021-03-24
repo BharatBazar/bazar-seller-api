@@ -1,5 +1,5 @@
-import ShopKeeperModel from './shopkeeper.model';
-import { user } from './../../lib/helpers/customMessage';
+import ShopKeeperModel from './shop.model';
+import { user } from '../../lib/helpers/customMessage';
 import { NextFunction, Request, Response } from 'express';
 import ResponseHandler from '../../lib/helpers/responseHandler';
 

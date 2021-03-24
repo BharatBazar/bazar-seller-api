@@ -1,6 +1,6 @@
 import { Schema, Model, model } from 'mongoose';
 import { ObjectId } from '../../datatypes';
-import { IShopKeeperModel } from './shopkeeper.interface';
+import { IShopKeeperModel } from './shopinterface';
 export const ShopKeeperSchema: Schema = new Schema({
     shopName: {
         type: String,

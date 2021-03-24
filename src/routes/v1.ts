@@ -1,3 +1,3 @@
-import shopkeeper from '../structure/shopkeeper';
+import shopkeeper from '../structure/shop';
 
 export default [...shopkeeper];

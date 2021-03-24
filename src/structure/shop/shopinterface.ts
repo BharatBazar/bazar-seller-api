@@ -1,6 +1,6 @@
 import { Document, ObjectId, Schema } from 'mongoose';
 
-interface ShopKeeper {
+interface Shop {
     shopName: string;
     addressOfShop: string;
     shopImage: [{_id:ObjectId }];
@@ -13,7 +13,7 @@ interface ShopKeeper {
     isTerminated: boolean;
 }
 
-export const ShopKeeperFields = {
+export const ShopFields = {
     
     shopName: 'shopName',
     addressOfShop: 'addressOfShop',
@@ -25,6 +25,6 @@ export const ShopKeeperFields = {
     worker: 'worker'
 };
 
-export interface IShopKeeperModel extends ShopKeeper, Document {
-    addNewShopKeeper(): { _id: ObjectId };
+export interface IShopModel extends Shop, Document {
+    addNewShop(): { _id: ObjectId };
 }

@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
 import { model } from 'mongoose';
 import { commonConfig } from '../../config';
-import { ShopKeeperModel } from '../../structure/shopkeeper/shopkeeper.interface';
+import { ShopKeeperModel } from '../../structure/shop/shopinterface';
 
 interface IUserToken {
     user?: object;
