@@ -6,8 +6,8 @@ const ShopMemberSchema: Schema = new Schema({
     name: String,
     phoneNumber: [{type:String}],
     role: {type: String, enum: ['owner','coOwner', 'worker'] },
-    shopId: {type: {_id:ObjectId, ref: 'shopKeeper'}},
-    permission: {_id:ObjectId, ref:'permission'},
+    shopId: {type: {_id:ObjectId, ref: 'shop'}},
+    permission: {_id:ObjectId, ref:'permissions'},
     photo: {_id: ObjectId, ref: 'photo'}
 });
 

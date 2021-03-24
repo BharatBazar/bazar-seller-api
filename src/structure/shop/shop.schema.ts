@@ -1,7 +1,7 @@
 import { Schema, Model, model } from 'mongoose';
 import { ObjectId } from '../../datatypes';
-import { IShopKeeperModel } from './shopinterface';
-export const ShopKeeperSchema: Schema = new Schema({
+import { IShopModel } from './shopinterface';
+export const ShopSchema: Schema = new Schema({
     shopName: {
         type: String,
         required: true,
@@ -26,8 +26,8 @@ export const ShopKeeperSchema: Schema = new Schema({
     isTerminated: {type: Boolean }
 });
 
-ShopKeeperSchema.methods.addNewShopKeeper = async function () {
+ShopSchema.methods.addNewShop = async function () {
     return this.save();
 };
 
-export const ShopKeeper: Model<IShopKeeperModel> = model<IShopKeeperModel>('shopKeeper', ShopKeeperSchema);
+export const Shop: Model<IShopModel> = model<IShopModel>('shop', ShopSchema);
