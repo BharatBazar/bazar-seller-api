@@ -1,2 +1,2 @@
 import { Schema } from 'mongoose';
-export const ObjectId = Schema.Types.ObjectId;
+export type ObjectId = Schema.Types.ObjectId;

@@ -11,4 +11,8 @@ const ShopMemberSchema: Schema = new Schema({
     photo: {_id: ObjectId, ref: 'photo'}
 });
 
+ShopMemberSchema.methods.addMember = async function() {
+    return this.save();
+}
+
 export const ShopMember: Model<IShopMemberModel> = model<IShopMemberModel>('shopMember', ShopMemberSchema);

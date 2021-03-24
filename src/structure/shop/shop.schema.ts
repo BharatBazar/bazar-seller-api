@@ -1,6 +1,7 @@
 import { Schema, Model, model } from 'mongoose';
-import { ObjectId } from '../../datatypes';
 import { IShopModel } from './shopinterface';
+
+const{ ObjectId } = Schema.Types;
 export const ShopSchema: Schema = new Schema({
     shopName: {
         type: String,
