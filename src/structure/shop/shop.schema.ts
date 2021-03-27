@@ -11,26 +11,23 @@ export const ShopSchema: Schema = new Schema({
     ownerPhoneNumber: {
         type: String,
         required: true,
+        unique:true
     },
     ownerName: {
         type:String,
         required: true
     },
-    // shopImage: {
-    //     type: [{_id: String}],
-    //     required: true,
-    // },
     addressOfShop: {
         type: String,
         required: true,
     },
-    // whatYouSell: [{ type: ObjectId, ref: 'whatYouSell' }],
     owner:  [{type: ObjectID, ref:'ShopMember'}],
     coOwner:  [{type: ObjectID, ref:'ShopMember' }],
     worker: [{type:ObjectID, ref:'ShopMember'  }],
     isAuthenticated: {type: Boolean, default:false },
     isTerminated: {type: Boolean, default:false },
-
+},{
+    timestamps: true
 });
 
 ShopSchema.methods.addNewShop = async function () {

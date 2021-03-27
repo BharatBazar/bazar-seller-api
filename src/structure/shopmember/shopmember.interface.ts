@@ -6,8 +6,8 @@ export interface shopMemberInterface {
     name:string;
     //photo: [{_id:ObjectId}];
     permissions:string;
-    phoneNumber: [string];
-    shopId: string;
+    phoneNumber: string;
+    shop: string;
     role: string;
     _id:Types.ObjectId
     

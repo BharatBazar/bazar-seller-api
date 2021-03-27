@@ -4,7 +4,7 @@ import { user } from '../../lib/helpers/customMessage';
 import { NextFunction, Request, Response } from 'express';
 import ResponseHandler from '../../lib/helpers/responseHandler';
 
-class ShopKeeperController {
+class ShopController {
     public createShop = async (req: Request, res: Response, next: NextFunction) => {
         const responseHandler = new ResponseHandler();
         try {
@@ -31,11 +31,20 @@ class ShopKeeperController {
          const responsHandler = new ResponseHandler();
 
         try {
-            responsHandler.reqRes(req,res).onFetch(user.UPDATED, await ShopModel.updateShop(req.body)) .send();
+            responsHandler.reqRes(req,res).onFetch(user.UPDATED, await ShopModel.updateShop(req.body)).send();
         } catch(error) {
             next(responsHandler.sendError(error))
         }
     }
+
+    public getAllShop = async (req:Request, res:Response, next:NextFunction) => {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler.reqRes(req,res).onFetch("User fetched",await ShopModel.getAllShop(req.body)).send()
+        } catch(error) {
+            next(responseHandler.sendError(error))
+        }
+    }
 }
 
-export default new ShopKeeperController();
+export default new ShopController();

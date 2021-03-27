@@ -1,28 +1,28 @@
-import ShopKeeperController from './shop.controller';
+import ShopController from './shop.controller';
 
 export default [
     {
         path: '/shop/create',
         method: 'post',
         escapeAuth:true,
-        handler: [ShopKeeperController.createShop],
+        handler: [ShopController.createShop],
     },
       {
         path: '/shop/get',
         method: 'get',
         escapeAuth:true,
-        handler: [ShopKeeperController.getShop],
+        handler: [ShopController.getShop],
     },
     {
         path: '/shop/update',
         method: 'patch',
         escapeAuth:true,
-        handler: [ShopKeeperController.updateShop],
+        handler: [ShopController.updateShop],
     },
-    // {
-    //     path: '/shop/getAllShop',
-    //     method: 'get',
-    //     escapeAuth:true,
-    //     handler: [ShopKeeperController]
-    // }
+   {
+       path: '/shop/getAllShop',
+       method: "get",
+       escapeAuth:true,
+       handler: [ShopController.getAllShop]
+   }
 ];

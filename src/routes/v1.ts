@@ -1,3 +1,4 @@
-import shopkeeper from '../structure/shop';
+import shop from '../structure/shop';
+import shopMember from "../structure/shopmember";
 
-export default [...shopkeeper];
+export default [...shop,...shopMember];
