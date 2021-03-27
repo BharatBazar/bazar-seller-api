@@ -1,18 +1,20 @@
-import {  Document, Schema,Types } from "mongoose";
-export enum shopMemberRole {coOwner='coOwner',owner='owner',worker='worker'};
-
+import { Document, Schema, Types } from 'mongoose';
+export enum shopMemberRole {
+    coOwner = 'coOwner',
+    owner = 'owner',
+    worker = 'worker',
+}
 
 export interface shopMemberInterface {
-    name:string;
+    name: string;
     //photo: [{_id:ObjectId}];
-    permissions:string;
+    permissions: string;
     phoneNumber: string;
     shop: string;
     role: string;
-    _id:Types.ObjectId
-    
+    _id: Types.ObjectId;
 }
 
 export interface IShopMemberModel extends shopMemberInterface, Document {
-    addMember(): IShopMemberModel
+    addMember(): IShopMemberModel;
 }

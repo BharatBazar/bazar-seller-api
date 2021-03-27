@@ -8,15 +8,14 @@ interface Shop {
     // whatYouSell: string[];
     owner: string[];
     coOwner: string[];
-    worker:string[];
+    worker: string[];
     isAuthenticated: boolean;
     isTerminated: boolean;
-    ownerPhoneNumber:string;
-    ownerName:string;
+    ownerPhoneNumber: string;
+    ownerName: string;
 }
 
 export const ShopFields = {
-    
     shopName: 'shopName',
     addressOfShop: 'addressOfShop',
     shopPhoto: 'shopPhoto',
@@ -24,10 +23,10 @@ export const ShopFields = {
     whatYouSell: 'whatYouSell',
     owner: 'owner',
     coOwner: 'coOwner',
-    worker: 'worker'
+    worker: 'worker',
 };
 
 export interface IShopModel extends Shop, Document {
     addNewShop(): IShopModel;
-    static shopExist(): IShopModel | null;
+    shopExist(): IShopModel | null;
 }

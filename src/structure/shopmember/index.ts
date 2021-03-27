@@ -4,7 +4,7 @@ export default [
     {
         path: '/shopMember/login',
         method: 'get',
-        escapeAuth:true,
+        escapeAuth: true,
         handler: [ShopController.ShopMemberLogin],
     },
 ];

@@ -4,25 +4,25 @@ export default [
     {
         path: '/shop/create',
         method: 'post',
-        escapeAuth:true,
+        escapeAuth: true,
         handler: [ShopController.createShop],
     },
-      {
+    {
         path: '/shop/get',
         method: 'get',
-        escapeAuth:true,
+        escapeAuth: true,
         handler: [ShopController.getShop],
     },
     {
         path: '/shop/update',
         method: 'patch',
-        escapeAuth:true,
+        escapeAuth: true,
         handler: [ShopController.updateShop],
     },
-   {
-       path: '/shop/getAllShop',
-       method: "get",
-       escapeAuth:true,
-       handler: [ShopController.getAllShop]
-   }
+    {
+        path: '/shop/getAllShop',
+        method: 'get',
+        escapeAuth: true,
+        handler: [ShopController.getAllShop],
+    },
 ];
