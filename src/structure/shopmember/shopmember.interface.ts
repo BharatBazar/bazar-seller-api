@@ -1,14 +1,15 @@
-import {  Document, ObjectId, Schema } from "mongoose";
+import {  Document, Schema,Types } from "mongoose";
 export enum shopMemberRole {coOwner='coOwner',owner='owner',worker='worker'};
 
 
 export interface shopMemberInterface {
     name:string;
-    photo: [{_id:ObjectId}];
-    // permission: {_id:ObjectId };
+    //photo: [{_id:ObjectId}];
+    permissions:string;
     phoneNumber: [string];
-    shopId: {_id:ObjectId};
-    role: shopMemberRole;
+    shopId: string;
+    role: string;
+    _id:Types.ObjectId
     
 }
 

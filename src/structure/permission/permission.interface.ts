@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
 
 
-export interface permissionSchemaInterface {
+export interface ShopPermissionSchemaInterface {
     createProduct:  Boolean; //Adding product details
     editProduct: Boolean; //Updating product details
     rollOutProduct: Boolean; //Allow product to be seen by buyer
@@ -10,6 +10,6 @@ export interface permissionSchemaInterface {
     createBill: Boolean; //Creating bill on shop
 }
 
-export interface IPermissionModel extends permissionSchemaInterface, Document {
-    addPermission(): IPermissionModel
+export interface IShopPermissionModel extends ShopPermissionSchemaInterface, Document {
+    addPermission(): IShopPermissionModel
 }

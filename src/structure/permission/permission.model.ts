@@ -1,10 +1,11 @@
-import { IPermissionModel, permissionSchemaInterface } from './permission.interface';
-import {Permissions } from './permission.schema';
+import { log } from 'util';
+import { IShopPermissionModel, ShopPermissionSchemaInterface } from './permission.interface';
+import {ShopPermissions } from './permission.schema';
 import { shopMemberRole } from "../shopmember/shopmember.interface";
 
-export class PermissionModel {
+export class ShopPermissionModel {
 
-    ownerPermission:permissionSchemaInterface = {
+    ownerPermission:ShopPermissionSchemaInterface = {
         createBill:true,
         createProduct:true,
         editProduct:true,
@@ -13,16 +14,20 @@ export class PermissionModel {
         bookingNotification:true
     }
 
-    async createPermisison(role:shopMemberRole) {
-        let permissions:IPermissionModel;
+    async createPermisison(role:String) {
+        console.log("creating Permission",role)
+        let permissions:IShopPermissionModel;
         if(role==shopMemberRole.owner) {
-            permissions = new Permissions(this.ownerPermission);
+            permissions = new ShopPermissions(this.ownerPermission);
         } else {
-            permissions = new Permissions();  
+            permissions = new ShopPermissions();  
         }
-        return permissions.addPermission()._id;
+       
+        await permissions.save();
+        
+        return permissions._id;
     }
 }
 
-export default new PermissionModel();
+export default new ShopPermissionModel();
 

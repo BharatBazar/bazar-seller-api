@@ -7,13 +7,13 @@ const ShopMemberSchema: Schema = new Schema({
     name: String,
     phoneNumber: [{type:String}],
     role: {type: String, enum: ['owner','coOwner', 'worker'] },
-    shopId: {type: {_id:ObjectId, ref: 'shop'}},
-    // permission: {_id:ObjectId, ref:'permission'},
+    shopId: {type:ObjectId, ref: 'shop'},
+    permissions: {type:ObjectId, ref:'Permission'},//Warning give reference inside type not as direct object as it throws error
     // photo: {_id: ObjectId, ref: 'photo'}
 });
 
 ShopMemberSchema.methods.addMember = async function() {
-    return (await this.save()).populate("owner").populate("coOwner").populate("worker");
+    return this.save();
 }
 
 export const ShopMember: Model<IShopMemberModel> = model<IShopMemberModel>('ShopMember', ShopMemberSchema);

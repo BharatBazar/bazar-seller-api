@@ -3,14 +3,16 @@ import { Document, ObjectId, Schema } from 'mongoose';
 interface Shop {
     shopName: string;
     addressOfShop: string;
-    shopImage: [{_id:ObjectId }];
-    ownerImage: [{_id:ObjectId }];
-    whatYouSell: string[];
-    owner: [{_id:ObjectId }];
-    coOwner: [{_id:ObjectId}];
-    worker:[{_id:ObjectId}];
+    // shopImage: [{_id:ObjectId }];
+    // ownerImage: [{_id:ObjectId }];
+    // whatYouSell: string[];
+    owner: string[];
+    coOwner: string[];
+    worker:string[];
     isAuthenticated: boolean;
     isTerminated: boolean;
+    ownerPhoneNumber:string;
+    ownerName:string;
 }
 
 export const ShopFields = {
@@ -27,4 +29,5 @@ export const ShopFields = {
 
 export interface IShopModel extends Shop, Document {
     addNewShop(): IShopModel;
+    static shopExist(): IShopModel | null;
 }

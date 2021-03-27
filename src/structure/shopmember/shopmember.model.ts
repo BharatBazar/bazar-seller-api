@@ -1,11 +1,19 @@
-import PermissionModel from './../permission/permission.model';
+import { log } from 'util';
+import ShopPermissionModel from './../permission/permission.model';
 import { ShopMember } from './shopmember.schema';
-import { IShopMemberModel } from "./shopmember.interface";
+import { IShopMemberModel,shopMemberInterface } from "./shopmember.interface";
 
 export class ShopMemberModel {
-    async createShopMember(shopMember: IShopMemberModel) {
-        const member:IShopMemberModel = new ShopMember(shopMember);
-        // member.permission = await PermissionModel.createPermisison(member.role);
-        return member.addMember()._id;
+    async createShopMember(shopMember:shopMemberInterface) {
+       
+        let member:IShopMemberModel = new ShopMember(shopMember);
+        //log(typeof member, typeof member._id,"Member",member)
+        member.permissions = await ShopPermissionModel.createPermisison(member.role);
+        
+        await member.save();
+        //log(member)
+        return member._id;
     }
 }
+
+export default new ShopMemberModel();
