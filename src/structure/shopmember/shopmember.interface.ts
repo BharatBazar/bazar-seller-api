@@ -1,3 +1,4 @@
+import { static } from 'express';
 import { Document, Schema, Types } from 'mongoose';
 export enum shopMemberRole {
     coOwner = 'coOwner',
@@ -13,8 +14,11 @@ export interface shopMemberInterface {
     shop: string;
     role: string;
     _id: Types.ObjectId;
+    password: string;
 }
 
 export interface IShopMemberModel extends shopMemberInterface, Document {
     addMember(): IShopMemberModel;
+    generatePassword(): string;
+    comparePassword(): boolean;
 }

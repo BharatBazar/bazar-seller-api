@@ -26,10 +26,12 @@ export const mongoUrl = (): string => {
 };
 
 export enum paginationConfig {
-    MAX_SHOP = 10
+    MAX_SHOP = 10,
 }
 
 export const commonConfig = {
     jwtSecretKey: process.env.SECRET_KEY || 'some-secret-key',
     pageSizeLimit: 15,
 };
+
+export const SALT_ROUNDS = 10;

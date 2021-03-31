@@ -1,27 +1,34 @@
+import { shop_message } from './../../lib/helpers/customMessage';
 import { paginationConfig } from './../../config/index';
 import { HTTP400Error } from './../../lib/utils/httpErrors';
-import { IPermissionModel } from './../permission/permission.interface';
 import { shopMemberInterface, IShopMemberModel } from './../shopmember/shopmember.interface';
 import ShopMemberModel from './../shopmember/shopmember.model';
-import { log } from 'util';
-import { Schema, Types, ObjectId } from 'mongoose';
-import { ShopMember } from '../shopmember/shopmember.schema';
-import { Shop, ShopSchema } from './shop.schema';
+import { Types, ObjectId } from 'mongoose';
+import { Shop } from './shop.schema';
 import { IShopModel } from './shop.interface';
 
 export class ShopModel {
     public createShop = async (body: IShopModel) => {
-        const shop: IShopModel = new Shop(body);
-        const shopMember: Partial<shopMemberInterface> = {
-            shop: shop._id,
-            name: shop.ownerName,
-            phoneNumber: shop.ownerPhoneNumber,
-            role: 'owner',
-        };
-        const ownerId = await ShopMemberModel.createShopMember(shopMember);
-        shop.owner.push(ownerId);
-        const data: IShopModel = await shop.addNewShop();
-        return data;
+        const shop: IShopModel = await Shop.shopExist({ ownerPhoneNumber: body.ownerPhoneNumber });
+        if (shop) {
+            if (shop.isAuthenticated) {
+                return { message: shop_message.AUTHENTICATED };
+            } else {
+                throw new HTTP400Error(shop_message.NOT_AUTHENTICATED);
+            }
+        } else {
+            const shop: IShopModel = new Shop(body);
+            const shopMember: Partial<shopMemberInterface> = {
+                shop: shop._id,
+                name: shop.ownerName,
+                phoneNumber: shop.ownerPhoneNumber,
+                role: 'owner',
+            };
+            const ownerId = await ShopMemberModel.createShopMember(shopMember);
+            shop.owner.push(ownerId);
+            const data: IShopModel = await shop.addNewShop();
+            return data;
+        }
     };
 
     public getShop = async (body: { _id: ObjectId }) => {
@@ -36,30 +43,33 @@ export class ShopModel {
     };
 
     public updateShop = async (body: IShopModel) => {
-        const shop: IShopModel = await Shop.shopExist(body._id);
-
-        if (body.coOwner) {
-            body.coOwner.forEach(async (details: IShopMemberModel, index: Number) => {
-                if (details._id) {
-                } else {
-                    const id: Types.ObjectId = await ShopMemberModel.createShopMember({
-                        shop: shop._id,
-                        role: 'coOwner',
-                        ...details,
-                    });
-                    shop.coOwner.push(id);
-                    if (index == body.coOwner.length - 1) {
-                        await shop.save();
-                        return shop;
+        const shop: IShopModel = await Shop.shopExist({ _id: body._id });
+        if (shop) {
+            if (body.coOwner) {
+                body.coOwner.forEach(async (details: IShopMemberModel, index: Number) => {
+                    if (details._id) {
+                    } else {
+                        const id: Types.ObjectId = await ShopMemberModel.createShopMember({
+                            shop: shop._id,
+                            role: 'coOwner',
+                            ...details,
+                        });
+                        shop.coOwner.push(id);
+                        if (index == body.coOwner.length - 1) {
+                            await shop.save();
+                            return shop;
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                return await Shop.findByIdAndUpdate(
+                    { _id: body._id },
+                    { isAuthenticated: body.isAuthenticated },
+                    { new: true },
+                );
+            }
         } else {
-            return await Shop.findByIdAndUpdate(
-                { _id: body._id },
-                { isAuthenticated: body.isAuthenticated },
-                { new: true },
-            );
+            throw new HTTP400Error(shop_message.NO_SHOP);
         }
     };
 

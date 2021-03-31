@@ -9,3 +9,15 @@ import jwt from 'jsonwebtoken';
  */
 export const generateToken = async (data: any) =>
     jwt.sign({ data }, process.env.jwtSecretKey ? process.env.jwtSecretKey : 'jwtSecretKey');
+
+/**
+ * 6 digit otp generator.
+ */
+export const otpGenerator = (): number => Math.floor(100000 + Math.random() * 900000);
+
+export const pruneFields = (body: any, fields: string) => {
+    const fieldsArray = fields.split(' ');
+    fieldsArray.forEach((field) => {
+        delete body[field];
+    });
+};

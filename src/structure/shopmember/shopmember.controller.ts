@@ -4,15 +4,42 @@ import { NextFunction, Request, Response } from 'express';
 
 class ShopMemberController {
     async ShopMemberLogin(req: Request, res: Response, next: NextFunction) {
-        const responsHandler = new ResponseHandler();
+        const responseHandler = new ResponseHandler();
 
         try {
-            responsHandler
+            responseHandler
                 .reqRes(req, res)
                 .onFetch('Login successfull!!', await ShopMemberModel.ShopMemberLogin(req.body))
                 .send();
         } catch (error) {
-            next(responsHandler.sendError(error));
+            next(responseHandler.sendError(error));
+        }
+    }
+
+    async CreateShopMember(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onCreate(
+                    'Hurray! Step one of creating your duka completed.',
+                    await ShopMemberModel.createShopMember(req.body),
+                )
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
+
+    async CheckPhoneNumber(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('OTP sent to provided mobile number', await ShopMemberModel.checkPhoneNumber(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
         }
     }
 }

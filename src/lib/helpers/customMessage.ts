@@ -16,6 +16,16 @@ export let user = {
     UPDATED: 'Hurray! Your profile has been successfully updated',
 };
 
+export let shop_message = {
+    NO_SHOP: 'Shop does not exist',
+    NOT_AUTHENTICATED: 'Shop is not verified yet company will contact you and will verify your shop.',
+    AUTHENTICATED: 'Hurray, shop is authenticated.',
+};
+
+export let shopMember_message = {
+    PASSWORD_NOT_MATCH: 'Password does not match.',
+};
+
 export let specialization = {
     CREATED: 'Hurray! new specialization has been created successfully',
     CREATED_DEC: `This specialization has been created with the some scenario so adding some description.`,

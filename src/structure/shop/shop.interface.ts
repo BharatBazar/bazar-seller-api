@@ -13,6 +13,7 @@ interface Shop {
     isTerminated: boolean;
     ownerPhoneNumber: string;
     ownerName: string;
+    ownerEmail: string;
 }
 
 export const ShopFields = {
