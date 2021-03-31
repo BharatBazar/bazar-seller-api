@@ -1,16 +1,18 @@
+import { ObjectId } from './../../datatypes/index';
 import { IShopModel } from './../shop/shop.interface';
 import { ShopModel } from './../shop/shop.model';
-import { HTTP400Error } from './../../lib/utils/httpErrors';
+import { HTTP400Error, HTTP404Error } from './../../lib/utils/httpErrors';
 import { log } from 'util';
 import ShopPermissionModel from './../permission/permission.model';
 import { ShopMember } from './shopmember.schema';
 import { IShopMemberModel, shopMemberInterface, shopMemberRole } from './shopmember.interface';
-import { LeanDocument } from 'mongoose';
+import { LeanDocument, Types } from 'mongoose';
 import { shopMember_message } from '../../lib/helpers/customMessage';
 import otpModel from '../otp/otp.model';
 import { pruneFields } from '../../lib/helpers';
 import { Shop } from '../shop/shop.schema';
 
+type InsertMany = { insertedIds: [string] };
 export class ShopMemberModel {
     async checkPhoneNumber(data: { phoneNumber: string }) {
         const phoneNumber: boolean = await ShopMember.checkPhoneNumber(data.phoneNumber);
@@ -22,21 +24,47 @@ export class ShopMemberModel {
     }
 
     async createShopMember(data: shopMemberInterface & { otp: string }) {
-        log(data);
-        if (data.otp) {
-            const isMatch = await otpModel.verifyOTP({ otp: data.otp, phoneNumber: data.phoneNumber });
-            if (isMatch) {
-                pruneFields(data, 'otp');
-                let member: IShopMemberModel = new ShopMember(data);
-                const shop: IShopModel = new Shop();
-                member.shop = shop._id;
-                await shop.save();
-                member.permissions = await ShopPermissionModel.createPermisison(member.role);
-                await member.save();
-                return member;
+        if (data.role == shopMemberRole.owner) {
+            if (data.otp) {
+                const isMatch = await otpModel.verifyOTP({ otp: data.otp, phoneNumber: data.phoneNumber });
+                if (isMatch) {
+                    pruneFields(data, 'otp');
+                    let member: IShopMemberModel = new ShopMember({ ...data, isTerminated: false });
+                    const shop: IShopModel = new Shop();
+                    member.shop = shop._id;
+                    shop.owner = member._id;
+                    await shop.save();
+                    member.permissions = await ShopPermissionModel.createPermisison(member.role);
+                    await member.save();
+                    return member;
+                }
+            } else {
+                throw new HTTP400Error('Please provide otp.');
             }
+        }
+    }
+
+    async createMember(data: {
+        coOwnerMember: shopMemberInterface[];
+        workerMember: shopMemberInterface[];
+        shop: string;
+    }) {
+        const shop: IShopModel | null = await Shop.findById(data.shop);
+        if (shop) {
+            const coOwnerMember: IShopMemberModel[] = await ShopMember.insertMany(data.coOwnerMember);
+            const workerMember: IShopMemberModel[] = await ShopMember.insertMany(data.workerMember);
+            log(workerMember);
+            await shop.updateOne({
+                $push: {
+                    coOwner: { $each: coOwnerMember.map((member) => member._id) },
+                    worker: { $each: workerMember.map((member) => member._id) },
+                },
+            });
+            log('Shop details =>', shop);
+            await shop.save();
+            return shop;
         } else {
-            throw new HTTP400Error('Please provide otp.');
+            throw new HTTP404Error('Shop Not Found');
         }
     }
 
@@ -54,6 +82,7 @@ export class ShopMemberModel {
             member = await ShopMember.findOne({ phoneNumber })
                 .populate({ path: 'permissions shop', populate: 'owner coOwner worker' })
                 .lean();
+
             if (member) {
                 if (!member.password) {
                     return {
@@ -61,6 +90,7 @@ export class ShopMemberModel {
                     };
                 } else {
                     const isMatch = await ShopMember.comparePassword(password, member.password);
+                    pruneFields(member, 'password');
                     if (isMatch) {
                         if (member.role == shopMemberRole.coOwner || member.role === shopMemberRole.worker) {
                             if (member.isTerminated) {
@@ -75,17 +105,20 @@ export class ShopMemberModel {
                                 return member;
                             }
                         } else if (!member.shop.isVerified) {
-                            if (!member.shop.name) {
+                            if (!member.shop.shopName) {
                                 return {
                                     shopNameAvailable: false,
+                                    data: member,
                                 };
-                            } else if (member.shop.coOwner.length == 0 && member.shop.membersDetailSkipped) {
+                            } else if (member.shop.coOwner.length == 0 && !member.shop.membersDetailSkipped) {
                                 return {
                                     memberDetails: false,
+                                    data: member,
                                 };
                             } else {
                                 return {
                                     shopVerification: false,
+                                    data: member,
                                 };
                             }
                         } else {

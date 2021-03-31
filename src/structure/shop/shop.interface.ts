@@ -1,4 +1,4 @@
-import { Document, ObjectId, Schema } from 'mongoose';
+import { Document, ObjectId, Schema, Types } from 'mongoose';
 
 interface Shop {
     shopName: string;
@@ -6,7 +6,7 @@ interface Shop {
     // shopImage: [{_id:ObjectId }];
     // ownerImage: [{_id:ObjectId }];
     // whatYouSell: string[];
-    owner: string[];
+    owner: Types.ObjectId;
     coOwner: string[];
     worker: string[];
     isVerified: boolean;

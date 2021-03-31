@@ -10,7 +10,7 @@ export const ShopSchema: Schema = new Schema(
         addressOfShop: {
             type: String,
         },
-        memberDetaisSkipped: { type: Boolean, default: false },
+        membersDetailSkipped: { type: Boolean, default: false },
         owner: { type: ObjectID, ref: 'ShopMember' },
         coOwner: [{ type: ObjectID, ref: 'ShopMember' }],
         worker: [{ type: ObjectID, ref: 'ShopMember' }],

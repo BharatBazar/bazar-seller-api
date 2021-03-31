@@ -42,6 +42,30 @@ class ShopMemberController {
             next(responseHandler.sendError(error));
         }
     }
+
+    async CreatePassword(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Password created', await ShopMemberModel.createPassword(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
+
+    async CreateMembers(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Shop member created', await ShopMemberModel.createMember(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
 }
 
 export default new ShopMemberController();

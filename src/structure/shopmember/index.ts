@@ -2,12 +2,6 @@ import ShopController from './shopmember.controller';
 
 export default [
     {
-        path: '/shopMember/login',
-        method: 'get',
-        escapeAuth: true,
-        handler: [ShopController.ShopMemberLogin],
-    },
-    {
         path: '/shopMember/create',
         method: 'post',
         escapeAuth: true,
@@ -18,5 +12,23 @@ export default [
         method: 'get',
         escapeAuth: true,
         handler: [ShopController.CheckPhoneNumber],
+    },
+    {
+        path: '/shopMember/login',
+        method: 'get',
+        escapeAuth: true,
+        handler: [ShopController.ShopMemberLogin],
+    },
+    {
+        path: '/shopMember/createPassword',
+        method: 'post',
+        escapeAuth: true,
+        handler: [ShopController.CreatePassword],
+    },
+    {
+        path: '/shopMember/createMember',
+        method: 'post',
+        escapeAuth: true,
+        handler: [ShopController.CreateMembers],
     },
 ];

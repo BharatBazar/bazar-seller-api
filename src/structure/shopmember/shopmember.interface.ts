@@ -9,9 +9,9 @@ export enum shopMemberRole {
 export interface shopMemberInterface {
     name: string;
     //photo: [{_id:ObjectId}];
-    permissions: string;
+    permissions: Types.ObjectId;
     phoneNumber: string;
-    shop: string;
+    shop: Types.ObjectId;
     role: string;
     _id: Types.ObjectId;
     password: string;

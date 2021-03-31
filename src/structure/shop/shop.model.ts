@@ -45,25 +45,7 @@ export class ShopModel {
     public updateShop = async (body: IShopModel) => {
         const shop: IShopModel = await Shop.shopExist({ _id: body._id });
         if (shop) {
-            if (body.coOwner) {
-                body.coOwner.forEach(async (details: IShopMemberModel, index: Number) => {
-                    if (details._id) {
-                    } else {
-                        const id: Types.ObjectId = await ShopMemberModel.createShopMember({
-                            shop: shop._id,
-                            role: 'coOwner',
-                            ...details,
-                        });
-                        shop.coOwner.push(id);
-                        if (index == body.coOwner.length - 1) {
-                            await shop.save();
-                            return shop;
-                        }
-                    }
-                });
-            } else {
-                return await Shop.findByIdAndUpdate({ _id: body._id }, { isVerified: body.isVerified }, { new: true });
-            }
+            return await Shop.findByIdAndUpdate({ _id: body._id }, body, { new: true });
         } else {
             throw new HTTP400Error(shop_message.NO_SHOP);
         }
