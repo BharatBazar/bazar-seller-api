@@ -7,8 +7,8 @@ interface Shop {
     // ownerImage: [{_id:ObjectId }];
     // whatYouSell: string[];
     owner: Types.ObjectId;
-    coOwner: string[];
-    worker: string[];
+    coOwner: Types.ObjectId[];
+    worker: Types.ObjectId[];
     isVerified: boolean;
     isTerminated: boolean;
     ownerPhoneNumber: string;

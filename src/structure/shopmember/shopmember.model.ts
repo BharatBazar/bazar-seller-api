@@ -11,6 +11,7 @@ import { shopMember_message } from '../../lib/helpers/customMessage';
 import otpModel from '../otp/otp.model';
 import { pruneFields } from '../../lib/helpers';
 import { Shop } from '../shop/shop.schema';
+import shop from '../shop';
 
 type InsertMany = { insertedIds: [string] };
 export class ShopMemberModel {
@@ -41,30 +42,19 @@ export class ShopMemberModel {
             } else {
                 throw new HTTP400Error('Please provide otp.');
             }
-        }
-    }
-
-    async createMember(data: {
-        coOwnerMember: shopMemberInterface[];
-        workerMember: shopMemberInterface[];
-        shop: string;
-    }) {
-        const shop: IShopModel | null = await Shop.findById(data.shop);
-        if (shop) {
-            const coOwnerMember: IShopMemberModel[] = await ShopMember.insertMany(data.coOwnerMember);
-            const workerMember: IShopMemberModel[] = await ShopMember.insertMany(data.workerMember);
-            log(workerMember);
-            await shop.updateOne({
-                $push: {
-                    coOwner: { $each: coOwnerMember.map((member) => member._id) },
-                    worker: { $each: workerMember.map((member) => member._id) },
-                },
-            });
-            log('Shop details =>', shop);
-            await shop.save();
-            return shop;
         } else {
-            throw new HTTP404Error('Shop Not Found');
+            const memberExist = await ShopMember.checkPhoneNumber(data.phoneNumber);
+            if (memberExist) {
+                throw new HTTP400Error('Phone number is already registered . Please check with your dukan member.');
+            } else {
+                let member: IShopMemberModel = new ShopMember({ ...data, isTerminated: true });
+                await Shop.findByIdAndUpdate(data.shop, {
+                    $push: data.role == shopMemberRole.coOwner ? { coOwner: member._id } : { worker: member._id },
+                });
+                member.permissions = await ShopPermissionModel.createPermisison(member.role);
+                await member.save();
+                return member;
+            }
         }
     }
 
