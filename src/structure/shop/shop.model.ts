@@ -17,15 +17,6 @@ export class ShopModel {
                 throw new HTTP400Error(shop_message.NOT_AUTHENTICATED);
             }
         } else {
-            const shop: IShopModel = new Shop(body);
-            const shopMember: Partial<shopMemberInterface> = {
-                shop: shop._id,
-                name: shop.ownerName,
-                phoneNumber: shop.ownerPhoneNumber,
-                role: 'owner',
-            };
-            const ownerId = await ShopMemberModel.createShopMember(shopMember);
-            shop.owner.push(ownerId);
             const data: IShopModel = await shop.addNewShop();
             return data;
         }
@@ -33,7 +24,7 @@ export class ShopModel {
 
     public getShop = async (body: { _id: ObjectId }) => {
         const shop: IShopModel | null = await Shop.findOne({ _id: body._id }).populate({
-            path: 'owner coOwner worker',
+            path: 'owner Co-owner worker',
             populate: {
                 path: 'permissions',
             },

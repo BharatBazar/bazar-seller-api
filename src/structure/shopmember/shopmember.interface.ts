@@ -1,7 +1,6 @@
-import { static } from 'express';
 import { Document, Schema, Types } from 'mongoose';
 export enum shopMemberRole {
-    coOwner = 'coOwner',
+    coOwner = 'Co-owner',
     owner = 'owner',
     worker = 'worker',
 }

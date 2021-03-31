@@ -66,7 +66,7 @@ export class ShopMemberModel {
         } else {
             let member: LeanDocument<IShopMemberModel> | null;
             member = await ShopMember.findOne({ phoneNumber })
-                .populate({ path: 'permissions shop', populate: 'owner coOwner worker' })
+                .populate({ path: 'permissions shop', populate: 'owner Co-owner worker' })
                 .lean();
 
             if (member) {

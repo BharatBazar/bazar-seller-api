@@ -23,7 +23,7 @@ export const ShopFields = {
     ownerPhoto: 'ownerPhoto',
     whatYouSell: 'whatYouSell',
     owner: 'owner',
-    coOwner: 'coOwner',
+    coOwner: 'Co-owner',
     worker: 'worker',
 };
 
