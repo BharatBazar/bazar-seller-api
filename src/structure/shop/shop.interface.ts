@@ -9,7 +9,7 @@ interface Shop {
     owner: string[];
     coOwner: string[];
     worker: string[];
-    isAuthenticated: boolean;
+    isVerified: boolean;
     isTerminated: boolean;
     ownerPhoneNumber: string;
     ownerName: string;

@@ -14,7 +14,7 @@ class OtpModel {
         const numberExist: boolean = await OTP.phoneNumberExist(data.phoneNumber);
         const otp = otpGenerator().toString();
         if (numberExist) {
-            await OTP.updateOne({ phoneNumber: data.phoneNumber }, { otp: otp }, { new: true });
+            await OTP.updateOne({ phoneNumber: data.phoneNumber }, { otp: otp }).lean();
             return otp;
         }
 
@@ -26,7 +26,7 @@ class OtpModel {
     public verifyOTP = async (data: data & otp) => {
         console.log(data);
 
-        const otp: IOtpModel | null = await OTP.findOne({ phoneNumber: data.phoneNumber }, 'otp');
+        const otp: IOtpModel | null = await OTP.findOne({ phoneNumber: data.phoneNumber }, 'otp').lean();
 
         if (!otp) {
             throw new HTTP400Error('OTP not found');

@@ -11,7 +11,7 @@ export class ShopModel {
     public createShop = async (body: IShopModel) => {
         const shop: IShopModel = await Shop.shopExist({ ownerPhoneNumber: body.ownerPhoneNumber });
         if (shop) {
-            if (shop.isAuthenticated) {
+            if (shop.isVerified) {
                 return { message: shop_message.AUTHENTICATED };
             } else {
                 throw new HTTP400Error(shop_message.NOT_AUTHENTICATED);
@@ -62,11 +62,7 @@ export class ShopModel {
                     }
                 });
             } else {
-                return await Shop.findByIdAndUpdate(
-                    { _id: body._id },
-                    { isAuthenticated: body.isAuthenticated },
-                    { new: true },
-                );
+                return await Shop.findByIdAndUpdate({ _id: body._id }, { isVerified: body.isVerified }, { new: true });
             }
         } else {
             throw new HTTP400Error(shop_message.NO_SHOP);

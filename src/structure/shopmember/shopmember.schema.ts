@@ -12,7 +12,7 @@ const ShopMemberSchema: Schema = new Schema({
     permissions: { type: ObjectId, ref: 'Permission' }, //Warning give reference inside type not as direct object as it throws error
     password: String,
     email: String,
-    isTerminated: { type: Boolean, default: false },
+    isTerminated: { type: Boolean, default: true },
     isDeleted: { type: Boolean, default: false },
     // photo: {_id: ObjectId, ref: 'photo'}
 });

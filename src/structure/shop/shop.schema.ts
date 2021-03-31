@@ -6,16 +6,15 @@ export const ShopSchema: Schema = new Schema(
     {
         shopName: {
             type: String,
-            required: true,
         },
         addressOfShop: {
             type: String,
-            required: true,
         },
+        memberDetaisSkipped: { type: Boolean, default: false },
         owner: { type: ObjectID, ref: 'ShopMember' },
         coOwner: [{ type: ObjectID, ref: 'ShopMember' }],
         worker: [{ type: ObjectID, ref: 'ShopMember' }],
-        isAuthenticated: { type: Boolean, default: false },
+        isVerified: { type: Boolean, default: false },
         isTerminated: { type: Boolean, default: false },
     },
     {

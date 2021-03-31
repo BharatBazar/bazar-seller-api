@@ -15,6 +15,8 @@ export interface shopMemberInterface {
     role: string;
     _id: Types.ObjectId;
     password: string;
+    isTerminated: boolean;
+    isDeleted: boolean;
 }
 
 export interface IShopMemberModel extends shopMemberInterface, Document {
