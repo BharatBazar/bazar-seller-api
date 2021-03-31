@@ -1,6 +1,4 @@
-import { ObjectId } from './../../datatypes/index';
 import { IShopModel } from './../shop/shop.interface';
-import { ShopModel } from './../shop/shop.model';
 import { HTTP400Error, HTTP404Error } from './../../lib/utils/httpErrors';
 import { log } from 'util';
 import ShopPermissionModel from './../permission/permission.model';
@@ -11,8 +9,6 @@ import { shopMember_message } from '../../lib/helpers/customMessage';
 import otpModel from '../otp/otp.model';
 import { pruneFields } from '../../lib/helpers';
 import { Shop } from '../shop/shop.schema';
-import shop from '../shop';
-
 type InsertMany = { insertedIds: [string] };
 export class ShopMemberModel {
     async checkPhoneNumber(data: { phoneNumber: string }) {
@@ -85,7 +81,7 @@ export class ShopMemberModel {
                         if (member.role == shopMemberRole.coOwner || member.role === shopMemberRole.worker) {
                             if (member.isTerminated) {
                                 throw new HTTP400Error(
-                                    'Your account is not activated ask shop owner to activated your account.',
+                                    'Your account is not activated ask shop owner to activate your account.',
                                 );
                             } else if (!member.shop.isVerified) {
                                 throw new HTTP400Error(
