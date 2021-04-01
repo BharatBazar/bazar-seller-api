@@ -12,7 +12,9 @@ import { Shop } from '../shop/shop.schema';
 type InsertMany = { insertedIds: [string] };
 export class ShopMemberModel {
     async checkPhoneNumber(data: { phoneNumber: string }) {
+        log(data);
         const phoneNumber: boolean = await ShopMember.checkPhoneNumber(data.phoneNumber);
+        log(phoneNumber);
         if (phoneNumber) {
             throw new HTTP400Error('Phone number already exist please login.');
         } else {
@@ -23,7 +25,7 @@ export class ShopMemberModel {
     async createShopMember(data: shopMemberInterface & { otp: string }) {
         if (data.role == shopMemberRole.owner) {
             if (data.otp) {
-                const isMatch = await otpModel.verifyOTP({ otp: data.otp, phoneNumber: data.phoneNumber });
+                const isMatch = await otpModel.verifyOTP({ otp: data.otp.toString(), phoneNumber: data.phoneNumber });
                 if (isMatch) {
                     pruneFields(data, 'otp');
                     let member: IShopMemberModel = new ShopMember({ ...data, isTerminated: false });

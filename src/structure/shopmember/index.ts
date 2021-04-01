@@ -9,7 +9,7 @@ export default [
     },
     {
         path: '/shopMember/checkPhoneNumber',
-        method: 'get',
+        method: 'post',
         escapeAuth: true,
         handler: [ShopController.CheckPhoneNumber],
     },
@@ -24,11 +24,5 @@ export default [
         method: 'post',
         escapeAuth: true,
         handler: [ShopController.CreatePassword],
-    },
-    {
-        path: '/shopMember/createMember',
-        method: 'post',
-        escapeAuth: true,
-        handler: [ShopController.CreateMembers],
     },
 ];
