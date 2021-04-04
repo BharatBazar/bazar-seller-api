@@ -36,7 +36,7 @@ class ShopMemberController {
         try {
             responseHandler
                 .reqRes(req, res)
-                .onFetch('Shop member delete.', await ShopMemberModel.createShopMember(req.body))
+                .onFetch('Shop member deleted.', await ShopMemberModel.deleteMember(req.body))
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));

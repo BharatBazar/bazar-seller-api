@@ -12,9 +12,7 @@ import { Shop } from '../shop/shop.schema';
 type InsertMany = { insertedIds: [string] };
 export class ShopMemberModel {
     async checkPhoneNumber(data: { phoneNumber: string }) {
-        log(data);
         const phoneNumber: boolean = await ShopMember.checkPhoneNumber(data.phoneNumber);
-        log(phoneNumber);
         if (phoneNumber) {
             throw new HTTP400Error('Phone number already exist please login.');
         } else {
@@ -94,11 +92,11 @@ export class ShopMemberModel {
                         if (member.role == shopMemberRole.coOwner || member.role === shopMemberRole.worker) {
                             if (member.isTerminated) {
                                 throw new HTTP400Error(
-                                    'Your account is not activated ask shop owner to activate your account.',
+                                    'Your account is not activated ask dukan owner to activate your account.',
                                 );
                             } else if (!member.shop.isVerified) {
                                 throw new HTTP400Error(
-                                    'Shop verification is still pending our representative will come and verify your shop.',
+                                    'Shop verification is still pending our representative will come and verify your dukan.',
                                 );
                             } else {
                                 return { data: member };
@@ -127,7 +125,7 @@ export class ShopMemberModel {
                 }
             } else {
                 throw new HTTP400Error(
-                    'Phone number does not exist please tell your shop owner to add you as a member. If you are owner please add your dukan.',
+                    'Phone number does not exist please tell your dukan owner to add you as a member. If you are owner please add your dukan.',
                 );
             }
         }
