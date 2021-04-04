@@ -11,9 +11,7 @@ interface Shop {
     worker: Types.ObjectId[];
     isVerified: boolean;
     isTerminated: boolean;
-    ownerPhoneNumber: string;
-    ownerName: string;
-    ownerEmail: string;
+    membersDetailSkipped: boolean;
 }
 
 export const ShopFields = {

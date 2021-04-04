@@ -57,9 +57,21 @@ export class ShopMemberModel {
     }
 
     async createPassword(data: { password: string; phoneNumber: string }) {
+        if (!(await ShopMember.checkPhoneNumber(data.phoneNumber))) {
+            throw new HTTP400Error('Password cannot be set.');
+        }
         const hashedPassword = await ShopMember.generatePassword(data.password);
         await ShopMember.updateOne({ phoneNumber: data.phoneNumber }, { password: hashedPassword }).exec();
         return 'Password created';
+    }
+
+    async deleteMember(data: { _id: Types.ObjectId }) {
+        const success: IShopMemberModel | null = await ShopMember.findByIdAndDelete(data._id);
+        if (success) {
+            return 'Dukan member deleted!!';
+        } else {
+            throw new HTTP400Error('Trouble deleting dukan member');
+        }
     }
 
     async ShopMemberLogin({ phoneNumber, password }: { phoneNumber: string; password: string }) {
@@ -67,14 +79,13 @@ export class ShopMemberModel {
             throw new HTTP400Error('Phone number is required.');
         } else {
             let member: LeanDocument<IShopMemberModel> | null;
-            member = await ShopMember.findOne({ phoneNumber })
-                .populate({ path: 'permissions shop', populate: 'owner Co-owner worker' })
-                .lean();
+            member = await ShopMember.findOne({ phoneNumber }).populate({ path: 'permissions shop' }).lean();
 
             if (member) {
                 if (!member.password) {
                     return {
-                        passwordAvailable: false,
+                        passwordAvailable: true,
+                        data: member,
                     };
                 } else {
                     const isMatch = await ShopMember.comparePassword(password, member.password);
@@ -90,27 +101,27 @@ export class ShopMemberModel {
                                     'Shop verification is still pending our representative will come and verify your shop.',
                                 );
                             } else {
-                                return member;
+                                return { data: member };
                             }
                         } else if (!member.shop.isVerified) {
                             if (!member.shop.shopName) {
                                 return {
-                                    shopNameAvailable: false,
+                                    shopNameAvailable: true,
                                     data: member,
                                 };
                             } else if (member.shop.coOwner.length == 0 && !member.shop.membersDetailSkipped) {
                                 return {
-                                    memberDetails: false,
+                                    memberDetails: true,
                                     data: member,
                                 };
                             } else {
                                 return {
-                                    shopVerification: false,
+                                    shopVerification: true,
                                     data: member,
                                 };
                             }
                         } else {
-                            return member;
+                            return { data: member };
                         }
                     } else throw new HTTP400Error(shopMember_message.PASSWORD_NOT_MATCH);
                 }

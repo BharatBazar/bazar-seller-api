@@ -31,6 +31,17 @@ class ShopMemberController {
         }
     }
 
+    async DeleteMember(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Shop member delete.', await ShopMemberModel.createShopMember(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
     async CheckPhoneNumber(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {

@@ -1,8 +1,6 @@
 import { shop_message } from './../../lib/helpers/customMessage';
 import { paginationConfig } from './../../config/index';
 import { HTTP400Error } from './../../lib/utils/httpErrors';
-import { shopMemberInterface, IShopMemberModel } from './../shopmember/shopmember.interface';
-import ShopMemberModel from './../shopmember/shopmember.model';
 import { Types, ObjectId } from 'mongoose';
 import { Shop } from './shop.schema';
 import { IShopModel } from './shop.interface';

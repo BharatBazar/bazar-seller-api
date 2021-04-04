@@ -15,7 +15,7 @@ export default [
     },
     {
         path: '/shopMember/login',
-        method: 'get',
+        method: 'post',
         escapeAuth: true,
         handler: [ShopController.ShopMemberLogin],
     },
@@ -24,5 +24,11 @@ export default [
         method: 'post',
         escapeAuth: true,
         handler: [ShopController.CreatePassword],
+    },
+    {
+        path: '/shopMember/delete',
+        method: 'delete',
+        escapeAuth: true,
+        handler: [ShopController.DeleteMember],
     },
 ];
