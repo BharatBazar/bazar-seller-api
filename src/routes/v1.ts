@@ -1,4 +1,5 @@
 import shop from '../structure/shop';
-import shopMember from "../structure/shopmember";
+import shopMember from '../structure/shopmember';
+import productCatalogue from '../structure/productCatalogue';
 
-export default [...shop,...shopMember];
+export default [...shop, ...shopMember, ...productCatalogue];
