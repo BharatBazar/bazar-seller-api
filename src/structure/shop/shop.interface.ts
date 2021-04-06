@@ -13,6 +13,9 @@ interface Shop {
     isTerminated: boolean;
     membersDetailSkipped: boolean;
     rating: Number;
+    category: [String];
+    subCategory1: [[String]];
+    subCategory2: [[String]];
 }
 
 export const ShopFields = {

@@ -3,12 +3,34 @@ import ResponseHandler from '../../lib/helpers/responseHandler';
 import productCatalogueModel from './productCatalogue.model';
 
 class ProductCatalogueController {
-    public async AddProductCatagory(req: Request, res: Response, next: NextFunction) {
+    public async AddProductInCatalogue(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {
             responseHandler
                 .reqRes(req, res)
-                .onCreate('Creating new product catalogue', await productCatalogueModel.AddProductCategory(req.body))
+                .onCreate('Creating new product catalogue', await productCatalogueModel.AddProductCatalogue(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
+    public async UpdateProductInCatalogue(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Product catalogue updated', await productCatalogueModel.UpdateProductCatalogue(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
+    public async GetProductCatalogue(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('All the products', await productCatalogueModel.GetProductCatalogue())
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));
