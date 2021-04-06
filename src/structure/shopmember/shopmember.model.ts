@@ -9,7 +9,6 @@ import { shopMember_message } from '../../lib/helpers/customMessage';
 import otpModel from '../otp/otp.model';
 import { pruneFields } from '../../lib/helpers';
 import { Shop } from '../shop/shop.schema';
-type InsertMany = { insertedIds: [string] };
 export class ShopMemberModel {
     async checkPhoneNumber(data: { phoneNumber: string }) {
         const phoneNumber: boolean = await ShopMember.checkPhoneNumber(data.phoneNumber);
@@ -47,7 +46,9 @@ export class ShopMemberModel {
                 await Shop.findByIdAndUpdate(data.shop, {
                     $push: data.role == shopMemberRole.coOwner ? { coOwner: member._id } : { worker: member._id },
                 });
+                member.shop = data.shop;
                 member.permissions = await ShopPermissionModel.createPermisison(member.role);
+
                 await member.save();
                 return member;
             }
@@ -78,7 +79,7 @@ export class ShopMemberModel {
         } else {
             let member: LeanDocument<IShopMemberModel> | null;
             member = await ShopMember.findOne({ phoneNumber }).populate({ path: 'permissions shop' }).lean();
-
+            log('Member =>', member);
             if (member) {
                 if (!member.password) {
                     return {
@@ -90,6 +91,7 @@ export class ShopMemberModel {
                     pruneFields(member, 'password');
                     if (isMatch) {
                         if (member.role == shopMemberRole.coOwner || member.role === shopMemberRole.worker) {
+                            log('Member =>', member);
                             if (member.isTerminated) {
                                 throw new HTTP400Error(
                                     'Your account is not activated ask dukan owner to activate your account.',

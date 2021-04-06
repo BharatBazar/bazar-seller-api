@@ -16,6 +16,7 @@ export interface shopMemberInterface {
     password: string;
     isTerminated: boolean;
     isDeleted: boolean;
+    languagePreference: ['Hindi', 'English', 'Message'];
 }
 
 export interface IShopMemberModel extends shopMemberInterface, Document {

@@ -12,6 +12,7 @@ interface Shop {
     isVerified: boolean;
     isTerminated: boolean;
     membersDetailSkipped: boolean;
+    rating: Number;
 }
 
 export const ShopFields = {

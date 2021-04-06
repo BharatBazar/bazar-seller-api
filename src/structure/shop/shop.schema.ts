@@ -16,6 +16,7 @@ export const ShopSchema: Schema = new Schema(
         worker: [{ type: ObjectID, ref: 'ShopMember' }],
         isVerified: { type: Boolean, default: false },
         isTerminated: { type: Boolean, default: false },
+        rating: Number,
     },
     {
         timestamps: true,
