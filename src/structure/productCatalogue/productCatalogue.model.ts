@@ -12,8 +12,8 @@ class ProductCatalogueModel {
         }
     }
 
-    public async GetProductCatalogue() {
-        return await ProductCatalogue.find();
+    public async GetProductCatalogue(query: IProductCatalogue) {
+        return await ProductCatalogue.find(query);
     }
 
     public async UpdateProductCatalogue(data: IProductCatalogue) {

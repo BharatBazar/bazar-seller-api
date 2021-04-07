@@ -30,7 +30,7 @@ class ProductCatalogueController {
         try {
             responseHandler
                 .reqRes(req, res)
-                .onFetch('All the products', await productCatalogueModel.GetProductCatalogue())
+                .onFetch('All the products', await productCatalogueModel.GetProductCatalogue(req.body))
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));

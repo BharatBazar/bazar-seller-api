@@ -1,17 +1,14 @@
 import { model, Model, Schema, Types } from 'mongoose';
-import { IProductCatalogueModel } from './productCatalogue.interface';
+import { IProductCatalogueModel, categoryType } from './productCatalogue.interface';
 
 const ProductCatalogueSchema: Schema = new Schema(
     {
-        _id: { type: String, unique: true },
-        category: {
-            type: [
-                {
-                    subCategory1: String,
-                    subCategory2: [String],
-                },
-            ],
-        },
+        name: String,
+        description: String,
+        image: String,
+        categoryType: { type: String, enum: categoryType },
+        subCategoryExist: Boolean,
+        subCategoryRef: { type: Types.ObjectId, ref: 'ProductCatalogue' },
     },
     { timestamps: true },
 );
