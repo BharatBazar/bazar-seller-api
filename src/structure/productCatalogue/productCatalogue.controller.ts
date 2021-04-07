@@ -1,3 +1,4 @@
+import { log } from 'util';
 import { NextFunction, Request, Response } from 'express';
 import ResponseHandler from '../../lib/helpers/responseHandler';
 import productCatalogueModel from './productCatalogue.model';
@@ -27,6 +28,7 @@ class ProductCatalogueController {
     }
     public async GetProductCatalogue(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
+
         try {
             responseHandler
                 .reqRes(req, res)

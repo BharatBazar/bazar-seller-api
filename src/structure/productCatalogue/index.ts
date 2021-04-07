@@ -15,7 +15,7 @@ export default [
     },
     {
         path: '/productCatalogue/getProducts',
-        method: 'get',
+        method: 'post',
         escapeAuth: true,
         handler: [productCatalogueController.GetProductCatalogue],
     },

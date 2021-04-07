@@ -21,12 +21,15 @@ export class ShopModel {
     };
 
     public getShop = async (body: { _id: ObjectId }) => {
+        console.log('Get shop', body);
         const shop: IShopModel | null = await Shop.findOne({ _id: body._id }).populate({
-            path: 'owner Co-owner worker',
+            path: 'owner Co-owner worker category',
             populate: {
                 path: 'permissions',
             },
         });
+        //Password need to be removed
+        delete shop['password'];
         if (shop) return shop;
         else throw new HTTP400Error('Shop does not exist');
     };

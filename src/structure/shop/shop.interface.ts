@@ -13,9 +13,9 @@ interface Shop {
     isTerminated: boolean;
     membersDetailSkipped: boolean;
     rating: Number;
-    category: [String];
-    subCategory1: [[String]];
-    subCategory2: [[String]];
+    category: [Types.ObjectId];
+    subCategory: [[Types.ObjectId]];
+    subCategory1: [[Types.ObjectId]];
 }
 
 export const ShopFields = {

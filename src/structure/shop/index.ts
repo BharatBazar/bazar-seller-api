@@ -9,7 +9,7 @@ export default [
     },
     {
         path: '/shop/get',
-        method: 'get',
+        method: 'post',
         escapeAuth: true,
         handler: [ShopController.getShop],
     },

@@ -11,7 +11,7 @@ export interface IProductCatalogue {
     image: string;
     categoryType: categoryType;
     subCategoryExist: boolean;
-    subCategoryParentRef: Types.ObjectId;
+    ParentRef: Types.ObjectId;
 }
 
 export interface IProductCatalogueModel extends IProductCatalogue, Document {}

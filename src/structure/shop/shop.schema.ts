@@ -1,4 +1,5 @@
-import { Schema, Model, model } from 'mongoose';
+import { ObjectId } from './../../datatypes/index';
+import { Schema, Model, model, Types } from 'mongoose';
 import { IShopModel } from './shop.interface';
 
 const ObjectID = Schema.Types.ObjectId;
@@ -17,6 +18,9 @@ export const ShopSchema: Schema = new Schema(
         isVerified: { type: Boolean, default: false },
         isTerminated: { type: Boolean, default: false },
         rating: Number,
+        category: [{ type: Types.ObjectId, ref: 'ProductCatalogue' }],
+        subCategory: [{ type: [Types.ObjectId], ref: 'ProductCatalogue' }],
+        subCategory1: [[{ type: [Types.ObjectId], ref: 'ProductCatalogue' }],
     },
     {
         timestamps: true,
