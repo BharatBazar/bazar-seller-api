@@ -37,6 +37,12 @@ export class ShopModel {
     public updateShop = async (body: IShopModel) => {
         const shop: IShopModel = await Shop.shopExist({ _id: body._id });
         if (shop) {
+            if (body.subCategory) {
+                body.subCategory = body.subCategory.map((item) => item.map((item) => Types.ObjectId(item)));
+            }
+            if (body.subCategory1) {
+                body.subCategory1 = body.subCategory1.map((item) => item.map((item) => Types.ObjectId(item)));
+            }
             return await Shop.findByIdAndUpdate({ _id: body._id }, body, { new: true });
         } else {
             throw new HTTP400Error(shop_message.NO_SHOP);

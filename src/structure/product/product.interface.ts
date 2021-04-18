@@ -1,7 +1,7 @@
-import { Date, Types, Document } from 'mongoose';
+import { Date, Types, Document, Model } from 'mongoose';
 
 export enum productStatus {
-    CREATED = 'Created',
+    NOTCOMPLETED = 'Incomplete',
     READYTOROLLOUT = 'Rollout',
     OUTOFSTOCK = 'Out of stock',
     WAITINGFORAPPROVAL = 'Waiting for approval',
@@ -28,4 +28,8 @@ export interface Product {
     productDiscountDeadline: [Date];
 }
 
-export interface IProductModel extends Document {}
+export interface IProductModelG extends Document {}
+
+export interface IProductModel extends Model<IProductModelG> {
+    productIdExist: (_id: Types.ObjectId) => Promise<boolean>;
+}

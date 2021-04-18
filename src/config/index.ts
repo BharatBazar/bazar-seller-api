@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 export const configCors = {
     // Allow your domains to restrict ill apis.
     allowOrigin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:8081'],
@@ -27,6 +28,7 @@ export const mongoUrl = (): string => {
 
 export enum paginationConfig {
     MAX_SHOP = 10,
+    MAX_PRODUCT = 10,
 }
 
 export const commonConfig = {
@@ -35,3 +37,7 @@ export const commonConfig = {
 };
 
 export const SALT_ROUNDS = 10;
+
+export interface IId {
+    _id: Types.ObjectId;
+}

@@ -5,10 +5,7 @@ export interface ProductColor {
     //shopkeeper can easily identify product by barcode scan or manually typing and update it need to think about it.
     productParent: Types.ObjectId; // Will refer to above product schema
     productColor: string; //Predefined color name should be there
-    productSize: [number]; // Quantity, Mrp and Sp will match the index of size
-    productQuantity: [number]; // Quanitity for each size
-    productMrp: [number]; //Mrp for each size
-    productSp: [number]; // Selling price for each size
+    productIncludedColor: [string];
     productPhotos: [string]; //Minimum 6 photo is required we need to guide dukandar about how to take photo
 }
 
