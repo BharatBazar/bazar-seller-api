@@ -1,6 +1,7 @@
+import productColorModel from '../productColor/productColor.model';
 import { IId, paginationConfig } from './../../config/index';
 import { HTTP404Error, HTTP400Error } from './../../lib/utils/httpErrors';
-import { IProductModelG } from './product.interface';
+import { IProductModel, IProductModelG } from './product.interface';
 import { Product } from './product.schema';
 
 class ProductModel {
@@ -11,9 +12,21 @@ class ProductModel {
     }
 
     public async updateProduct(data: IProductModelG) {
-        const exist = await Product.productIdExist(data._id);
+        const exist: IProductModelG | null = await Product.productIdExist(data._id);
         if (exist) {
+            if (exist.productColor.length > 0) {
+                exist.productColor.forEach(async (item) => await productColorModel.deleteProductColor({ _id: item }));
+            }
             return await Product.findByIdAndUpdate(data._id, data, { new: true });
+        } else {
+            throw new HTTP404Error('Product not found.');
+        }
+    }
+
+    public async deleteProduct(data: IProductModelG) {
+        const exist: IProductModelG | null = await Product.productIdExist(data._id);
+        if (exist) {
+            if (exist) return await Product.findByIdAndDelete(data._id);
         } else {
             throw new HTTP404Error('Product not found.');
         }

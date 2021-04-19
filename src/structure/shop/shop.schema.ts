@@ -20,7 +20,7 @@ export const ShopSchema: Schema = new Schema(
         rating: Number,
         category: [{ type: Types.ObjectId, ref: 'ProductCatalogue' }],
         subCategory: [{ type: [Types.ObjectId], ref: 'ProductCatalogue' }],
-        subCategory1: [[{ type: [Types.ObjectId], ref: 'ProductCatalogue' }],
+        subCategory1: [{ type: [Types.ObjectId], ref: 'ProductCatalogue' }],
     },
     {
         timestamps: true,

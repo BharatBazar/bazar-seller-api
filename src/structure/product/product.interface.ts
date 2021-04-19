@@ -28,8 +28,8 @@ export interface Product {
     productDiscountDeadline: [Date];
 }
 
-export interface IProductModelG extends Document {}
+export interface IProductModelG extends Document, Product {}
 
 export interface IProductModel extends Model<IProductModelG> {
-    productIdExist: (_id: Types.ObjectId) => Promise<boolean>;
+    productIdExist: (_id: Types.ObjectId) => Promise<IProductModelG>;
 }

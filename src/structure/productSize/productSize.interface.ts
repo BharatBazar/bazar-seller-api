@@ -1,11 +1,15 @@
-import { ObjectId, Types, Document } from 'mongoose';
+import { ObjectId, Types, Document, Model } from 'mongoose';
 
 interface ProductSizeSchema {
-    productSize: number;
+    productSize: string;
     productQuantity: string;
     productMrp: string;
     productSp: string;
     productParent: Types.ObjectId;
 }
 
-export interface IProductSizeModel extends ProductSizeSchema, Document {}
+export interface IProductSizeModelG extends ProductSizeSchema, Document {}
+
+export interface IProductSizeModel extends Model<IProductSizeModelG> {
+    productSizeIdExist: (_id: Types.ObjectId) => Promise<boolean>;
+}

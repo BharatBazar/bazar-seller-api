@@ -1,4 +1,7 @@
+import { NextFunction } from 'express';
 import { Schema, Types, Model, model } from 'mongoose';
+import productColorModel from '../productColor/productColor.model';
+import { ProductColor } from '../productColor/productColor.schema';
 import { IProductModel, IProductModelG, productStatus } from './product.interface';
 
 const ProductSchema: Schema = new Schema(
@@ -24,7 +27,7 @@ const ProductSchema: Schema = new Schema(
 );
 
 ProductSchema.statics.productIdExist = async function (_id: Types.ObjectId) {
-    return (await this.findById(_id).countDocuments()) > 0;
+    return await this.findById(_id);
 };
 
 export const Product: IProductModel = model<IProductModelG, IProductModel>('Product', ProductSchema);
