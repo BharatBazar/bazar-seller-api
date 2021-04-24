@@ -6,7 +6,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
-        "dev": "tsc && nodemon dist/index.js"
+        "dev": "nodemon dist/index.js"
     },
     "keywords": [],
     "author": "",

@@ -7,7 +7,7 @@ const ProductSizeSchema: Schema = new Schema(
         productMrp: String,
         productSp: String,
         productQuantity: String,
-        productParent: { Type: Types.ObjectId, ref: 'ProductColor' },
+        parentId: { type: Types.ObjectId, ref: 'ProductColor' },
     },
     { timestamps: true },
 );

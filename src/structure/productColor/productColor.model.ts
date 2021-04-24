@@ -1,4 +1,7 @@
+import { QueryOptions, UpdateQuery } from 'mongoose';
 import { IId } from '../../config';
+import { pruneFields } from '../../lib/helpers';
+import product from '../product';
 import productSizeModel from '../productSize/productSize.model';
 import { HTTP400Error } from './../../lib/utils/httpErrors';
 import { IProductColorModel, IProductColorModelG } from './productColor.interface';
@@ -14,7 +17,13 @@ class ProductColorModel {
     public async updateProductColor(data: IProductColorModelG) {
         const exist = await ProductColor.productColorIdExist(data._id);
         if (exist) {
-            return await ProductColor.findByIdAndUpdate(data._id, data, { new: true });
+            let productColor: UpdateQuery<IProductColorModelG> | undefined = {};
+            if (data.productSize) {
+                productColor['$push'] = { productSize: { $each: data.productSize } };
+            }
+            pruneFields(data, 'productSize');
+            productColor = { ...productColor, ...data };
+            return (await ProductColor.findByIdAndUpdate(data._id, productColor, { new: true }))?._id;
         } else {
             throw new HTTP400Error('Product color does not exist.');
         }

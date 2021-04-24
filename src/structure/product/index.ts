@@ -14,14 +14,14 @@ export default [
         handler: [ProductController.GetProduct],
     },
     {
-        path: '/shop/update',
+        path: '/product/update',
         method: 'patch',
         escapeAuth: true,
         handler: [ProductController.UpdateProdcut],
     },
     {
-        path: '/shop/getAllShop',
-        method: 'get',
+        path: '/product/getAllProduct',
+        method: 'post',
         escapeAuth: true,
         handler: [ProductController.GetAllProduct],
     },

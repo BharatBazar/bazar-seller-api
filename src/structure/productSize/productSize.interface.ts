@@ -5,7 +5,7 @@ interface ProductSizeSchema {
     productQuantity: string;
     productMrp: string;
     productSp: string;
-    productParent: Types.ObjectId;
+    parentId: Types.ObjectId;
 }
 
 export interface IProductSizeModelG extends ProductSizeSchema, Document {}
