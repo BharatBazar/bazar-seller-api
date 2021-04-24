@@ -36,9 +36,10 @@ class ProductSizeModel {
         }
     }
 
-    public async deleteProductSize(data: IId) {
+    public async deleteProductSize(data: IId & { parentId: Types.ObjectId }) {
         const exist = await ProductSize.productSizeIdExist(data._id);
         if (exist) {
+            await ProductColor.findByIdAndUpdate(data.parentId, { $pull: { productSize: data._id } });
             return await ProductSize.findByIdAndDelete(data._id);
         } else {
             throw new HTTP400Error('Product size does not found.');

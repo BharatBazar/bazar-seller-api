@@ -8,7 +8,19 @@ class ProductSizeController {
         try {
             responseHandler
                 .reqRes(req, res)
-                .onCreate('Product size created', await productSizeModel.createProductSize(req.body))
+                .onCreate('Product size created.', await productSizeModel.createProductSize(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
+
+    public async DeleteProductSize(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Product size deleted.', await productSizeModel.deleteProductSize(req.body))
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));

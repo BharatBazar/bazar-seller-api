@@ -7,4 +7,10 @@ export default [
         escapeAuth: true,
         handler: [productSizeController.CreateProductSize],
     },
+    {
+        path: '/productSize/delete',
+        method: 'delete',
+        escapeAuth: true,
+        handler: [productSizeController.DeleteProductSize,
+    },
 ];

@@ -1,7 +1,6 @@
-import { QueryOptions, UpdateQuery } from 'mongoose';
+import { UpdateQuery } from 'mongoose';
 import { IId } from '../../config';
 import { pruneFields } from '../../lib/helpers';
-import product from '../product';
 import productSizeModel from '../productSize/productSize.model';
 import { HTTP400Error } from './../../lib/utils/httpErrors';
 import { IProductColorModel, IProductColorModelG } from './productColor.interface';
