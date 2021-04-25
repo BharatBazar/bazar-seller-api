@@ -1,16 +1,34 @@
-import { UpdateQuery } from 'mongoose';
+import { ProductSize } from './../productSize/productSize.schema';
+import { UpdateQuery, Types } from 'mongoose';
 import { IId } from '../../config';
 import { pruneFields } from '../../lib/helpers';
-import productSizeModel from '../productSize/productSize.model';
+import productModel from '../product/product.model';
+import { Product } from '../product/product.schema';
 import { HTTP400Error } from './../../lib/utils/httpErrors';
-import { IProductColorModel, IProductColorModelG } from './productColor.interface';
+import { IProductColorModelG } from './productColor.interface';
 import { ProductColor } from './productColor.schema';
 
 class ProductColorModel {
-    public async createProductColor(data: IProductColorModel) {
-        const productColor = new ProductColor(data);
-        await productColor.save();
-        return productColor;
+    public async createProductColor(data: IProductColorModelG) {
+        if (data.parentId) {
+            let productColor: [Types.ObjectId] = [];
+            const color: IProductColorModelG = new ProductColor(data.productSize);
+            productColor.push(color._id);
+            await productModel.updateProduct({ productColor, _id: data.parentId });
+
+            color.parentId = data.parentId;
+
+            await color.save();
+            return color;
+        } else {
+            const productColor = new ProductColor(data.productSize);
+            const product = new Product();
+            product.productColor.push(productColor._id);
+            productColor.parentId = product._id;
+            await productColor.save();
+            await product.save();
+            return productColor;
+        }
     }
 
     public async updateProductColor(data: IProductColorModelG) {
@@ -28,15 +46,28 @@ class ProductColorModel {
         }
     }
 
-    public async deleteProductColor(data: IId) {
+    public async deleteProductColor(data: IId & { parenId?: string }) {
+        console.log(data);
         const exist: IProductColorModelG | null = await ProductColor.findById(data._id);
         if (exist) {
-            if (exist.productSize.length > 0) {
-                exist.productSize.forEach(async (item) => await productSizeModel.deleteProductSize({ _id: item }));
+            if (data.parenId) {
+                await Product.findByIdAndUpdate(data.parenId, { $pull: { productColor: data._id } });
             }
-            return await ProductColor.findByIdAndDelete(data._id);
+            //await ProductSize.deleteMany({ _id: { $in: exist.productSize } });
+            await exist.delete();
+            //await ProductColor.findOneAndRemove({ _id: data._id });
+            return '';
         } else {
             throw new HTTP400Error('Product color does not exist.');
+        }
+    }
+
+    public async getProductColor(data: IId) {
+        const exist = await ProductColor.productColorIdExist(data._id);
+        if (exist) {
+            return await ProductColor.findById(data._id).populate({ path: 'productSize' });
+        } else {
+            throw new HTTP400Error('Product size does not found.');
         }
     }
 }

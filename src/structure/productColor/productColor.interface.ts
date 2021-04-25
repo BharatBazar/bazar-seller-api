@@ -3,7 +3,7 @@ import { Types, Document, Model } from 'mongoose';
 export interface ProductColorSchema {
     //One more thing productcolor id should be user generated id or a barcode id something like that so that
     //shopkeeper can easily identify product by barcode scan or manually typing and update it need to think about it.
-    productParent: Types.ObjectId; // Will refer to aparent product schema
+    parentId: Types.ObjectId; // Will refer to aparent product schema
     productColor: string; //Predefined color name should be there
     productIncludedColor: [string];
     productSize: [Types.ObjectId];

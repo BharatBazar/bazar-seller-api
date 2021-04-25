@@ -1,4 +1,7 @@
+import { UpdateQuery } from 'mongoose';
+import { pruneFields } from '../../lib/helpers';
 import productColorModel from '../productColor/productColor.model';
+import { ProductColor } from '../productColor/productColor.schema';
 import { IId, paginationConfig } from './../../config/index';
 import { HTTP404Error, HTTP400Error } from './../../lib/utils/httpErrors';
 import { IProductModel, IProductModelG } from './product.interface';
@@ -14,9 +17,13 @@ class ProductModel {
     public async updateProduct(data: IProductModelG) {
         const exist: IProductModelG | null = await Product.productIdExist(data._id);
         if (exist) {
-            if (exist.productColor.length > 0) {
-                exist.productColor.forEach(async (item) => await productColorModel.deleteProductColor({ _id: item }));
+            let product: UpdateQuery<IProductModelG> | undefined = {};
+            if (data.productColor && data.productColor instanceof Array) {
+                product['$push'] = { productSize: { $each: data.productColor } };
             }
+            pruneFields(data, 'productColor');
+            product = { ...product, ...data };
+
             return await Product.findByIdAndUpdate(data._id, data, { new: true });
         } else {
             throw new HTTP404Error('Product not found.');
@@ -24,9 +31,10 @@ class ProductModel {
     }
 
     public async deleteProduct(data: IProductModelG) {
-        const exist: IProductModelG | null = await Product.productIdExist(data._id);
+        const exist: IProductModelG | null = await Product.findById(data._id);
         if (exist) {
-            if (exist) return await Product.findByIdAndDelete(data._id);
+            await exist.delete();
+            return '';
         } else {
             throw new HTTP404Error('Product not found.');
         }
@@ -35,7 +43,12 @@ class ProductModel {
     public async getProduct(data: IId) {
         const exist = await Product.productIdExist(data._id);
         if (exist) {
-            return await Product.findById(data._id);
+            return await Product.findById(data._id).populate({
+                path: 'productColor',
+                populate: {
+                    path: 'productSize',
+                },
+            });
         } else {
             throw new HTTP400Error('Product not found.');
         }

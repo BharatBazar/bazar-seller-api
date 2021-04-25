@@ -11,6 +11,18 @@ export default [
         path: '/productSize/delete',
         method: 'delete',
         escapeAuth: true,
-        handler: [productSizeController.DeleteProductSize,
+        handler: [productSizeController.DeleteProductSize],
+    },
+    {
+        path: '/productSize/update',
+        method: 'patch',
+        escapeAuth: true,
+        handler: [productSizeController.UpdateProductSize],
+    },
+    {
+        path: '/productSize/get',
+        method: 'post',
+        escapeAuth: true,
+        handler: [productSizeController.GetProductSize],
     },
 ];

@@ -7,11 +7,11 @@ import { IProductSizeModelG } from './productSize.interface';
 import { ProductSize } from './productSize.schema';
 
 class ProductSizeModel {
-    public async createProductSize(data: { productSize: IProductSizeModelG } & { parentId?: Types.ObjectId }) {
+    public async createProductSize(data: IProductSizeModelG) {
         if (data.parentId) {
             const size: IProductSizeModelG = new ProductSize(data.productSize);
             size.parentId = data.parentId;
-            let productSize: Types.ObjectId[] = [];
+            let productSize: [Types.ObjectId] = [];
             productSize.push(size._id);
             await productColorModel.updateProductColor({ productSize, _id: data.parentId });
             await size.save();
@@ -36,11 +36,15 @@ class ProductSizeModel {
         }
     }
 
-    public async deleteProductSize(data: IId & { parentId: Types.ObjectId }) {
+    public async deleteProductSize(data: IId & { parentId?: Types.ObjectId }) {
+        console.log(data);
         const exist = await ProductSize.productSizeIdExist(data._id);
         if (exist) {
-            await ProductColor.findByIdAndUpdate(data.parentId, { $pull: { productSize: data._id } });
-            return await ProductSize.findByIdAndDelete(data._id);
+            if (data.parentId) {
+                await ProductColor.findByIdAndUpdate(data.parentId, { $pull: { productSize: data._id } });
+            }
+            await ProductSize.findByIdAndDelete(data._id);
+            return;
         } else {
             throw new HTTP400Error('Product size does not found.');
         }
@@ -49,7 +53,7 @@ class ProductSizeModel {
     public async getProductSize(data: IId) {
         const exist = await ProductSize.productSizeIdExist(data._id);
         if (exist) {
-            return await ProductSize.findByIdAndDelete(data._id);
+            return await ProductSize.findById(data._id);
         } else {
             throw new HTTP400Error('Product size does not found.');
         }

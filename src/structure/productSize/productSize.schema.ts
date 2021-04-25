@@ -16,6 +16,11 @@ ProductSizeSchema.statics.productSizeIdExist = async function (_id: Types.Object
     return (await this.findById(_id).countDocuments()) > 0;
 };
 
+ProductSizeSchema.pre('deleteOne', async function (next) {
+    console.log('Product stixe removed', this._id);
+    next();
+});
+
 export const ProductSize: IProductSizeModel = model<IProductSizeModelG, IProductSizeModel>(
     'ProductSize',
     ProductSizeSchema,

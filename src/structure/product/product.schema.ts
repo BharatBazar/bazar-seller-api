@@ -1,3 +1,4 @@
+import { HTTP400Error } from './../../lib/utils/httpErrors';
 import { NextFunction } from 'express';
 import { Schema, Types, Model, model } from 'mongoose';
 import productColorModel from '../productColor/productColor.model';
@@ -29,5 +30,19 @@ const ProductSchema: Schema = new Schema(
 ProductSchema.statics.productIdExist = async function (_id: Types.ObjectId) {
     return await this.findById(_id);
 };
+
+ProductSchema.pre('remove', async function (next: NextFunction) {
+    let requests = this.productColor.map((item: Types.ObjectId) => {
+        return new Promise(async (resolve) => {
+            resolve(await productColorModel.deleteProductColor({ _id: item }));
+        });
+    });
+
+    Promise.all(requests)
+        .then(() => next())
+        .catch((error) => {
+            throw new HTTP400Error('Problem deleting work');
+        });
+});
 
 export const Product: IProductModel = model<IProductModelG, IProductModel>('Product', ProductSchema);

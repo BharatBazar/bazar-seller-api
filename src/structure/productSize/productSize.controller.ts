@@ -17,10 +17,38 @@ class ProductSizeController {
 
     public async DeleteProductSize(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
+
         try {
             responseHandler
                 .reqRes(req, res)
-                .onFetch('Product size deleted.', await productSizeModel.deleteProductSize(req.body))
+                .onFetch(
+                    'Product size deleted.',
+                    await productSizeModel.deleteProductSize({ _id: req.query._id, parentId: req.query.parentId }),
+                )
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
+
+    public async UpdateProductSize(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Product size updated.', await productSizeModel.updateProductSize(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
+
+    public async GetProductSize(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Product size.', await productSizeModel.getProductSize(req.body))
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));
