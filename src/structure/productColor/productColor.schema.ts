@@ -6,7 +6,7 @@ import { Schema, Types, model } from 'mongoose';
 const ProductColorSchema: Schema = new Schema({
     parentId: { type: Types.ObjectId, ref: 'Product' },
     productColorName: String,
-    prodcutColorCode: String,
+    productColorCode: String,
     productIncludedColor: [String],
     productSize: [{ type: Types.ObjectId, ref: 'ProductSize' }],
     productPhotos: [String],

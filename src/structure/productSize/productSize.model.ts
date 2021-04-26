@@ -16,13 +16,7 @@ class ProductSizeModel {
             await size.save();
             return size;
         } else {
-            const productSize = new ProductSize(data.productSize);
-            const productColor = new ProductColor();
-            productColor.productSize.push(productSize._id);
-            productSize.parentId = productColor._id;
-            await productColor.save();
-            await productSize.save();
-            return productSize;
+            throw new HTTP400Error('Please provide parentId.');
         }
     }
 

@@ -12,7 +12,7 @@ class ProductColorModel {
     public async createProductColor(data: IProductColorModelG) {
         if (data.parentId) {
             let productColor: [Types.ObjectId] = [];
-            const color: IProductColorModelG = new ProductColor(data.productSize);
+            const color: IProductColorModelG = new ProductColor(data);
             productColor.push(color._id);
             await productModel.updateProduct({ productColor, _id: data.parentId });
 
@@ -21,13 +21,7 @@ class ProductColorModel {
             await color.save();
             return color;
         } else {
-            const productColor = new ProductColor(data.productSize);
-            const product = new Product();
-            product.productColor.push(productColor._id);
-            productColor.parentId = product._id;
-            await productColor.save();
-            await product.save();
-            return productColor;
+            throw new HTTP400Error('Please provide parent id');
         }
     }
 
