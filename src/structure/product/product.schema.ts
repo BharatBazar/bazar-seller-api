@@ -41,7 +41,7 @@ ProductSchema.pre('remove', async function (next: NextFunction) {
     Promise.all(requests)
         .then(() => next())
         .catch((error) => {
-            throw new HTTP400Error('Problem deleting work');
+            throw new HTTP400Error('Problem deleting produtct');
         });
 });
 

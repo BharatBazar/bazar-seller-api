@@ -9,8 +9,7 @@ import { ProductSize } from './productSize.schema';
 class ProductSizeModel {
     public async createProductSize(data: IProductSizeModelG) {
         if (data.parentId) {
-            const size: IProductSizeModelG = new ProductSize(data.productSize);
-            size.parentId = data.parentId;
+            const size: IProductSizeModelG = new ProductSize(data);
             let productSize: [Types.ObjectId] = [];
             productSize.push(size._id);
             await productColorModel.updateProductColor({ productSize, _id: data.parentId });

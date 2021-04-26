@@ -2,7 +2,7 @@ import { ObjectId, Types, Document, Model } from 'mongoose';
 
 interface ProductSizeSchema {
     productSize: string;
-    productQuantity: string;
+    productQuantity: number;
     productMrp: string;
     productSp: string;
     parentId: Types.ObjectId;

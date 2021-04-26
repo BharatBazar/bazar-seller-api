@@ -27,6 +27,18 @@ class ProductController {
         }
     }
 
+    public async DeleteProdcut(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Product deleted!', await ProductModel.deleteProduct({ _id: req.query._id }))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
+
     public async GetProduct(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {

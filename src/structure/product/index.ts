@@ -20,6 +20,12 @@ export default [
         handler: [ProductController.UpdateProdcut],
     },
     {
+        path: '/product/delete',
+        method: 'delete',
+        escapeAuth: true,
+        handler: [ProductController.DeleteProdcut],
+    },
+    {
         path: '/product/getAllProduct',
         method: 'post',
         escapeAuth: true,
