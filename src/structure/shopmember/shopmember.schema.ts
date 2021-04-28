@@ -8,7 +8,7 @@ const ShopMemberSchema: Schema = new Schema({
     name: String,
     phoneNumber: { type: String, require: true, unique: true },
     role: { type: String, enum: ['owner', 'Co-owner', 'worker'] },
-    shop: { type: ObjectId, ref: 'shop' },
+    shop: { type: ObjectId, ref: 'Shop' },
     permissions: { type: ObjectId, ref: 'Permission' }, //Warning give reference inside type not as direct object as it throws error
     password: String,
     email: String,

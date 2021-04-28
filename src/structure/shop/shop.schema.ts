@@ -35,4 +35,4 @@ ShopSchema.statics.shopExist = async function (condition) {
     return await this.findOne(condition);
 };
 
-export const Shop: Model<IShopModel> = model<IShopModel>('shop', ShopSchema);
+export const Shop: Model<IShopModel> = model<IShopModel>('Shop', ShopSchema);
