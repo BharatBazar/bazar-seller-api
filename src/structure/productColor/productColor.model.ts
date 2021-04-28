@@ -1,4 +1,3 @@
-import { ProductSize } from './../productSize/productSize.schema';
 import { UpdateQuery, Types } from 'mongoose';
 import { IId } from '../../config';
 import { pruneFields } from '../../lib/helpers';
@@ -14,8 +13,8 @@ class ProductColorModel {
             let productColor: [Types.ObjectId] = [];
             const color: IProductColorModelG = new ProductColor(data);
             productColor.push(color._id);
-            await productModel.updateProduct({ productColor, _id: data.parentId });
-
+            const item = await productModel.updateProduct({ productColor, _id: data.parentId });
+            console.log(item);
             color.parentId = data.parentId;
 
             await color.save();

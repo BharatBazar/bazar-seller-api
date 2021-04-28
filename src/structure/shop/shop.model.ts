@@ -1,9 +1,11 @@
 import { shop_message } from './../../lib/helpers/customMessage';
 import { paginationConfig } from './../../config/index';
 import { HTTP400Error } from './../../lib/utils/httpErrors';
-import { Types, ObjectId } from 'mongoose';
+import { Types, ObjectId, UpdateQuery } from 'mongoose';
 import { Shop } from './shop.schema';
 import { IShopModel } from './shop.interface';
+import e from 'express';
+import { pruneFields } from '../../lib/helpers';
 
 export class ShopModel {
     public createShop = async (body: IShopModel) => {
@@ -28,22 +30,37 @@ export class ShopModel {
                 path: 'permissions',
             },
         });
-        //Password need to be removed
-        delete shop['password'];
-        if (shop) return shop;
-        else throw new HTTP400Error('Shop does not exist');
+
+        if (shop) {
+            pruneFields(shop, 'password');
+            return shop;
+        } else throw new HTTP400Error('Shop does not exist');
     };
 
-    public updateShop = async (body: IShopModel) => {
+    public updateShop = async (data: IShopModel) => {
+        const shop: IShopModel = await Shop.shopExist({ _id: data._id });
+
+        if (shop) {
+            // let shopDetails: UpdateQuery<IShopModel> = {};
+
+            // if (data.subCategory) {
+            //     shopDetails['$push'] = { subCategory: { $each: data.subCategory } };
+            // }
+            // if (data.subCategory1) {
+            //     shopDetails['$push'] = { subCategory1: { $each: data.subCategory1 } };
+            // }
+
+            // shopDetails = { ...data, ...shopDetails };
+
+            return await Shop.findByIdAndUpdate({ _id: data._id }, data, { new: true });
+        } else {
+            throw new HTTP400Error(shop_message.NO_SHOP);
+        }
+    };
+
+    public updateShopCategory = async (body: IShopModel) => {
         const shop: IShopModel = await Shop.shopExist({ _id: body._id });
         if (shop) {
-            if (body.subCategory) {
-                body.subCategory = body.subCategory.map((item) => item.map((item) => Types.ObjectId(item)));
-            }
-            if (body.subCategory1) {
-                body.subCategory1 = body.subCategory1.map((item) => item.map((item) => Types.ObjectId(item)));
-            }
-            return await Shop.findByIdAndUpdate({ _id: body._id }, body, { new: true });
         } else {
             throw new HTTP400Error(shop_message.NO_SHOP);
         }

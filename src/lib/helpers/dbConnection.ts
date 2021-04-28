@@ -1,4 +1,4 @@
-import { connect, connection } from 'mongoose';
+import { connect, connection, ConnectOptions } from 'mongoose';
 import * as chalk from 'chalk';
 import { mongoUrl } from '../../config';
 
@@ -17,7 +17,7 @@ class Connection {
 
     public mongoConnection() {
         const dbURL: any = this.mongoUrl;
-        connect(dbURL, this.mongoOption);
+        connect(dbURL, this.mongoOption());
 
         connection.on('connected', () => {
             console.log(connected('Mongoose default connection is open to ', dbURL, '\u{1F60D}'));
@@ -40,7 +40,7 @@ class Connection {
         });
     }
 
-    protected mongoOption() {
+    protected mongoOption(): ConnectOptions {
         return {
             // absolutely copied from mongoose docs.
             // Change according to your need

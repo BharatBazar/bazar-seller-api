@@ -1,10 +1,8 @@
 import { UpdateQuery } from 'mongoose';
 import { pruneFields } from '../../lib/helpers';
-import productColorModel from '../productColor/productColor.model';
-import { ProductColor } from '../productColor/productColor.schema';
 import { IId, paginationConfig } from './../../config/index';
 import { HTTP404Error, HTTP400Error } from './../../lib/utils/httpErrors';
-import { IProductModel, IProductModelG } from './product.interface';
+import { IProductModelG } from './product.interface';
 import { Product } from './product.schema';
 
 class ProductModel {
@@ -14,17 +12,18 @@ class ProductModel {
         return product;
     }
 
-    public async updateProduct(data: IProductModelG) {
+    public async updateProduct(data: Partial<IProductModelG>) {
         const exist: IProductModelG | null = await Product.productIdExist(data._id);
         if (exist) {
             let product: UpdateQuery<IProductModelG> | undefined = {};
-            if (data.productColor && data.productColor instanceof Array) {
-                product['$push'] = { productSize: { $each: data.productColor } };
+            if (data.productColor) {
+                product['$push'] = { productColor: { $each: data.productColor } };
             }
             pruneFields(data, 'productColor');
             product = { ...product, ...data };
 
-            return await Product.findByIdAndUpdate(data._id, data, { new: true });
+            await Product.findByIdAndUpdate(data._id, product, { new: true });
+            return '';
         } else {
             throw new HTTP404Error('Product not found.');
         }
