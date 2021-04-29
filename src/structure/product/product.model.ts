@@ -18,8 +18,9 @@ class ProductModel {
             let product: UpdateQuery<IProductModelG> | undefined = {};
             if (data.productColor) {
                 product['$push'] = { productColor: { $each: data.productColor } };
+                pruneFields(data, 'productColor');
             }
-            pruneFields(data, 'productColor');
+
             product = { ...product, ...data };
 
             await Product.findByIdAndUpdate(data._id, product, { new: true });

@@ -3,7 +3,6 @@ import { IProductCatalogueModel, categoryType } from './productCatalogue.interfa
 
 const ProductCatalogueSchema: Schema = new Schema(
     {
-        _id: String,
         name: String,
         description: String,
         image: String,

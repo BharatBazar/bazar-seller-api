@@ -23,13 +23,7 @@ export class ShopModel {
     };
 
     public getShop = async (body: { _id: ObjectId }) => {
-        console.log('Get shop', body);
-        const shop: IShopModel | null = await Shop.findOne({ _id: body._id }).populate({
-            path: 'owner Co-owner worker category',
-            populate: {
-                path: 'permissions',
-            },
-        });
+        const shop: IShopModel | null = await Shop.findOne({ _id: body._id }).populate({ path: 'category' });
 
         if (shop) {
             pruneFields(shop, 'password');
@@ -39,20 +33,24 @@ export class ShopModel {
 
     public updateShop = async (data: IShopModel) => {
         const shop: IShopModel = await Shop.shopExist({ _id: data._id });
-
+        console.log(shop, data);
         if (shop) {
             // let shopDetails: UpdateQuery<IShopModel> = {};
-
-            // if (data.subCategory) {
-            //     shopDetails['$push'] = { subCategory: { $each: data.subCategory } };
+            // if (data.category) {
+            //     shopDetails['$push'] = { category: { $each: data.category } };
+            //     pruneFields(data, 'category');
             // }
-            // if (data.subCategory1) {
-            //     shopDetails['$push'] = { subCategory1: { $each: data.subCategory1 } };
-            // }
+            // // if (data.subCategory) {
+            // //     shopDetails['$push'] = { subCategory: { $each: data.subCategory } };
+            // // }
+            // // if (data.subCategory1) {
+            // //     shopDetails['$push'] = { subCategory1: { $each: data.subCategory1 } };
+            // // }
 
-            // shopDetails = { ...data, ...shopDetails };
+            // shopDetails = { ...shopDetails, ...data };
+            // console.log(shopDetails);
 
-            return await Shop.findByIdAndUpdate({ _id: data._id }, data, { new: true });
+            return await Shop.findByIdAndUpdate(data._id, data, { new: true });
         } else {
             throw new HTTP400Error(shop_message.NO_SHOP);
         }
