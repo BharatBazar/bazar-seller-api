@@ -1,10 +1,9 @@
 import { shop_message } from './../../lib/helpers/customMessage';
 import { paginationConfig } from './../../config/index';
 import { HTTP400Error } from './../../lib/utils/httpErrors';
-import { Types, ObjectId, UpdateQuery } from 'mongoose';
+import { ObjectId } from 'mongoose';
 import { Shop } from './shop.schema';
 import { IShopModel } from './shop.interface';
-import e from 'express';
 import { pruneFields } from '../../lib/helpers';
 
 export class ShopModel {
