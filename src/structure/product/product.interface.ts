@@ -14,6 +14,7 @@ export interface Product {
     productCategory: string;
     productSubCategory1: string;
     productSubCategory2: string | undefined;
+    shopId: Types.ObjectId;
     //Above field will have predifined information about the size, unit etc.
     productTitle: string;
     productSubtitle: string;

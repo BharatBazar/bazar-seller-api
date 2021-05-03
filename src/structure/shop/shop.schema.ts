@@ -11,6 +11,9 @@ export const ShopSchema: Schema = new Schema(
         addressOfShop: {
             type: String,
         },
+        googleLocation: {
+            type: String,
+        },
         membersDetailSkipped: { type: Boolean, default: false },
         owner: { type: ObjectID, ref: 'ShopMember', unique: true },
         coOwner: [{ type: ObjectID, ref: 'ShopMember', unique: true }],
