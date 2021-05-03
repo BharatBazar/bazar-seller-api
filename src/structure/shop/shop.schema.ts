@@ -21,9 +21,10 @@ export const ShopSchema: Schema = new Schema(
         isVerified: { type: Boolean, default: false },
         isTerminated: { type: Boolean, default: false },
         rating: Number,
+
         category: [{ type: Types.ObjectId, ref: 'ProductCatalogue', unique: true }],
-        subCategory: [{ type: [Types.ObjectId], ref: 'ProductCatalogue', unique: true }],
-        subCategory1: [{ type: [[Types.ObjectId]], ref: 'ProductCatalogue', unique: true }],
+        subCategory: [[{ type: Types.ObjectId, ref: 'ProductCatalogue', unique: true }]],
+        subCategory1: [[[{ type: Types.ObjectId, ref: 'ProductCatalogue', unique: true }]]],
     },
     {
         timestamps: true,

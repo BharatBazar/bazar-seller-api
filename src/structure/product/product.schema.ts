@@ -10,6 +10,7 @@ const ProductSchema: Schema = new Schema(
         productCategory: String,
         productSubCategory1: String,
         productSubCategory2: { type: String, default: undefined },
+        productBrand: String,
         shopId: { type: Types.ObjectId, ref: 'Shop' },
         productTitle: { type: String, default: '' },
         productSubtitle: { type: String, default: '' },

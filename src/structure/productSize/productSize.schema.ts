@@ -3,6 +3,7 @@ import { Schema, Types, Model, model } from 'mongoose';
 
 const ProductSizeSchema: Schema = new Schema(
     {
+        shopId: String,
         productSize: String,
         productMrp: String,
         productSp: String,

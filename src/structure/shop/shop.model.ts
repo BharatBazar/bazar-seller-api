@@ -22,11 +22,28 @@ export class ShopModel {
     };
 
     public getShop = async (body: { _id: ObjectId }) => {
-        const shop: IShopModel | null = await Shop.findOne({ _id: body._id }).populate({ path: 'category' });
+        const shop: IShopModel | null = await Shop.findById(body._id);
+
+        const subCategory = [];
+        const subCategory1 = [];
 
         if (shop) {
-            pruneFields(shop, 'password');
-            return shop;
+            for (let i = 0; i < shop.subCategory.length; i++) {
+                subCategory.push(`subCategory.${i} `); // Don't delete the last space !
+            }
+            for (let i = 0; i < shop.subCategory1.length; i++) {
+                for (let t = 0; t < shop.subCategory1[i].length; t++) {
+                    subCategory1.push(`subCategory1.${i}.${t}`); // Don't delete the last space !
+                }
+            }
+
+            const populateString = subCategory.join(' ') + subCategory1.join(' ') + ' category';
+            console.log('populate string', typeof populateString, populateString);
+
+            const populatedShop = await Shop.findById(body._id).populate(populateString);
+
+            pruneFields(populatedShop, 'password');
+            return populatedShop;
         } else throw new HTTP400Error('Shop does not exist');
     };
 

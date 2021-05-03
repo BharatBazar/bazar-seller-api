@@ -16,7 +16,7 @@ export interface Product {
     productSubCategory2: string | undefined;
     shopId: Types.ObjectId;
     //Above field will have predifined information about the size, unit etc.
-    productTitle: string;
+    productTitle: string; //It can be possible that a shop sells particular brand items on their shop.
     productSubtitle: string;
     productColor: [Types.ObjectId];
     showPrice: boolean; //Whether dukandar wants to show price to customer or not
