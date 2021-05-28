@@ -25,4 +25,10 @@ export default [
         escapeAuth: true,
         handler: [ShopController.getAllShop],
     },
+    {
+        path: '/shop/searchShop',
+        method: 'post',
+        escapeAuth: true,
+        handler: [ShopController.searchShopByName],
+    },
 ];

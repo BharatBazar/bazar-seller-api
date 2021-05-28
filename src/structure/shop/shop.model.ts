@@ -80,6 +80,19 @@ export class ShopModel {
         }
     };
 
+    public searchShopByName = async (shopName: string) => {
+        const searchCount = await Shop.countDocuments({ shopName: { $regex: shopName, $options: 'i' } });
+        console.log(searchCount, shopName);
+        const data =
+            searchCount > 0
+                ? await Shop.find({ shopName: { $regex: shopName, $options: 'i' } })
+                      .select('_id shopName')
+                      .limit(10)
+                : [];
+        console.log(data);
+        return data;
+    };
+
     public getAllShop = async (query: any) => {
         if (!query.query) {
             throw new HTTP400Error('No query available');

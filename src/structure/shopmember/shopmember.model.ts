@@ -29,6 +29,7 @@ export class ShopMemberModel {
                     const shop: IShopModel = new Shop();
                     member.shop = shop._id;
                     shop.owner = member._id;
+                    console.log('Shop', shop);
                     await shop.save();
                     member.permissions = await ShopPermissionModel.createPermisison(member.role);
                     await member.save();

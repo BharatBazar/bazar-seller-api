@@ -53,6 +53,18 @@ class ShopController {
             next(responseHandler.sendError(error));
         }
     };
+
+    public searchShopByName = async (req: Request, res: Response, next: NextFunction) => {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Search Result', await ShopModel.searchShopByName(req.body.shopName))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    };
 }
 
 export default new ShopController();
