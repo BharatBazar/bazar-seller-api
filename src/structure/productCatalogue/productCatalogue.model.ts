@@ -13,7 +13,8 @@ class ProductCatalogueModel {
     }
 
     public async GetProductCatalogue(query: IProductCatalogue) {
-        return await ProductCatalogue.find(query);
+        const data = await ProductCatalogue.find(query);
+        return data;
     }
 
     public async UpdateProductCatalogue(data: IProductCatalogue) {

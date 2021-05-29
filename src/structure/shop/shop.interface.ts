@@ -2,9 +2,10 @@ import { Document, ObjectId, Schema, Types } from 'mongoose';
 
 interface Shop {
     shopName: string;
+    shopDescription: string;
     addressOfShop: string;
-    // shopImage: [{_id:ObjectId }];
-    // ownerImage: [{_id:ObjectId }];
+    shopImage: [{ _id: ObjectId }];
+    ownerImage: [{ _id: ObjectId }];
     // whatYouSell: string[];
     owner: Types.ObjectId;
     coOwner: Types.ObjectId[];
@@ -13,6 +14,7 @@ interface Shop {
     isTerminated: boolean;
     membersDetailSkipped: boolean;
     rating: Number;
+    noOfRating: Number;
     category: [Types.ObjectId];
     subCategory: [[Types.ObjectId]];
     subCategory1: [[Types.ObjectId]];

@@ -6,7 +6,6 @@ export enum categoryType {
     SubCategory1 = 'SubCategory1',
 }
 export interface IProductCatalogue {
-    _id: string;
     name: string;
     description: string;
     image: string;
