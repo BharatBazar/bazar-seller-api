@@ -8,6 +8,9 @@ export const ShopSchema: Schema = new Schema(
         shopName: {
             type: String,
         },
+        shopDescription: {
+            type: String,
+        },
         addressOfShop: {
             type: String,
         },
@@ -21,7 +24,7 @@ export const ShopSchema: Schema = new Schema(
         isVerified: { type: Boolean, default: false },
         isTerminated: { type: Boolean, default: false },
         rating: Number,
-
+        numberOfRating: Number,
         category: [{ type: Types.ObjectId, ref: 'ProductCatalogue' }],
         subCategory: [[{ type: Types.ObjectId, ref: 'ProductCatalogue' }]],
         subCategory1: [[[{ type: Types.ObjectId, ref: 'ProductCatalogue' }]]],
