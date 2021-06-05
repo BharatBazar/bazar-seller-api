@@ -13,6 +13,12 @@ export default [
         escapeAuth: true,
         handler: [AddressController.UpdateAddress],
     },
+    {
+        path: '/address/checkpincode',
+        method: 'post',
+        escapeAuth: true,
+        handler: [AddressController.checkPincode],
+    },
 
     {
         path: '/address/getAll',

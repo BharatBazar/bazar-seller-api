@@ -15,6 +15,18 @@ class AddressConroller {
         }
     }
 
+    async checkPincode(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onCreate('Pincode available.', await AddressModel.checkPincode(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
+
     async UpdateAddress(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {

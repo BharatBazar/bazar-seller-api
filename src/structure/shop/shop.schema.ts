@@ -11,12 +11,29 @@ export const ShopSchema: Schema = new Schema(
         shopDescription: {
             type: String,
         },
-        addressOfShop: {
+        state: {
+            type: Types.ObjectId,
+            ref: 'Address',
+        },
+        city: {
+            type: Types.ObjectId,
+            ref: 'Address',
+        },
+        area: {
+            type: Types.ObjectId,
+            ref: 'Address',
+        },
+        pincode: {
+            type: Types.ObjectId,
+            ref: 'Address',
+        },
+        address: {
             type: String,
         },
         googleLocation: {
             type: String,
         },
+
         membersDetailSkipped: { type: Boolean, default: false },
         owner: { type: Types.ObjectId, ref: 'ShopMember', unique: true },
         coOwner: [{ type: Types.ObjectId, ref: 'ShopMember' }],

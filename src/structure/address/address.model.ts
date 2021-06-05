@@ -5,7 +5,7 @@ import { Address } from './address.schema';
 class AddressModel {
     public async createAddress(data: IAddressModel) {
         let address;
-        if (data.parent.length > 0) {
+        if (data.parent && data.parent.length > 0) {
             address = await Address.findOne({ name: data.name, parent: data.parent });
         } else {
             address = await Address.findOne({ name: data.name });
@@ -40,8 +40,39 @@ class AddressModel {
         }
     }
 
-    public async getAddress(query: any) {
-        return await Address.find(query);
+    public async getAddress(query: { addressType: addressType }) {
+        const exist = await Address.find(query);
+        if (exist.length > 0) {
+            return exist;
+        } else {
+            throw new HTTP400Error('No address exist for this type');
+        }
+    }
+
+    public async checkPincode(query: { name: string }) {
+        const exist = await Address.findOne({ ...query, addressType: addressType.pincode })
+            .populate({
+                path: 'parent',
+                select: 'name _id',
+                populate: {
+                    path: 'parent',
+                    select: 'name _id',
+                },
+            })
+            .lean();
+
+        if (exist) {
+            const areas = await Address.find({ parent: exist.parent._id, addressType: addressType.area })
+                .select('name _id')
+                .lean();
+            return {
+                city: exist.parent,
+                state: exist.parent.parent,
+                area: areas,
+            };
+        } else {
+            throw new HTTP400Error('Pincode does not exist');
+        }
     }
 
     public async updateAddress(data: IAddressModel) {

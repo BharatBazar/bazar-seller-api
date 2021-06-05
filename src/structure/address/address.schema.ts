@@ -2,7 +2,7 @@ import { Model, Schema, Types, model } from 'mongoose';
 import { addressType, IAddressModel } from './address.interface';
 
 const AddressSchema: Schema = new Schema({
-    parent: { type: String, ref: 'Address' },
+    parent: { type: Types.ObjectId, ref: 'Address', default: undefined },
     name: String,
     addressType: { type: String, enum: addressType },
 });
