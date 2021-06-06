@@ -7,6 +7,13 @@ interface Shop {
     shopImage: [{ _id: ObjectId }];
     ownerImage: [{ _id: ObjectId }];
     // whatYouSell: string[];
+
+    state: string;
+    city: string;
+    area: string;
+    pincode: string;
+    localAddress: string;
+
     owner: Types.ObjectId;
     coOwner: Types.ObjectId[];
     worker: Types.ObjectId[];

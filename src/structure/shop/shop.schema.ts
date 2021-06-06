@@ -27,7 +27,7 @@ export const ShopSchema: Schema = new Schema(
             type: Types.ObjectId,
             ref: 'Address',
         },
-        address: {
+        localAddress: {
             type: String,
         },
         googleLocation: {
