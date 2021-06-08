@@ -1,5 +1,5 @@
 import { HTTP400Error } from './../../lib/utils/httpErrors';
-import { IProductCatalogue } from './productCatalogue.interface';
+import { categoryType, IProductCatalogue } from './productCatalogue.interface';
 import { ProductCatalogue } from './productCatalogue.schema';
 class ProductCatalogueModel {
     public async AddProductCatalogue(data: IProductCatalogue) {
@@ -9,6 +9,20 @@ class ProductCatalogueModel {
             const create = new ProductCatalogue(data);
             create.save();
             return create;
+        }
+    }
+
+    public async DeleteProductCatalogue(data: IProductCatalogue) {
+        const exist: IProductCatalogue = await ProductCatalogue.findById(data._id);
+        if (exist) {
+            if (exist.categoryType == categoryType.Category) {
+                await ProductCatalogue.findByIdAndDelete(data._id);
+                return 'Deleted';
+            } else {
+                throw new HTTP400Error('Subcategory deletion logic not added yet');
+            }
+        } else {
+            throw new HTTP400Error('Category deleted!1');
         }
     }
 

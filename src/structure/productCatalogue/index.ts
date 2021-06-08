@@ -19,4 +19,10 @@ export default [
         escapeAuth: true,
         handler: [productCatalogueController.GetProductCatalogue],
     },
+    {
+        path: '/productCatalogue/deleteProduct',
+        method: 'delete',
+        escapeAuth: true,
+        handler: [productCatalogueController.DeleteProductInCatalogue],
+    },
 ];

@@ -26,6 +26,20 @@ class ProductCatalogueController {
             next(responseHandler.sendError(error));
         }
     }
+    public async DeleteProductInCatalogue(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch(
+                    'Product catalogue deleted',
+                    await productCatalogueModel.DeleteProductCatalogue({ _id: req.query._id }),
+                )
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
     public async GetProductCatalogue(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
 
