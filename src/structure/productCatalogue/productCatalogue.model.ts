@@ -3,7 +3,7 @@ import { categoryType, IProductCatalogue } from './productCatalogue.interface';
 import { ProductCatalogue } from './productCatalogue.schema';
 class ProductCatalogueModel {
     public async AddProductCatalogue(data: IProductCatalogue) {
-        if (await ProductCatalogue.ProductExist(data._id)) {
+        if (await ProductCatalogue.findOne({ name: data.name })) {
             throw new HTTP400Error('Product already exist please call update api.');
         } else {
             const create = new ProductCatalogue(data);

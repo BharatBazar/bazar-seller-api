@@ -120,6 +120,16 @@ export class ShopMemberModel {
                                     memberDetails: true,
                                     data: member,
                                 };
+                            } else if (member.shop.category.length == 0) {
+                                return {
+                                    category: true,
+                                    data: member,
+                                };
+                            } else if (member.shop.subCategory.length == 0) {
+                                return {
+                                    subCategory: true,
+                                    data: member,
+                                };
                             } else {
                                 return {
                                     shopVerification: true,
