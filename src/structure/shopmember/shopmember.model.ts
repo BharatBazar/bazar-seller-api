@@ -41,7 +41,9 @@ export class ShopMemberModel {
         } else {
             const memberExist = await ShopMember.checkPhoneNumber(data.phoneNumber);
             if (memberExist) {
-                throw new HTTP400Error('Phone number is already registered . Please check with your dukan member.');
+                throw new HTTP400Error(
+                    'Phone number is already registered . If you want to create your own digital dukan tell your previous dukan owner to delete your membership from dukan.',
+                );
             } else {
                 let member: IShopMemberModel = new ShopMember({ ...data, isTerminated: true });
                 await Shop.findByIdAndUpdate(data.shop, {
@@ -80,7 +82,6 @@ export class ShopMemberModel {
         } else {
             let member: LeanDocument<IShopMemberModel> | null;
             member = await ShopMember.findOne({ phoneNumber }).populate({ path: 'permissions shop' }).lean();
-            log('Member =>', member);
             if (member) {
                 if (!member.password) {
                     return {
@@ -92,7 +93,6 @@ export class ShopMemberModel {
                     pruneFields(member, 'password');
                     if (isMatch) {
                         if (member.role == shopMemberRole.coOwner || member.role === shopMemberRole.worker) {
-                            log('Member =>', member);
                             if (member.isTerminated) {
                                 throw new HTTP400Error(
                                     'Your account is not activated ask dukan owner to activate your account.',
@@ -108,6 +108,11 @@ export class ShopMemberModel {
                             if (!member.shop.shopName) {
                                 return {
                                     shopNameAvailable: true,
+                                    data: member,
+                                };
+                            } else if (!member.shop.state) {
+                                return {
+                                    addressAvailable: true,
                                     data: member,
                                 };
                             } else if (member.shop.coOwner.length == 0 && !member.shop.membersDetailSkipped) {

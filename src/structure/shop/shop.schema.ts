@@ -2,7 +2,6 @@ import { ObjectId } from './../../datatypes/index';
 import { Schema, Model, model, Types } from 'mongoose';
 import { IShopModel } from './shop.interface';
 
-const ObjectID = Schema.Types.ObjectId;
 export const ShopSchema: Schema = new Schema(
     {
         shopName: {
@@ -24,8 +23,7 @@ export const ShopSchema: Schema = new Schema(
             ref: 'Address',
         },
         pincode: {
-            type: Types.ObjectId,
-            ref: 'Address',
+            type: String,
         },
         localAddress: {
             type: String,
