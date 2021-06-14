@@ -1,4 +1,5 @@
-import { Product } from '../../../product/product.interface';
+import { Types, Document } from 'mongoose';
+import { Product } from '../../../../product/product.interface';
 
 export interface Jeans extends Product {
     brand: string; //Brand to which jeans belong
@@ -7,4 +8,7 @@ export interface Jeans extends Product {
     fabric: string; //Like cotton fabric etc
     discount: string;
     fit: string;
+    color: [Types.ObjectId];
 }
+
+export interface JeansModel extends Document, Jeans {}

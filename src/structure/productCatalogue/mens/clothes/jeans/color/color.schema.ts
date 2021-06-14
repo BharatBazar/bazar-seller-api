@@ -1,4 +1,4 @@
-import { Types, Document, Model } from 'mongoose';
+import { Types } from 'mongoose';
 
 export interface ColorSchema {
     //One more thing productcolor id should be user generated id or a barcode id something like that so that
