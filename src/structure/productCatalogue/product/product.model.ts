@@ -1,7 +1,7 @@
 import { UpdateQuery } from 'mongoose';
-import { pruneFields } from '../../lib/helpers';
-import { IId, paginationConfig } from './../../config/index';
-import { HTTP404Error, HTTP400Error } from './../../lib/utils/httpErrors';
+import { pruneFields } from '../../../lib/helpers';
+import { IId, paginationConfig } from '../../../config/index';
+import { HTTP404Error, HTTP400Error } from '../../../lib/utils/httpErrors';
 import { IProductModelG } from './product.interface';
 import { Product } from './product.schema';
 

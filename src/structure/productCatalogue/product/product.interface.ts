@@ -27,6 +27,7 @@ export interface Product {
     productDescription: string; // Will be a audio as audio is better to understand in common language
     productDiscount: [number]; // If a dukandar has decided that he wants to give special discount on particular product so discount will for each color
     productDiscountDeadline: [Date];
+    bazarAssured: boolean; // It is the flag if we have personally verified the product and it is really a good product
 }
 
 export interface IProductModelG extends Document, Product {}

@@ -1,10 +1,10 @@
-import { HTTP400Error } from './../../lib/utils/httpErrors';
+import { HTTP400Error } from '../../../lib/utils/httpErrors';
 import { NextFunction } from 'express';
 import { Schema, Types, model } from 'mongoose';
-import productColorModel from '../productColor/productColor.model';
+import productColorModel from '../../productColor/productColor.model';
 import { IProductModel, IProductModelG, productStatus } from './product.interface';
 
-const ProductSchema: Schema = new Schema(
+export const ProductSchema: Schema = new Schema(
     {
         //TODO: Fix reference cannot take string directly use id to refer the product catalogue document
         productCategory: String,
@@ -22,6 +22,7 @@ const ProductSchema: Schema = new Schema(
         productNew: Boolean,
         productNewDeadline: Date,
         productDiscount: [Number],
+        bazarAssured: Boolean,
         productDiscountDeadline: [Date],
     },
     {
