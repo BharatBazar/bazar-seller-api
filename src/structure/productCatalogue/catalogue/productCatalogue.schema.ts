@@ -8,7 +8,8 @@ const ProductCatalogueSchema: Schema = new Schema(
         image: String,
         categoryType: { type: String, enum: categoryType },
         subCategoryExist: Boolean,
-        subCategoryRef: { type: Types.ObjectId, ref: 'ProductCatalogue' },
+        parentRef: { type: Types.ObjectId, ref: 'ProductCatalogue' },
+        childRef: { type: Types.ObjectId, ref: 'ProductCatalogue' },
     },
     { timestamps: true },
 );
