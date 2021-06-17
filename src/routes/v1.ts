@@ -5,5 +5,15 @@ import product from '../structure/productCatalogue/product';
 import productSize from '../structure/productSize';
 import productColor from '../structure/productColor';
 import address from '../structure/address';
+import jeans from '../structure/productCatalogue/mens/clothes/jeans/routes';
 
-export default [...shop, ...shopMember, ...productCatalogue, ...product, ...productSize, ...productColor, ...address];
+export default [
+    ...shop,
+    ...shopMember,
+    ...productCatalogue,
+    ...product,
+    ...productSize,
+    ...productColor,
+    ...address,
+    ...jeans,
+];

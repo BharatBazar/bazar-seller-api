@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { log } from 'util';
 import dbConnection from './lib/helpers/dbConnection';
 
@@ -37,7 +37,6 @@ dbConnection.mongoConnection();
 // Different router required to initialize different apis call.
 
 const r1 = express.Router();
-
 // Different router required to initialize different apis call.
 
 app.use('/', applyRoutes(v1, r1));

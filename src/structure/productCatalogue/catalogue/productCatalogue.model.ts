@@ -1,4 +1,4 @@
-import { HTTP400Error } from './../../lib/utils/httpErrors';
+import { HTTP400Error } from '../../../lib/utils/httpErrors';
 import { categoryType, IProductCatalogue } from './productCatalogue.interface';
 import { ProductCatalogue } from './productCatalogue.schema';
 class ProductCatalogueModel {
