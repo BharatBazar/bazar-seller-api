@@ -1,5 +1,6 @@
-import { Schema } from 'mongoose';
-import { classifierTypes } from '../classifier/classifier.interface';
+import { IFilterModel } from './filter.interface';
+import { Schema, Document, model, Model } from 'mongoose';
+import { classifierTypes } from '../classifiers/classifier.interface';
 
 const FilterSchema: Schema = new Schema(
     {
@@ -14,3 +15,5 @@ const FilterSchema: Schema = new Schema(
         timestamps: true,
     },
 );
+
+export const Fitler: Model<IFilterModel> = model<IFilterModel>('JeansFilter', FilterSchema);

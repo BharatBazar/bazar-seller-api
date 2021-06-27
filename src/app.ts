@@ -24,6 +24,7 @@ import { applyMiddleware, applyRoutes } from './lib/utils/wrapper';
 import middleware from './lib/middleware/common.middleware';
 import errorMiddleware from './lib/middleware/error.middleware';
 import v1 from './routes/v1';
+import v2 from './routes/v2';
 
 applyMiddleware(middleware, app);
 
@@ -37,9 +38,11 @@ dbConnection.mongoConnection();
 // Different router required to initialize different apis call.
 
 const r1 = express.Router();
+const r2 = express.Router();
 // Different router required to initialize different apis call.
 
 app.use('/', applyRoutes(v1, r1));
+app.use('/catalogue/', applyRoutes(v2, r2));
 
 /*---------------------------------------
 | API VERSIONS CONFIGURATION [END]

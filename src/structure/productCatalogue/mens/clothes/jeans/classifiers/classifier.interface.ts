@@ -1,3 +1,4 @@
+import { Document } from 'mongoose';
 export enum classifierTypes {
     SIZE = 'Size',
     COLOR = 'Color',
@@ -12,3 +13,5 @@ export interface IClassfier {
     image: string; // Can be provided for pattern or brand etc..
     type: classifierTypes; //type is the classifier to which the document belongs
 }
+
+export interface IClassifierModel extends IClassfier, Document {}
