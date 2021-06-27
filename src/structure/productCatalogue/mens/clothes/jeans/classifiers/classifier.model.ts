@@ -17,6 +17,10 @@ class ClassifierModel {
             return classifier;
         }
     };
+
+    public getClassifier = async (data: IClassifierModel) => {
+        return await Classifier.find();
+    };
 }
 
 export default new ClassifierModel();

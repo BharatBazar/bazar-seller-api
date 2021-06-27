@@ -8,7 +8,7 @@ const FilterSchema: Schema = new Schema(
         description: String,
         image: String,
         type: { type: String, enum: classifierTypes },
-        multile: Boolean,
+        multiple: { type: Boolean, default: false },
         distributionLevel: Number,
     },
     {
@@ -16,4 +16,4 @@ const FilterSchema: Schema = new Schema(
     },
 );
 
-export const Fitler: Model<IFilterModel> = model<IFilterModel>('JeansFilter', FilterSchema);
+export const Filter: Model<IFilterModel> = model<IFilterModel>('JeansFilter', FilterSchema);

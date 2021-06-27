@@ -7,4 +7,10 @@ export default [
         escapeAuth: true,
         handler: [classifierController.CreateClassifier],
     },
+    {
+        path: '/mens/clothes/jeans/classifiers/getAll',
+        method: 'get',
+        escapeAuth: true,
+        handler: [classifierController.GetAllClassifier],
+    },
 ];

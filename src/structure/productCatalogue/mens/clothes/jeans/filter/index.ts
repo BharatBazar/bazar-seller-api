@@ -7,4 +7,16 @@ export default [
         escapeAuth: true,
         handler: [filterController.CreateProdcut],
     },
+    {
+        path: '/mens/clothes/jeans/filter/getAll',
+        method: 'get',
+        escapeAuth: true,
+        handler: [filterController.GetAllFilter],
+    },
+    {
+        path: '/mens/clothes/jeans/filter/getAllWithValue',
+        method: 'get',
+        escapeAuth: true,
+        handler: [filterController.GetAllFilterWithValue],
+    },
 ];

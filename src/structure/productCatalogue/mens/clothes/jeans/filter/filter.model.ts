@@ -1,10 +1,10 @@
 import { HTTP400Error } from './../../../../../../lib/utils/httpErrors';
 import { IFilterModel } from './filter.interface';
-import { Fitler } from './filter.schema';
+import { Filter } from './filter.schema';
 
 class FilterModel {
     public filterExist = async (name: string) => {
-        const exist = Fitler.findOne({ name }).countDocuments();
+        const exist = Filter.findOne({ name }).countDocuments();
         return exist;
     };
 
@@ -13,13 +13,31 @@ class FilterModel {
         if (exist) {
             throw new HTTP400Error('Filter already exist');
         } else {
-            const filter = new Fitler(data);
+            const filter = new Filter(data);
             await filter.save();
             return filter;
         }
     };
 
-    public getFilter = async () => {};
+    public getFilter = async () => {
+        this.getAllFilterWithValue();
+        return await Filter.find();
+    };
+
+    public getAllFilterWithValue = async () => {
+        const filterWithValue = await Filter.aggregate([
+            {
+                $lookup: {
+                    from: 'jeansclassifiers',
+                    localField: 'type',
+                    foreignField: 'type',
+                    as: 'values',
+                },
+            },
+        ]);
+
+        return filterWithValue;
+    };
 }
 
 export default new FilterModel();

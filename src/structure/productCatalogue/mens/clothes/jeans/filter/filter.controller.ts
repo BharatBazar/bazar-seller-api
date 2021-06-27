@@ -39,29 +39,29 @@ class FilterController {
     //     }
     // }
 
-    // public async GetFilter(req: Request, res: Response, next: NextFunction) {
-    //     const responseHandler = new ResponseHandler();
-    //     try {
-    //         responseHandler
-    //             .reqRes(req, res)
-    //             .onFetch('Here is your product!', await FilterModel.getFilter(req.body))
-    //             .send();
-    //     } catch (error) {
-    //         next(responseHandler.sendError(error));
-    //     }
-    // }
+    public async GetAllFilterWithValue(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Here is all the filters!', await FilterModel.getAllFilterWithValue())
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
 
-    // public async GetAllFilter(req: Request, res: Response, next: NextFunction) {
-    //     const responseHandler = new ResponseHandler();
-    //     try {
-    //         responseHandler
-    //             .reqRes(req, res)
-    //             .onFetch('Here is the product you asked for!', await FilterModel.getAllFilter(req.body))
-    //             .send();
-    //     } catch (error) {
-    //         next(responseHandler.sendError(error));
-    //     }
-    // }
+    public async GetAllFilter(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Filters..!', await FilterModel.getFilter())
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
 }
 
 export default new FilterController();

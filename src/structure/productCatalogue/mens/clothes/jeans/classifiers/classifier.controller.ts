@@ -51,17 +51,17 @@ class ClassifierController {
     //     }
     // }
 
-    // public async GetAllClassifier(req: Request, res: Response, next: NextFunction) {
-    //     const responseHandler = new ResponseHandler();
-    //     try {
-    //         responseHandler
-    //             .reqRes(req, res)
-    //             .onFetch('Here is the product you asked for!', await ClassifierModel.getAllClassifier(req.body))
-    //             .send();
-    //     } catch (error) {
-    //         next(responseHandler.sendError(error));
-    //     }
-    // }
+    public async GetAllClassifier(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Here is the classifier!', await ClassifierModel.getClassifier(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
 }
 
 export default new ClassifierController();
