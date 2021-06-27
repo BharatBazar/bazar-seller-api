@@ -1,5 +1,6 @@
+import { IClassfier } from './../classifiers/classifier.interface';
 import { HTTP400Error } from './../../../../../../lib/utils/httpErrors';
-import { IFilterModel } from './filter.interface';
+import { IFilter, IFilterModel } from './filter.interface';
 import { Filter } from './filter.schema';
 
 class FilterModel {
@@ -25,7 +26,7 @@ class FilterModel {
     };
 
     public getAllFilterWithValue = async () => {
-        const filterWithValue = await Filter.aggregate([
+        const filterWithValue: { values: IClassfier }[] = await Filter.aggregate([
             {
                 $lookup: {
                     from: 'jeansclassifiers',
@@ -36,7 +37,12 @@ class FilterModel {
             },
         ]);
 
-        return filterWithValue;
+        return {
+            filter: filterWithValue.filter((filter: IFilter) => filter.distributionLevel == 0),
+            distribution: filterWithValue
+                .filter((filter: IFilter) => filter.distributionLevel > 0)
+                .sort((a, b) => a.distributionLevel - b.distributionLevel),
+        };
     };
 }
 
