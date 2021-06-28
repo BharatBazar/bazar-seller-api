@@ -1,5 +1,7 @@
+import { ObjectId } from './../../../../../../datatypes/index';
+import { Types } from 'mongoose';
 import { IClassfier } from './../classifiers/classifier.interface';
-import { HTTP400Error } from './../../../../../../lib/utils/httpErrors';
+import { HTTP400Error, HTTP404Error } from './../../../../../../lib/utils/httpErrors';
 import { IFilter, IFilterModel } from './filter.interface';
 import { Filter } from './filter.schema';
 
@@ -23,6 +25,15 @@ class FilterModel {
     public getFilter = async () => {
         this.getAllFilterWithValue();
         return await Filter.find();
+    };
+
+    public updateFilter = async (data: IFilterModel & { _id: Types.ObjectId }) => {
+        const exist = await Filter.findByIdAndUpdate(data._id, data);
+        if (exist) {
+            return 'Filter updated';
+        } else {
+            throw new HTTP404Error('Filter not found!');
+        }
     };
 
     public getAllFilterWithValue = async () => {

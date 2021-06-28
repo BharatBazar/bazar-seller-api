@@ -3,7 +3,7 @@ import ResponseHandler from '../../../../../../lib/helpers/responseHandler';
 import FilterModel from './filter.model';
 
 class FilterController {
-    public async CreateProdcut(req: Request, res: Response, next: NextFunction) {
+    public async CreateFilter(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {
             responseHandler
@@ -15,19 +15,19 @@ class FilterController {
         }
     }
 
-    // public async UpdateProdcut(req: Request, res: Response, next: NextFunction) {
-    //     const responseHandler = new ResponseHandler();
-    //     try {
-    //         responseHandler
-    //             .reqRes(req, res)
-    //             .onFetch('Filter updated!', await FilterModel.updateFilter(req.body))
-    //             .send();
-    //     } catch (error) {
-    //         next(responseHandler.sendError(error));
-    //     }
-    // }
+    public async UpdateFilter(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Filter updated!', await FilterModel.updateFilter(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
 
-    // public async DeleteProdcut(req: Request, res: Response, next: NextFunction) {
+    // public async DeleteFilter(req: Request, res: Response, next: NextFunction) {
     //     const responseHandler = new ResponseHandler();
     //     try {
     //         responseHandler
