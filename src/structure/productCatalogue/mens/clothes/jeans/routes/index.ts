@@ -1,6 +1,7 @@
-//import filter from '../filter';
+import filter from '../filter';
 import classifiers from '../classifiers';
+import size from '../product/size';
+import color from '../product/color';
+import product from '../product/product';
 
-console.log('Classifier', classifiers);
-
-export default [...classifiers];
+export default [...classifiers, ...filter, ...product, ...color, ...size];
