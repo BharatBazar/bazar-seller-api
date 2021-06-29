@@ -2,31 +2,31 @@ import JeansController from './product.controller';
 
 export default [
     {
-        path: '/product/create',
+        path: 'mens/clothes/jeans/create',
         method: 'post',
         escapeAuth: true,
         handler: [JeansController.CreateJeans],
     },
     {
-        path: '/product/get',
+        path: 'mens/clothes/jeans/get',
         method: 'post',
         escapeAuth: true,
         handler: [JeansController.GetJeans],
     },
     {
-        path: '/product/update',
+        path: 'mens/clothes/jeans/update',
         method: 'patch',
         escapeAuth: true,
         handler: [JeansController.UpdateJeans],
     },
     {
-        path: '/product/delete',
+        path: 'mens/clothes/jeans/delete',
         method: 'delete',
         escapeAuth: true,
         handler: [JeansController.DeleteJeans],
     },
     {
-        path: '/product/getAllJeans',
+        path: 'mens/clothes/jeans/getAllJeans',
         method: 'post',
         escapeAuth: true,
         handler: [JeansController.GetAllJeans],

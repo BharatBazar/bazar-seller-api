@@ -1,6 +1,7 @@
 import { productStatus } from './../../../../../product/product.interface';
 import { model, Model, Schema, Types } from 'mongoose';
 import { IJeansModel } from './product.interface';
+import { NextFunction } from 'express';
 
 const JeansSchema: Schema = new Schema(
     {
@@ -27,5 +28,19 @@ const JeansSchema: Schema = new Schema(
     },
     { timestamps: true },
 );
+
+JeansSchema.pre('remove', async function (next: NextFunction) {
+    let requests = this.colors.map((item: Types.ObjectId) => {
+        return new Promise(async (resolve) => {
+            resolve(await productColorModel.deleteProductColor({ _id: item }));
+        });
+    });
+
+    Promise.all(requests)
+        .then(() => next())
+        .catch((error) => {
+            throw new HTTP400Error('Problem deleting produtct');
+        });
+});
 
 export const Jeans: Model<IJeansModel> = model<IJeansModel>('Jeans', JeansSchema);

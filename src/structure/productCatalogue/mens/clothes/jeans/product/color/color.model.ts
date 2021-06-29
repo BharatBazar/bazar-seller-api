@@ -1,0 +1,65 @@
+import { UpdateQuery, Types } from 'mongoose';
+import { IId } from '../../../../../../../config';
+import { pruneFields } from '../../../../../../../lib/helpers';
+import JeansModel from '../product/product.model';
+import { HTTP400Error } from '../../../../.././../../lib/utils/httpErrors';
+import { IJeansColorModel } from './color.interface';
+import { JeansColor } from './color.schema';
+import { Jeans } from '../product/product.schema';
+
+class JeansColorModel {
+    public async createJeansColor(data: IJeansColorModel) {
+        if (data.parentId) {
+            let colors: [Types.ObjectId] = [];
+            const color: IJeansColorModel = new JeansColor(data);
+            colors.push(color._id);
+            const item = await JeansModel.updateJeans({ colors, _id: data.parentId });
+
+            color.parentId = data.parentId;
+
+            await color.save();
+            return color;
+        } else {
+            throw new HTTP400Error('Please provide parent id');
+        }
+    }
+
+    public async updateJeansColor(data: IJeansColorModel) {
+        const exist = (await JeansColor.findById(data._id).countDocuments()) > 0;
+        if (exist) {
+            let jeansColor: UpdateQuery<IJeansColorModel> | undefined = {};
+            if (data.sizes) {
+                jeansColor['$push'] = { jeansSize: { $each: data.sizes } };
+            }
+            pruneFields(data, 'jeansSize');
+            jeansColor = { ...jeansColor, ...data };
+            return (await JeansColor.findByIdAndUpdate(data._id, jeansColor, { new: true }))?._id;
+        } else {
+            throw new HTTP400Error('Jeans color does not exist.');
+        }
+    }
+
+    public async deleteJeansColor(data: IId & { parenId?: string }) {
+        const exist: IJeansColorModel | null = await JeansColor.findById(data._id);
+        if (exist) {
+            if (data.parenId) {
+                await Jeans.findByIdAndUpdate(data.parenId, { $pull: { colors: data._id } });
+            }
+            await exist.delete();
+            return '';
+        } else {
+            throw new HTTP400Error('Jeans color does not exist.');
+        }
+    }
+
+    public async getJeansColor(data: IId) {
+        const exist = (await JeansColor.findById(data._id).countDocuments()) > 0;
+        if (exist) {
+            return await JeansColor.findById(data._id).populate({ path: 'jeansSize' });
+        } else {
+            throw new HTTP400Error('Jeans size does not found.');
+        }
+    }
+}
+
+export default new JeansColorModel();
