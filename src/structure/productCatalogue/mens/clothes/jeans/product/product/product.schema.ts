@@ -28,4 +28,4 @@ const JeansSchema: Schema = new Schema(
     { timestamps: true },
 );
 
-export const JeansModel: Model<IJeansModel> = model<IJeansModel>('Jeans', JeansSchema);
+export const Jeans: Model<IJeansModel> = model<IJeansModel>('Jeans', JeansSchema);
