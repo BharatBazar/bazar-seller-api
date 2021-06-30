@@ -1,10 +1,10 @@
 import { Document } from 'mongoose';
 export enum classifierTypes {
-    SIZE = 'Size',
-    COLOR = 'Color',
-    BRAND = 'Brand',
-    PATTERN = 'Pattern',
-    FIT = 'Fit',
+    SIZE = 'size',
+    COLOR = 'color',
+    BRAND = 'brand',
+    PATTERN = 'pattern',
+    FIT = 'fit',
 }
 
 export interface IClassfier {

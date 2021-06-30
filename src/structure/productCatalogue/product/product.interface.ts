@@ -11,22 +11,22 @@ export enum productStatus {
 export interface Product {
     //Also i need to think about how i will be dealing with language preferences how can i use multiple language.
 
-    productCategory: string;
-    productSubCategory1: string;
-    productSubCategory2: string | undefined;
+    Category: string;
+    SubCategory1: string;
+    SubCategory2: string | undefined;
     shopId: Types.ObjectId;
     //Above field will have predifined information about the size, unit etc.
-    productTitle: string; //It can be possible that a shop sells particular brand items on their shop.
-    productSubtitle: string;
-    productColor: [Types.ObjectId];
+    title: string; //It can be possible that a shop sells particular brand items on their shop.
+    subTitle: string;
+    Color: [Types.ObjectId];
     showPrice: boolean; //Whether dukandar wants to show price to customer or not
     productStatus: productStatus;
-    productRating: number;
-    productNew: boolean; // Sometimes customer comes to shop asking what is new in the shop so this will show all the new available products
-    productNewDeadline: Date;
-    productDescription: string; // Will be a audio as audio is better to understand in common language
-    productDiscount: [number]; // If a dukandar has decided that he wants to give special discount on particular product so discount will for each color
-    productDiscountDeadline: [Date];
+    rating: number;
+    new: boolean; // Sometimes customer comes to shop asking what is new in the shop so this will show all the new available s
+    newDeadline: Date;
+    description: string; // Will be a audio as audio is better to understand in common language
+    discount: [number]; // If a dukandar has decided that he wants to give special discount on particular  so discount will for each color
+    discountDeadline: [Date];
     bazarAssured: boolean; // It is the flag if we have personally verified the product and it is really a good product
 }
 
