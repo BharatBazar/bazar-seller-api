@@ -39,6 +39,18 @@ class JeansController {
         }
     }
 
+    public async DeleteJeansFilter(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Jeans filters deleted!', await JeansModel.deleteJeansFilter({ ...req.body }))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
+
     public async GetJeans(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {

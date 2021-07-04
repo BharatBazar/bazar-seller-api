@@ -1,3 +1,4 @@
+import { HTTP400Error } from './../../../../../../../lib/utils/httpErrors';
 import { UpdateQuery, Types } from 'mongoose';
 import { pruneFields } from '../../../../../../../lib/helpers';
 import { IId, paginationConfig } from '../../../../../../../config/index';
@@ -35,6 +36,19 @@ class JeansModel {
         }
     }
 
+    public async deleteJeansFilter(data: { _id: Types.ObjectId; filter: any }) {
+        let exist: boolean = await this.jeansIdExist(data._id);
+        if (exist) {
+            let jeans: UpdateQuery<IJeansModel> | undefined = {};
+            console.log(data);
+            jeans['$pull'] = { ...data.filter };
+            await Jeans.findByIdAndUpdate(data._id, jeans, { new: true });
+            return '';
+        } else {
+            throw new HTTP404Error('Jeans not found');
+        }
+    }
+
     public async deleteJeans(data: IJeansModel) {
         const exist: IJeansModel | null = await Jeans.findById(data._id);
         if (exist) {
@@ -52,7 +66,7 @@ class JeansModel {
                 path: 'colors brand fit pattern',
                 populate: {
                     path: 'sizes color includedColor',
-                   
+
                     populate: {
                         path: 'size',
                     },

@@ -26,6 +26,12 @@ export default [
         handler: [JeansController.DeleteJeans],
     },
     {
+        path: '/mens/clothes/jeans/delete/filter',
+        method: 'patch',
+        escapeAuth: true,
+        handler: [JeansController.DeleteJeansFilter],
+    },
+    {
         path: '/mens/clothes/jeans/getAll',
         method: 'post',
         escapeAuth: true,
