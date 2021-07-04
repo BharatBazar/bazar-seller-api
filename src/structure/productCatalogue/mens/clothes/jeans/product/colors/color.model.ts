@@ -2,7 +2,7 @@ import { UpdateQuery, Types } from 'mongoose';
 import { IId } from '../../../../../../../config';
 import { pruneFields } from '../../../../../../../lib/helpers';
 import JeansModel from '../product/product.model';
-import { HTTP400Error } from '../../../../.././../../lib/utils/httpErrors';
+import { HTTP400Error } from '../../../../../../../lib/utils/httpErrors';
 import { IJeansColorModel } from './color.interface';
 import { JeansColor } from './color.schema';
 import { Jeans } from '../product/product.schema';
@@ -29,10 +29,11 @@ class JeansColorModel {
         if (exist) {
             let jeansColor: UpdateQuery<IJeansColorModel> | undefined = {};
             if (data.sizes) {
-                jeansColor['$push'] = { jeansSize: { $each: data.sizes } };
+                jeansColor['$push'] = { sizes: { $each: data.sizes } };
             }
-            pruneFields(data, 'jeansSize');
+            pruneFields(data, 'sizes');
             jeansColor = { ...jeansColor, ...data };
+            console.log(jeansColor, data);
             return (await JeansColor.findByIdAndUpdate(data._id, jeansColor, { new: true }))?._id;
         } else {
             throw new HTTP400Error('Jeans color does not exist.');

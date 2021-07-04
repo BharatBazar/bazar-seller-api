@@ -52,6 +52,7 @@ class JeansModel {
                 path: 'colors brand fit pattern',
                 populate: {
                     path: 'sizes color includedColor',
+                   
                     populate: {
                         path: 'size',
                     },

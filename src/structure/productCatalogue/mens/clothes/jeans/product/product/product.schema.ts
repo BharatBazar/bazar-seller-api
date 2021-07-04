@@ -1,14 +1,16 @@
+import { HTTP400Error } from './../../../../../../../lib/utils/httpErrors';
 import { productStatus } from './../../../../../product/product.interface';
 import { model, Model, Schema, Types } from 'mongoose';
 import { IJeansModel } from './product.interface';
 import { NextFunction } from 'express';
+import JeansColorModel from '../colors/color.model';
 
 const JeansSchema: Schema = new Schema(
     {
         //TODO: Fix reference cannot take string directly use id to refer the product catalogue document
         shopId: { type: Types.ObjectId, ref: 'Shop' },
         title: { type: String, default: '' },
-        subtitle: { type: String, default: '' },
+        subTitle: { type: String, default: '' },
         description: { type: String, default: '' },
 
         showPrice: { type: Boolean, default: false },
@@ -32,7 +34,7 @@ const JeansSchema: Schema = new Schema(
 JeansSchema.pre('remove', async function (next: NextFunction) {
     let requests = this.colors.map((item: Types.ObjectId) => {
         return new Promise(async (resolve) => {
-            resolve(await productColorModel.deleteProductColor({ _id: item }));
+            resolve(await JeansColorModel.deleteJeansColor({ _id: item }));
         });
     });
 
