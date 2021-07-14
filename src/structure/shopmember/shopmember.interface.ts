@@ -6,7 +6,8 @@ export enum shopMemberRole {
 }
 
 export interface shopMemberInterface {
-    name: string;
+    firstName: string;
+    lastName: string;
     //photo: [{_id:ObjectId}];
     permissions: Types.ObjectId;
     phoneNumber: string;

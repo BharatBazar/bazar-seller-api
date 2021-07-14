@@ -5,7 +5,8 @@ import bcrypt from 'bcrypt';
 const { ObjectId } = Schema.Types;
 
 const ShopMemberSchema: Schema = new Schema({
-    name: String,
+    firstName: String,
+    lastName: String,
     phoneNumber: { type: String, require: true, unique: true },
     role: { type: String, enum: ['owner', 'Co-owner', 'worker'] },
     shop: { type: ObjectId, ref: 'Shop' },

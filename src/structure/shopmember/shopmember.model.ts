@@ -29,7 +29,6 @@ export class ShopMemberModel {
                     const shop: IShopModel = new Shop();
                     member.shop = shop._id;
                     shop.owner = member._id;
-                    console.log('Shop', shop);
                     await shop.save();
                     member.permissions = await ShopPermissionModel.createPermisison(member.role);
                     await member.save();
@@ -42,7 +41,7 @@ export class ShopMemberModel {
             const memberExist = await ShopMember.checkPhoneNumber(data.phoneNumber);
             if (memberExist) {
                 throw new HTTP400Error(
-                    'Phone number is already registered . If you want to create your own digital dukan tell your previous dukan owner to delete your membership from dukan.',
+                    'Phone number is already registered . If you want to create your own digital dukan tell your previous dukan owner to delete your membership from his dukan.',
                 );
             } else {
                 let member: IShopMemberModel = new ShopMember({ ...data, isTerminated: true });
