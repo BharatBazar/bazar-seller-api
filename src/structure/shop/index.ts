@@ -14,6 +14,12 @@ export default [
         handler: [ShopController.getShop],
     },
     {
+        path: '/shop/verificationDetails',
+        method: 'post',
+        escapeAuth: true,
+        handler: [ShopController.getShopVerificationDetails],
+    },
+    {
         path: '/shop/update',
         method: 'patch',
         escapeAuth: true,

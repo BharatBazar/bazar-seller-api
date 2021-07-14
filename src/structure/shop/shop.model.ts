@@ -21,6 +21,18 @@ export class ShopModel {
         }
     };
 
+    public shopVerificationDetails = async (body: IShopModel) => {
+        const shop: IShopModel | null = await Shop.findOne(
+            { ownerPhoneNumber: body.ownerPhoneNumber },
+            'isVerified verificationStatus remarks',
+        );
+        if (shop) {
+            return shop;
+        } else {
+            throw new HTTP400Error('Shop does not exist');
+        }
+    };
+
     public getShop = async (body: { _id: ObjectId }) => {
         const shop: IShopModel | null = await Shop.findById(body._id);
 

@@ -1,6 +1,6 @@
 import { ObjectId } from './../../datatypes/index';
 import { Schema, Model, model, Types } from 'mongoose';
-import { IShopModel } from './shop.interface';
+import { IShopModel, verificationStatus } from './shop.interface';
 
 export const ShopSchema: Schema = new Schema(
     {
@@ -37,6 +37,9 @@ export const ShopSchema: Schema = new Schema(
         coOwner: [{ type: Types.ObjectId, ref: 'ShopMember' }],
         worker: [{ type: Types.ObjectId, ref: 'ShopMember' }],
         isVerified: { type: Boolean, default: false },
+        verificationStatus: { type: String, enum: verificationStatus, default: verificationStatus.registered },
+        remarks: { type: String, default: '' },
+
         isTerminated: { type: Boolean, default: false },
         rating: Number,
         numberOfRating: Number,

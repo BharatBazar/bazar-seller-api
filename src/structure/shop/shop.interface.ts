@@ -1,11 +1,18 @@
 import { Document, ObjectId, Schema, Types } from 'mongoose';
 
+export enum verificationStatus {
+    registered = 'Registered',
+    rejected = 'Rejected',
+    verified = 'Verified',
+}
 interface Shop {
     shopName: string;
     shopDescription: string;
     addressOfShop: string;
     shopImage: [{ _id: ObjectId }];
     ownerImage: [{ _id: ObjectId }];
+    verificationStatus: verificationStatus;
+    remarks: string;
     // whatYouSell: string[];
 
     state: string;
