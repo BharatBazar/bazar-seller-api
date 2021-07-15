@@ -16,6 +16,32 @@ class ShopMemberController {
         }
     }
 
+    async ForgetPassword(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Request successfull!', await ShopMemberModel.forgetPassword(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
+
+    async UpdatePassword(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Password updated!', await ShopMemberModel.updatePassword(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
+
     async CreateShopMember(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {

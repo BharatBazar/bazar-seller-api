@@ -14,6 +14,18 @@ export default [
         handler: [ShopController.CheckPhoneNumber],
     },
     {
+        path: '/shopMember/forgetPassword',
+        method: 'post',
+        escapeAuth: true,
+        handler: [ShopController.ForgetPassword],
+    },
+    {
+        path: '/shopMember/updatePassword',
+        method: 'post',
+        escapeAuth: true,
+        handler: [ShopController.UpdatePassword],
+    },
+    {
         path: '/shopMember/login',
         method: 'post',
         escapeAuth: true,
