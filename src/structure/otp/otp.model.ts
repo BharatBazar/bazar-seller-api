@@ -11,9 +11,8 @@ interface otp {
 }
 class OtpModel {
     public sendOTP = async (data: data) => {
-        console.log(data);
         const numberExist: boolean = await OTP.phoneNumberExist(data.phoneNumber);
-        console.log(numberExist);
+
         const otp = otpGenerator().toString();
         if (numberExist) {
             await OTP.updateOne({ phoneNumber: data.phoneNumber }, { otp: otp }).lean();
@@ -26,8 +25,6 @@ class OtpModel {
     };
 
     public verifyOTP = async (data: data & otp) => {
-        console.log(data);
-
         const otp: IOtpModel | null = await OTP.findOne({ phoneNumber: data.phoneNumber }, 'otp').lean();
 
         if (!otp) {

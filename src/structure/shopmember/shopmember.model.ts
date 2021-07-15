@@ -75,6 +75,34 @@ export class ShopMemberModel {
         }
     }
 
+    async forgetPassword({ phoneNumber, verify, otp }: { phoneNumber: string; verify: boolean; otp: string }) {
+        if (!phoneNumber) {
+            throw new HTTP400Error('Phone number is required.');
+        } else {
+            let member: boolean;
+            member = (await ShopMember.findOne({ phoneNumber }).countDocuments()) > 0;
+            if (member) {
+                if (verify) {
+                    const matched: boolean = await otpModel.verifyOTP({ otp, phoneNumber });
+                    if (matched) {
+                        return { otpVerified: true };
+                    }
+                } else {
+                    return otpModel.sendOTP({ phoneNumber });
+                }
+            } else {
+                throw new HTTP400Error('Phone number does not exist.');
+            }
+        }
+    }
+
+    async updatePassword(data: { password: string; phoneNumber: string }) {
+        const password = await this.createPassword(data);
+        if (password) {
+            return 'Password created';
+        }
+    }
+
     async ShopMemberLogin({ phoneNumber, password }: { phoneNumber: string; password: string }) {
         if (!phoneNumber) {
             throw new HTTP400Error('Phone number is required.');
