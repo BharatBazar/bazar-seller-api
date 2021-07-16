@@ -147,6 +147,11 @@ export class ShopMemberModel {
                                     memberDetails: true,
                                     data: member,
                                 };
+                            } else if (!member.shop.isVerified) {
+                                return {
+                                    shopVerification: true,
+                                    data: member,
+                                };
                             } else if (member.shop.category.length == 0) {
                                 return {
                                     category: true,
@@ -155,11 +160,6 @@ export class ShopMemberModel {
                             } else if (member.shop.subCategory.length == 0) {
                                 return {
                                     subCategory: true,
-                                    data: member,
-                                };
-                            } else {
-                                return {
-                                    shopVerification: true,
                                     data: member,
                                 };
                             }
