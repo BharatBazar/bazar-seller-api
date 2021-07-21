@@ -24,6 +24,7 @@ interface Shop {
     owner: Types.ObjectId;
     coOwner: Types.ObjectId[];
     worker: Types.ObjectId[];
+
     isVerified: boolean;
     isTerminated: boolean;
     membersDetailSkipped: boolean;

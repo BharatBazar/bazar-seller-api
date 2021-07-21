@@ -49,7 +49,8 @@ export class ShopModel {
                 }
             }
 
-            const populateString = subCategory.join(' ') + subCategory1.join(' ') + ' category';
+            const populateString =
+                subCategory.join(' ') + subCategory1.join(' ') + ' category' + ' coOwner owner worker';
             console.log('populate string', typeof populateString, populateString);
 
             const populatedShop = await Shop.findById(body._id).populate(populateString);
