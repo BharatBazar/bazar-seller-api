@@ -106,7 +106,7 @@ export class ShopModel {
         return data;
     };
 
-    public getAllShop = async (query: any) => {
+    public getAllShop = async (query: { query: any; selectString: string }) => {
         if (!query.query) {
             throw new HTTP400Error('No query available');
         }
@@ -122,6 +122,11 @@ export class ShopModel {
         const data =
             searchCount > 0
                 ? await Shop.find({ $and: [condition, query.query] })
+                      .select(
+                          query.selectString
+                              ? query.selectString
+                              : 'createdAt verificationStatus shopName addressOfShop localAddress shopImage ',
+                      )
                       .sort('-createdAt')
                       .limit(paginationConfig.MAX_SHOP)
                 : [];

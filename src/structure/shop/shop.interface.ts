@@ -2,6 +2,7 @@ import { Document, ObjectId, Schema, Types } from 'mongoose';
 
 export enum verificationStatus {
     registered = 'Registered',
+    processing = 'Processing',
     rejected = 'Rejected',
     verified = 'Verified',
 }

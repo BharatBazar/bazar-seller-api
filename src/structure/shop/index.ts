@@ -27,7 +27,7 @@ export default [
     },
     {
         path: '/shop/getAllShop',
-        method: 'get',
+        method: 'post',
         escapeAuth: true,
         handler: [ShopController.getAllShop],
     },
