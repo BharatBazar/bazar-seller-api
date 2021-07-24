@@ -1,10 +1,12 @@
+import { ObjectId } from './../../datatypes/index';
 import { shop_message } from './../../lib/helpers/customMessage';
 import { paginationConfig } from './../../config/index';
 import { HTTP400Error } from './../../lib/utils/httpErrors';
-import { ObjectId } from 'mongoose';
+import { ObjectId, Types } from 'mongoose';
 import { Shop } from './shop.schema';
 import { IShopModel } from './shop.interface';
 import { pruneFields } from '../../lib/helpers';
+import ShopMemberModel from '../shopmember/shopmember.model';
 
 export class ShopModel {
     public createShop = async (body: IShopModel) => {
@@ -50,7 +52,7 @@ export class ShopModel {
             }
 
             const populateString =
-                subCategory.join(' ') + subCategory1.join(' ') + ' category' + ' coOwner owner worker';
+                subCategory.join(' ') + subCategory1.join(' ') + ' category' + ' coOwner owner worker state city area';
             console.log('populate string', typeof populateString, populateString);
 
             const populatedShop = await Shop.findById(body._id).populate(populateString);
@@ -62,7 +64,7 @@ export class ShopModel {
 
     public updateShop = async (data: IShopModel) => {
         const shop: IShopModel = await Shop.shopExist({ _id: data._id });
-        console.log(shop, data);
+
         if (shop) {
             // let shopDetails: UpdateQuery<IShopModel> = {};
             // if (data.category) {
@@ -82,6 +84,46 @@ export class ShopModel {
             return await Shop.findByIdAndUpdate(data._id, data, { new: true });
         } else {
             throw new HTTP400Error(shop_message.NO_SHOP);
+        }
+    };
+
+    public deleteShop = async (data: { _id: Types.ObjectId }) => {
+        try {
+            console.log(data);
+            data._id = new Types.ObjectId(data._id);
+            const shop = await Shop.findOne({ _id: data._id });
+            console.log('shop =>', shop);
+            if (shop) {
+                const deleteMember = [];
+                deleteMember.push(
+                    new Promise(async (resolve) => {
+                        resolve(await ShopMemberModel.deleteMember({ _id: shop.owner }));
+                    }),
+                );
+                shop.coOwner.forEach((member) => {
+                    deleteMember.push(
+                        new Promise(async (resolve) => {
+                            resolve(await ShopMemberModel.deleteMember({ _id: member }));
+                        }),
+                    );
+                });
+                shop.worker.forEach((member) => {
+                    deleteMember.push(
+                        new Promise(async (resolve) => {
+                            resolve(await ShopMemberModel.deleteMember({ _id: member }));
+                        }),
+                    );
+                });
+
+                console.log(deleteMember.length, deleteMember);
+
+                await Promise.all([...deleteMember, await Shop.findByIdAndDelete(data._id)]);
+                return 'Shop deleted';
+            } else {
+                throw new HTTP400Error('Shop does not exist!!');
+            }
+        } catch (error) {
+            throw new Error('Error in removing dukan from market');
         }
     };
 

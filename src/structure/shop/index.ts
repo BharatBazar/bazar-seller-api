@@ -14,6 +14,12 @@ export default [
         handler: [ShopController.getShop],
     },
     {
+        path: '/shop/delete',
+        method: 'delete',
+        escapeAuth: true,
+        handler: [ShopController.deleteShop],
+    },
+    {
         path: '/shop/verificationDetails',
         method: 'post',
         escapeAuth: true,

@@ -16,10 +16,10 @@ interface Shop {
     remarks: string;
     // whatYouSell: string[];
 
-    state: string;
-    city: string;
-    area: string;
-    pincode: string;
+    state: Types.ObjectId;
+    city: Types.ObjectId;
+    area: Types.ObjectId;
+    pincode: Types.ObjectId;
     localAddress: string;
 
     owner: Types.ObjectId;

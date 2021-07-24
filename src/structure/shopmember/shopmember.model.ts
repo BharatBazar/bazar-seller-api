@@ -9,6 +9,7 @@ import { shopMember_message } from '../../lib/helpers/customMessage';
 import otpModel from '../otp/otp.model';
 import { pruneFields } from '../../lib/helpers';
 import { Shop } from '../shop/shop.schema';
+import { ShopPermissions } from '../permission/permission.schema';
 export class ShopMemberModel {
     async checkPhoneNumber(data: { phoneNumber: string }) {
         const phoneNumber: boolean = await ShopMember.checkPhoneNumber(data.phoneNumber);
@@ -67,8 +68,11 @@ export class ShopMemberModel {
     }
 
     async deleteMember(data: { _id: Types.ObjectId }) {
-        const success: IShopMemberModel | null = await ShopMember.findByIdAndDelete(data._id);
+        const success: IShopMemberModel | null = await ShopMember.findById(data._id);
         if (success) {
+            await ShopPermissions.findByIdAndDelete(success.permissions);
+            await ShopMember.findByIdAndDelete(data._id);
+            console.log('Dukan member deleted', success);
             return 'Dukan member deleted!!';
         } else {
             throw new HTTP400Error('Trouble deleting dukan member');

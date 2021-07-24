@@ -28,6 +28,18 @@ class ShopController {
             next(responsHandler.sendError(error));
         }
     };
+    public deleteShop = async (req: Request, res: Response, next: NextFunction) => {
+        const responsHandler = new ResponseHandler();
+
+        try {
+            responsHandler
+                .reqRes(req, res)
+                .onFetch(user.FETCH_ALL, await ShopModel.deleteShop(req.query))
+                .send();
+        } catch (error) {
+            next(responsHandler.sendError(error));
+        }
+    };
 
     public getShopVerificationDetails = async (req: Request, res: Response, next: NextFunction) => {
         const responsHandler = new ResponseHandler();
