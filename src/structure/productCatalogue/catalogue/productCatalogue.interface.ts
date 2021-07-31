@@ -12,7 +12,8 @@ export interface IProductCatalogue {
     categoryType: categoryType;
     subCategoryExist: boolean;
     parentRef: Types.ObjectId;
-    childRef: Types.ObjectId;
+    childRef: Types.ObjectId[];
+    activate: boolean;
     filters: [
         {
             name: 'Size';

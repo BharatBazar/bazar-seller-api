@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 export const configCors = {
     // Allow your domains to restrict ill apis.
-    allowOrigin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:8081'],
+    allowOrigin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:8081', 'http://localhost:8080'],
     // Expose additional which are restricted.
     exposedHeaders: ['X-Auth'],
 };

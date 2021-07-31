@@ -1,12 +1,26 @@
+import { HTTP400Error } from './../../../lib/utils/httpErrors';
 import { HTTP400Error } from '../../../lib/utils/httpErrors';
 import { categoryType, IProductCatalogue } from './productCatalogue.interface';
 import { ProductCatalogue } from './productCatalogue.schema';
 class ProductCatalogueModel {
     public async AddProductCatalogue(data: IProductCatalogue) {
-        if (await ProductCatalogue.findOne({ name: data.name })) {
+        if (await ProductCatalogue.findOne({ name: data.name, categoryType: data.categoryType })) {
             throw new HTTP400Error('Product already exist please call update api.');
         } else {
             const create = new ProductCatalogue(data);
+            if (data.categoryType != categoryType.Category) {
+                if (data.parentRef) {
+                    const parent = await ProductCatalogue.findByIdAndUpdate(data.parentRef, {
+                        $push: { childRef: create._id },
+                    });
+                    if (!parent) {
+                        throw new HTTP400Error('Parent not found');
+                    }
+                } else {
+                    throw new HTTP400Error('Please provide parent id.');
+                }
+            }
+
             create.save();
             return create;
         }
@@ -32,11 +46,14 @@ class ProductCatalogueModel {
     }
 
     public async UpdateProductCatalogue(data: IProductCatalogue) {
-        console.log(data);
-        if (!(await ProductCatalogue.ProductExist(data._id))) {
-            throw new HTTP400Error('Product does not exist please add product in order to update it.');
+        if ('activate' in data) {
+            throw new HTTP400Error('Cannot activate catelogue item from this api.');
         } else {
-            return await ProductCatalogue.findByIdAndUpdate(data._id, data, { new: true });
+            if (!(await ProductCatalogue.ProductExist(data._id))) {
+                throw new HTTP400Error('Product does not exist please add product in order to update it.');
+            } else {
+                return await ProductCatalogue.findByIdAndUpdate(data._id, data, { new: true });
+            }
         }
     }
 }

@@ -24,10 +24,8 @@ export class ShopModel {
     };
 
     public shopVerificationDetails = async (body: IShopModel) => {
-        const shop: IShopModel | null = await Shop.findOne(
-            { ownerPhoneNumber: body.ownerPhoneNumber },
-            'isVerified verificationStatus remarks',
-        );
+        const shop: IShopModel | null = await Shop.findOne({ _id: body._id }, 'isVerified verificationStatus remarks');
+
         if (shop) {
             return shop;
         } else {
