@@ -11,8 +11,8 @@ export interface IProductCatalogue {
     image: string;
     categoryType: categoryType;
     subCategoryExist: boolean;
-    parentRef: Types.ObjectId;
-    childRef: Types.ObjectId[];
+    parent: Types.ObjectId;
+    child: Types.ObjectId[];
     activate: boolean;
     filters: [
         {

@@ -9,9 +9,9 @@ class ProductCatalogueModel {
         } else {
             const create = new ProductCatalogue(data);
             if (data.categoryType != categoryType.Category) {
-                if (data.parentRef) {
-                    const parent = await ProductCatalogue.findByIdAndUpdate(data.parentRef, {
-                        $push: { childRef: create._id },
+                if (data.parent) {
+                    const parent = await ProductCatalogue.findByIdAndUpdate(data.parent, {
+                        $push: { child: create._id },
                     });
                     if (!parent) {
                         throw new HTTP400Error('Parent not found');
