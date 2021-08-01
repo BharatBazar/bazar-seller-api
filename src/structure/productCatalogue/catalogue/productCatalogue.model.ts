@@ -47,8 +47,12 @@ class ProductCatalogueModel {
                     await ProductCatalogue.findByIdAndDelete(exist._id),
                 ]);
                 return 'Deleted';
-            } else {
-                throw new HTTP400Error('Subcategory deletion logic not added yet');
+            } else if (exist.categoryType == categoryType.SubCategory1) {
+                await Promise.all([
+                    await ProductCatalogue.findByIdAndUpdate(exist.parent, { $pull: { child: exist._id } }),
+                    await ProductCatalogue.findByIdAndDelete(exist._id),
+                ]);
+                return 'Deleted';
             }
         } else {
             throw new HTTP400Error('Category deleted!1');
