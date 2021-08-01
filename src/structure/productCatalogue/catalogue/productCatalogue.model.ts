@@ -1,10 +1,10 @@
 import { HTTP400Error } from './../../../lib/utils/httpErrors';
 import { HTTP400Error } from '../../../lib/utils/httpErrors';
-import { categoryType, IProductCatalogue } from './productCatalogue.interface';
+import { categoryType, IProductCatalogue, IProductCatalogueModel } from './productCatalogue.interface';
 import { ProductCatalogue } from './productCatalogue.schema';
 class ProductCatalogueModel {
     public async AddProductCatalogue(data: IProductCatalogue) {
-        if (await ProductCatalogue.findOne({ name: data.name, categoryType: data.categoryType })) {
+        if (await ProductCatalogue.findOne({ name: data.name, categoryType: data.categoryType, parent: data.parent })) {
             throw new HTTP400Error('Product already exist please call update api.');
         } else {
             const create = new ProductCatalogue(data);
@@ -26,11 +26,26 @@ class ProductCatalogueModel {
         }
     }
 
-    public async DeleteProductCatalogue(data: IProductCatalogue) {
-        const exist: IProductCatalogue = await ProductCatalogue.findById(data._id);
+    public async DeleteProductCatalogue(data: IProductCatalogueModel) {
+        const exist: IProductCatalogueModel | null = await ProductCatalogue.findById(data._id);
         if (exist) {
             if (exist.categoryType == categoryType.Category) {
-                await ProductCatalogue.findByIdAndDelete(data._id);
+                const allItem = await ProductCatalogue.find({ parent: exist._id });
+                let deletePromises = allItem.map(
+                    (item) =>
+                        new Promise(async (resolve) => {
+                            resolve(await ProductCatalogue.deleteMany({ parent: item._id }));
+                        }),
+                );
+                await Promise.all([...deletePromises, await ProductCatalogue.findByIdAndDelete(exist._id)]);
+
+                return 'Deleted';
+            } else if (exist.categoryType == categoryType.SubCategory) {
+                await Promise.all([
+                    await ProductCatalogue.deleteMany({ parent: exist._id }),
+                    await ProductCatalogue.findByIdAndUpdate(exist.parent, { $pull: { child: exist._id } }),
+                    await ProductCatalogue.findByIdAndDelete(exist._id),
+                ]);
                 return 'Deleted';
             } else {
                 throw new HTTP400Error('Subcategory deletion logic not added yet');
@@ -41,7 +56,7 @@ class ProductCatalogueModel {
     }
 
     public async GetProductCatalogue(query: IProductCatalogue) {
-        const data = await ProductCatalogue.find(query);
+        const data = await ProductCatalogue.find(query).populate({ path: 'parent child', select: 'name' });
         return data;
     }
 
