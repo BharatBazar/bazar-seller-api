@@ -8,6 +8,7 @@ class ProductCatalogueModel {
             throw new HTTP400Error('Product already exist please call update api.');
         } else {
             const create = new ProductCatalogue(data);
+
             if (data.categoryType != categoryType.Category) {
                 if (data.parent) {
                     const parent = await ProductCatalogue.findByIdAndUpdate(data.parent, {
@@ -21,7 +22,7 @@ class ProductCatalogueModel {
                 }
             }
 
-            create.save();
+            await create.save();
             return create;
         }
     }
