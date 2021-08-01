@@ -46,6 +46,7 @@ class ProductCatalogueModel {
     }
 
     public async UpdateProductCatalogue(data: IProductCatalogue) {
+        console.log('uopdate data =>', data);
         if ('activate' in data) {
             throw new HTTP400Error('Cannot activate catelogue item from this api.');
         } else {

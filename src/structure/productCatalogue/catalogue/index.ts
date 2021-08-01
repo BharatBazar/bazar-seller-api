@@ -2,25 +2,25 @@ import productCatalogueController from './productCatalogue.controller';
 
 export default [
     {
-        path: '/productCatalogue/addProduct',
+        path: '/catalogue/add',
         method: 'post',
         escapeAuth: true,
         handler: [productCatalogueController.AddProductInCatalogue],
     },
     {
-        path: '/productCatalogue/updateProduct',
+        path: '/catalogue/update',
         method: 'patch',
         escapeAuth: true,
         handler: [productCatalogueController.UpdateProductInCatalogue],
     },
     {
-        path: '/productCatalogue/getProducts',
+        path: '/catalogue/get',
         method: 'post',
         escapeAuth: true,
         handler: [productCatalogueController.GetProductCatalogue],
     },
     {
-        path: '/productCatalogue/deleteProduct',
+        path: '/catalogue/delete',
         method: 'delete',
         escapeAuth: true,
         handler: [productCatalogueController.DeleteProductInCatalogue],

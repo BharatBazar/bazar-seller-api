@@ -7,7 +7,7 @@ const ProductCatalogueSchema: Schema = new Schema(
         description: String,
         image: String,
         categoryType: { type: String, enum: categoryType },
-        subCategoryExist: Boolean,
+        subCategoryExist: { type: Boolean, default: false },
         parentRef: { type: Types.ObjectId, ref: 'ProductCatalogue', default: undefined },
         childRef: [{ type: Types.ObjectId, ref: 'ProductCatalogue', default: undefined }],
         activate: { type: Boolean, default: false },
