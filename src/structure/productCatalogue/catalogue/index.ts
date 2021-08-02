@@ -25,4 +25,10 @@ export default [
         escapeAuth: true,
         handler: [productCatalogueController.DeleteProductInCatalogue],
     },
+    {
+        path: '/catalogue/actiavteItem',
+        method: 'patch',
+        escapeAuth: true,
+        handler: [productCatalogueController.activateCatalogueItem],
+    },
 ];

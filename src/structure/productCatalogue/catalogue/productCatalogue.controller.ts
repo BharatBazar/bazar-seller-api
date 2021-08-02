@@ -52,6 +52,19 @@ class ProductCatalogueController {
             next(responseHandler.sendError(error));
         }
     }
+
+    public async activateCatalogueItem(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Catalogue item activated', await productCatalogueModel.ActivateCatalogue(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
 }
 
 export default new ProductCatalogueController();

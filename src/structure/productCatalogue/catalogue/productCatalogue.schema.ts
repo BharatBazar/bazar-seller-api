@@ -10,7 +10,7 @@ const ProductCatalogueSchema: Schema = new Schema(
         subCategoryExist: { type: Boolean, default: false },
         parent: { type: Types.ObjectId, ref: 'ProductCatalogue', default: undefined },
         child: [{ type: Types.ObjectId, ref: 'ProductCatalogue', default: undefined }],
-        activate: { type: Boolean, default: false },
+        active: { type: Boolean, default: false },
     },
     { timestamps: true },
 );

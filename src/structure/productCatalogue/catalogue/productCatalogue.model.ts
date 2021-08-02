@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { HTTP400Error } from './../../../lib/utils/httpErrors';
 import { HTTP400Error } from '../../../lib/utils/httpErrors';
 import { categoryType, IProductCatalogue, IProductCatalogueModel } from './productCatalogue.interface';
@@ -66,7 +67,6 @@ class ProductCatalogueModel {
     }
 
     public async UpdateProductCatalogue(data: IProductCatalogue) {
-        console.log('uopdate data =>', data);
         if ('activate' in data) {
             throw new HTTP400Error('Cannot activate catelogue item from this api.');
         } else {
@@ -75,6 +75,36 @@ class ProductCatalogueModel {
             } else {
                 return await ProductCatalogue.findByIdAndUpdate(data._id, data, { new: true });
             }
+        }
+    }
+
+    private async checkAndActicateCatalogueItem(exist: IProductCatalogueModel) {
+        const categoryList: IProductCatalogueModel | null = await ProductCatalogue.findById(exist._id).populate({
+            path: 'child',
+            select: 'active',
+        });
+        if (exist.subCategoryExist && exist.child.length == 0) {
+            let flag = categoryList.child.some((child) => child.active);
+            if (flag) {
+                await ProductCatalogue.findByIdAndUpdate(exist._id, { active: true });
+                return 'Catalogue item activated';
+            } else {
+                throw new HTTP400Error('Catalogue does not have any active child and child exist.');
+            }
+        } else if (!exist.subCategoryExist) {
+            await ProductCatalogue.findByIdAndUpdate(exist._id, { active: true });
+            return 'Catalogue item activated';
+        } else {
+            throw new HTTP400Error('Catalogoue item cannot be activated since it has not child and child exist.');
+        }
+    }
+
+    public async ActivateCatalogue(data: { _id: Types.ObjectId; activate: boolean }) {
+        const exist = await ProductCatalogue.findById(data._id);
+        if (exist) {
+            return await this.checkAndActicateCatalogueItem(exist);
+        } else {
+            throw new HTTP400Error('Catalogue item does not exist please add product in order to update it.');
         }
     }
 }

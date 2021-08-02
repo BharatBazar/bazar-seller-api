@@ -13,7 +13,7 @@ export interface IProductCatalogue {
     subCategoryExist: boolean;
     parent: Types.ObjectId;
     child: Types.ObjectId[];
-    activate: boolean;
+    active: boolean;
     filters: [
         {
             name: 'Size';
