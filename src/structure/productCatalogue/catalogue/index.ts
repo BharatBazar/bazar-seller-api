@@ -26,7 +26,7 @@ export default [
         handler: [productCatalogueController.DeleteProductInCatalogue],
     },
     {
-        path: '/catalogue/actiavteItem',
+        path: '/catalogue/activateItem',
         method: 'patch',
         escapeAuth: true,
         handler: [productCatalogueController.activateCatalogueItem],

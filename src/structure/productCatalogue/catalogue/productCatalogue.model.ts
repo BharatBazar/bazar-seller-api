@@ -83,19 +83,22 @@ class ProductCatalogueModel {
             path: 'child',
             select: 'active',
         });
-        if (exist.subCategoryExist && exist.child.length == 0) {
+
+        if (exist.subCategoryExist && exist.child.length > 0) {
             let flag = categoryList.child.some((child) => child.active);
             if (flag) {
-                await ProductCatalogue.findByIdAndUpdate(exist._id, { active: true });
+                await ProductCatalogue.findByIdAndUpdate(exist._id, { active: !exist.active });
                 return 'Catalogue item activated';
             } else {
                 throw new HTTP400Error('Catalogue does not have any active child and child exist.');
             }
         } else if (!exist.subCategoryExist) {
-            await ProductCatalogue.findByIdAndUpdate(exist._id, { active: true });
+            await ProductCatalogue.findByIdAndUpdate(exist._id, { active: !exist.active });
             return 'Catalogue item activated';
         } else {
-            throw new HTTP400Error('Catalogoue item cannot be activated since it has not child and child exist.');
+            throw new HTTP400Error(
+                'Catalogoue item cannot be activated since it no child has been added but child exist.',
+            );
         }
     }
 
