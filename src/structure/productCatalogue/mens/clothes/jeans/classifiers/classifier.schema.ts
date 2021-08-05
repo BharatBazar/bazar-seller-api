@@ -7,6 +7,7 @@ const ClassifierSchema: Schema = new Schema(
         description: String,
         image: String,
         type: { type: String, enum: classifierTypes },
+        active: { type: Boolean, default: false },
     },
     {
         timestamps: true,

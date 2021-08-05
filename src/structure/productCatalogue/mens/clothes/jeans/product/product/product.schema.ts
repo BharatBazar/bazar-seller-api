@@ -26,6 +26,7 @@ const JeansSchema: Schema = new Schema(
         pattern: [{ type: Types.ObjectId, ref: 'JeansClassifier' }],
         fit: { type: Types.ObjectId, ref: 'JeansClassifier' },
         brand: { type: Types.ObjectId, ref: 'JeansClassifier' },
+
         colors: [{ type: Types.ObjectId, ref: 'JeansColor' }],
     },
     { timestamps: true },

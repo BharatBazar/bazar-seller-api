@@ -1,4 +1,5 @@
-import { HTTP400Error } from '../../../../../../lib/utils/httpErrors';
+import { Types } from 'mongoose';
+import { HTTP400Error, HTTP404Error } from '../../../../../../lib/utils/httpErrors';
 import { IClassifierModel } from './classifier.interface';
 import { Classifier } from './classifier.schema';
 
@@ -20,6 +21,15 @@ class ClassifierModel {
 
     public getClassifier = async (data: IClassifierModel) => {
         return await Classifier.find();
+    };
+
+    public updateClassifier = async (data: IClassifierModel & { _id: Types.ObjectId }) => {
+        const exist = await Classifier.findByIdAndUpdate(data._id, data);
+        if (exist) {
+            return 'Classifier updated';
+        } else {
+            throw new HTTP404Error('Classifier not found!');
+        }
     };
 }
 

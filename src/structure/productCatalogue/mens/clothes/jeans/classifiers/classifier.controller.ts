@@ -15,17 +15,17 @@ class ClassifierController {
         }
     }
 
-    // public async UpdateClassifier(req: Request, res: Response, next: NextFunction) {
-    //     const responseHandler = new ResponseHandler();
-    //     try {
-    //         responseHandler
-    //             .reqRes(req, res)
-    //             .onFetch('Classifier updated!', await ClassifierModel.updateClassifier(req.body))
-    //             .send();
-    //     } catch (error) {
-    //         next(responseHandler.sendError(error));
-    //     }
-    // }
+    public async UpdateClassifier(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Classifier updated!', await ClassifierModel.updateClassifier(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
 
     // public async DeleteClassifier(req: Request, res: Response, next: NextFunction) {
     //     const responseHandler = new ResponseHandler();

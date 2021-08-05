@@ -8,6 +8,12 @@ export default [
         handler: [classifierController.CreateClassifier],
     },
     {
+        path: '/mens/clothes/jeans/classifiers/update',
+        method: 'patch',
+        escapeAuth: true,
+        handler: [classifierController.UpdateClassifier],
+    },
+    {
         path: '/mens/clothes/jeans/classifiers/getAll',
         method: 'get',
         escapeAuth: true,

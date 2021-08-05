@@ -10,6 +10,7 @@ const FilterSchema: Schema = new Schema(
         type: { type: String, enum: classifierTypes },
         multiple: { type: Boolean, default: false },
         distributionLevel: Number,
+        active: { type: Boolean, default: false },
     },
     {
         timestamps: true,
