@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import { HTTP400Error } from './../../../lib/utils/httpErrors';
+import { HTTP400Error } from '../../../lib/utils/httpErrors';
 import { HTTP400Error } from '../../../lib/utils/httpErrors';
 import { categoryType, IProductCatalogue, IProductCatalogueModel } from './productCatalogue.interface';
 import { ProductCatalogue } from './productCatalogue.schema';

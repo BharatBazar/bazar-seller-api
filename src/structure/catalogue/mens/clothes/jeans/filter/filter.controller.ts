@@ -27,6 +27,18 @@ class FilterController {
         }
     }
 
+    public async DeleteFilter(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Filter deleted!', await FilterModel.deleteFilter(req.query))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
+
     // public async DeleteFilter(req: Request, res: Response, next: NextFunction) {
     //     const responseHandler = new ResponseHandler();
     //     try {

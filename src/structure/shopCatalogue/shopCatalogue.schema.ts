@@ -1,4 +1,4 @@
-import { IProductCatalogueModel } from './../productCatalogue/productCatalogue.interface';
+import { IProductCatalogueModel } from '../catalogue/productCatalogue.interface';
 import { Schema, model } from 'mongoose';
 import { ICategory, IShopCatalogueModel, IShopCatalogueModelG } from './shopCatalogue.interface';
 

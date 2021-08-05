@@ -2,27 +2,33 @@ import filterController from './filter.controller';
 
 export default [
     {
-        path: '/mens/clothes/jeans/filter/create',
+        path: '/jeans/filter/create',
         method: 'post',
         escapeAuth: true,
         handler: [filterController.CreateFilter],
     },
     {
-        path: '/mens/clothes/jeans/filter/getAll',
-        method: 'get',
+        path: '/jeans/filter/getAll',
+        method: 'post',
         escapeAuth: true,
         handler: [filterController.GetAllFilter],
     },
     {
-        path: '/mens/clothes/jeans/filter/getAllWithValue',
+        path: '/jeans/filter/getAllWithValue',
         method: 'get',
         escapeAuth: true,
         handler: [filterController.GetAllFilterWithValue],
     },
     {
-        path: '/mens/clothes/jeans/filter/update',
+        path: '/jeans/filter/update',
         method: 'patch',
         escapeAuth: true,
         handler: [filterController.UpdateFilter],
+    },
+    {
+        path: '/jeans/filter/delete',
+        method: 'delete',
+        escapeAuth: true,
+        handler: [filterController.DeleteFilter],
     },
 ];

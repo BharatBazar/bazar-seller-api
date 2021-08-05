@@ -1,5 +1,5 @@
-import { HTTP400Error } from './../../../../../../../lib/utils/httpErrors';
-import { productStatus } from './../../../../../product/product.interface';
+import { HTTP400Error } from '../../../../../../../lib/utils/httpErrors';
+import { productStatus } from '../../../../../product/product.interface';
 import { model, Model, Schema, Types } from 'mongoose';
 import { IJeansModel } from './product.interface';
 import { NextFunction } from 'express';

@@ -2,7 +2,7 @@ import { Types } from 'mongoose';
 import { IId } from '../../../../../../../config';
 import jeansColorModel from '../colors/color.model';
 import { JeansColor } from '../colors/color.schema';
-import { HTTP400Error } from '../../../../.././../../lib/utils/httpErrors';
+import { HTTP400Error } from '../../../../../../../lib/utils/httpErrors';
 import { IJeansSizeModel } from './size.interface';
 import { JeansSize } from './size.schema';
 
