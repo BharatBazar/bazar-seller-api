@@ -31,4 +31,10 @@ export default [
         escapeAuth: true,
         handler: [filterController.DeleteFilter],
     },
+    {
+        path: '/jeans/filter/classifier',
+        method: 'get',
+        escapeAuth: true,
+        handler: [filterController.GetAllClassifier],
+    },
 ];

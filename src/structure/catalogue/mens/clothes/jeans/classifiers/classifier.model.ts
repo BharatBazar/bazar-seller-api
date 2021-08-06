@@ -11,7 +11,7 @@ class ClassifierModel {
     public createClassifier = async (data: IClassifierModel) => {
         const exist = await this.classifierExist(data.name);
         if (exist) {
-            throw new HTTP400Error('Classifier already exist');
+            throw new HTTP400Error('Filter item already exist');
         } else {
             const classifier = new Classifier(data);
             await classifier.save();
@@ -19,16 +19,26 @@ class ClassifierModel {
         }
     };
 
+    public deleteClassifier = async (data: IClassifierModel) => {
+        const exist = await Classifier.findById(data._id);
+        if (exist) {
+            await Classifier.findByIdAndDelete(data._id);
+        } else {
+            throw new HTTP400Error('Filter item does not exist');
+        }
+    };
+
     public getClassifier = async (data: IClassifierModel) => {
-        return await Classifier.find();
+        console.log(data);
+        return await Classifier.find(data);
     };
 
     public updateClassifier = async (data: IClassifierModel & { _id: Types.ObjectId }) => {
         const exist = await Classifier.findByIdAndUpdate(data._id, data);
         if (exist) {
-            return 'Classifier updated';
+            return 'Filter item updated';
         } else {
-            throw new HTTP404Error('Classifier not found!');
+            throw new HTTP404Error('Filter item not found!');
         }
     };
 }

@@ -15,8 +15,14 @@ export default [
     },
     {
         path: '/jeans/classifiers/getAll',
-        method: 'get',
+        method: 'post',
         escapeAuth: true,
         handler: [classifierController.GetAllClassifier],
+    },
+    {
+        path: '/jeans/classifiers/delete',
+        method: 'delete',
+        escapeAuth: true,
+        handler: [classifierController.DeleteClassifier],
     },
 ];

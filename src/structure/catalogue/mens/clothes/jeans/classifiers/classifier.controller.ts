@@ -27,17 +27,17 @@ class ClassifierController {
         }
     }
 
-    // public async DeleteClassifier(req: Request, res: Response, next: NextFunction) {
-    //     const responseHandler = new ResponseHandler();
-    //     try {
-    //         responseHandler
-    //             .reqRes(req, res)
-    //             .onFetch('Classifier deleted!', await ClassifierModel.deleteClassifier({ _id: req.query._id }))
-    //             .send();
-    //     } catch (error) {
-    //         next(responseHandler.sendError(error));
-    //     }
-    // }
+    public async DeleteClassifier(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Filter item deleted!', await ClassifierModel.deleteClassifier({ _id: req.query._id }))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
 
     // public async GetClassifier(req: Request, res: Response, next: NextFunction) {
     //     const responseHandler = new ResponseHandler();

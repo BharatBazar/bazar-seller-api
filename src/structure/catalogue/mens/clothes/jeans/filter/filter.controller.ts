@@ -39,6 +39,18 @@ class FilterController {
         }
     }
 
+    public async GetAllClassifier(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('All the classifier!!', await FilterModel.getAllClassifier())
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
+
     // public async DeleteFilter(req: Request, res: Response, next: NextFunction) {
     //     const responseHandler = new ResponseHandler();
     //     try {

@@ -25,6 +25,10 @@ class FilterModel {
         }
     };
 
+    public getAllClassifier = async () => {
+        return ['pattern', 'size', 'brand', 'color', 'fit'];
+    };
+
     public deleteFilter = async (data: IFilterModel) => {
         const exist = await Filter.findById(data._id);
         if (exist) {
