@@ -17,6 +17,7 @@ export interface IClassfier {
     image: string; // Can be provided for pattern or brand etc..
     type: classifierTypes; //type is the classifier to which the document belongs
     parent: string;
+    active: boolean;
 }
 
 export interface IClassifierModel extends IClassfier, Document {}

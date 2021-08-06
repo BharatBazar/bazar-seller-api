@@ -1,6 +1,6 @@
 import { ObjectId } from '../../../../../../datatypes/index';
 import { Types } from 'mongoose';
-import { IClassfier } from '../classifiers/classifier.interface';
+import { IClassfier, IClassifierModel } from '../classifiers/classifier.interface';
 import { HTTP400Error, HTTP404Error } from '../../../../../../lib/utils/httpErrors';
 import { IFilter, IFilterModel } from './filter.interface';
 import { Filter } from './filter.schema';
@@ -24,6 +24,26 @@ class FilterModel {
             const filter = new Filter(data);
             await filter.save();
             return filter;
+        }
+    };
+
+    public activateFilter = async (data: { _id: Types.ObjectId; active: boolean }) => {
+        const exist = await Filter.findById(data._id);
+        if (exist) {
+            const filterItem: IClassifierModel[] = await Classifier.find({ parent: exist._id });
+            if (filterItem.length == 0) {
+                throw new HTTP400Error('No items in the filter');
+            } else {
+                const flag = filterItem.some((item) => item.active);
+                if (flag) {
+                    await Filter.findByIdAndUpdate(data._id, { active: data.active });
+                    return data.active ? 'Filter activated' : 'Filter deactivated';
+                } else {
+                    throw new HTTP400Error('None of the filter item is activated');
+                }
+            }
+        } else {
+            throw new HTTP400Error('Filter does not exist');
         }
     };
 

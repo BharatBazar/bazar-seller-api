@@ -32,6 +32,12 @@ export default [
         handler: [filterController.DeleteFilter],
     },
     {
+        path: '/jeans/filter/activate',
+        method: 'patch',
+        escapeAuth: true,
+        handler: [filterController.ActivateFilter],
+    },
+    {
         path: '/jeans/filter/classifier',
         method: 'get',
         escapeAuth: true,

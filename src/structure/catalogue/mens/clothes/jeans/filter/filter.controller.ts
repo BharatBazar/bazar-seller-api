@@ -27,6 +27,18 @@ class FilterController {
         }
     }
 
+    public async ActivateFilter(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Filter activated!', await FilterModel.activateFilter(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
+
     public async DeleteFilter(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {
