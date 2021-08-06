@@ -15,7 +15,7 @@ export default [
     },
     {
         path: '/jeans/filter/getAllWithValue',
-        method: 'get',
+        method: 'post',
         escapeAuth: true,
         handler: [filterController.GetAllFilterWithValue],
     },

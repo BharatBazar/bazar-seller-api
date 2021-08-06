@@ -4,6 +4,7 @@ import { IClassfier } from '../classifiers/classifier.interface';
 import { HTTP400Error, HTTP404Error } from '../../../../../../lib/utils/httpErrors';
 import { IFilter, IFilterModel } from './filter.interface';
 import { Filter } from './filter.schema';
+import { filter } from 'compression';
 
 class FilterModel {
     public filterExist = async (name: string, type: string) => {
@@ -46,7 +47,7 @@ class FilterModel {
 
     public updateFilter = async (data: IFilterModel & { _id: Types.ObjectId }) => {
         if (data.type) {
-            throw new HTTP400Error('Type cannot be edited once filter is created.');
+            delete data['type'];
         }
         const exist = await Filter.findByIdAndUpdate(data._id, data);
         if (exist) {
@@ -67,12 +68,12 @@ class FilterModel {
                 },
             },
         ]);
-
+        console.log('Filter =>', filterWithValue);
         return {
-            filter: filterWithValue.filter((filter: IFilter) => filter.distributionLevel == 0),
+            filter: filterWithValue.filter((filter: IFilter) => filter.filterLevel == 0),
             distribution: filterWithValue
-                .filter((filter: IFilter) => filter.distributionLevel > 0)
-                .sort((a, b) => a.distributionLevel - b.distributionLevel),
+                .filter((filter: IFilter) => filter.filterLevel > 0)
+                .sort((a, b) => a.filterLevel - b.filterLevel),
         };
     };
 }

@@ -9,7 +9,7 @@ const FilterSchema: Schema = new Schema(
         image: String,
         type: { type: String, enum: classifierTypes },
         multiple: { type: Boolean, default: false },
-        distributionLevel: Number,
+        filterLevel: { type: Number, default: 0 },
         active: { type: Boolean, default: false },
     },
     {
