@@ -5,6 +5,7 @@ import { HTTP400Error, HTTP404Error } from '../../../../../../lib/utils/httpErro
 import { IFilter, IFilterModel } from './filter.interface';
 import { Filter } from './filter.schema';
 import { filter } from 'compression';
+import { Classifier } from '../classifiers/classifier.schema';
 
 class FilterModel {
     public filterExist = async (name: string, type: string) => {
@@ -33,7 +34,10 @@ class FilterModel {
     public deleteFilter = async (data: IFilterModel) => {
         const exist = await Filter.findById(data._id);
         if (exist) {
-            await Filter.findByIdAndDelete(data._id);
+            await Promise.all([
+                await Classifier.deleteMany({ parent: exist._id }),
+                await Filter.findByIdAndDelete(data._id),
+            ]);
             return 'Deleted';
         } else {
             throw new HTTP400Error('Filter does not exist');
