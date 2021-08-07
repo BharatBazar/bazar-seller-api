@@ -81,11 +81,13 @@ class FilterModel {
         }
     };
 
-    public getAllFilterWithValue = async () => {
+    public getAllFilterWithValue = async (condition: Partial<IFilter>) => {
         const filterWithValue: { values: IClassfier }[] = await Filter.aggregate([
+            { $match: condition ? condition : {} },
             {
                 $lookup: {
                     from: 'jeansclassifiers',
+
                     localField: 'type',
                     foreignField: 'type',
                     as: 'values',
