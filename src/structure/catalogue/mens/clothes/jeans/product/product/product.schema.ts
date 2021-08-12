@@ -7,7 +7,6 @@ import JeansColorModel from '../colors/color.model';
 
 const JeansSchema: Schema = new Schema(
     {
-        //TODO: Fix reference cannot take string directly use id to refer the product catalogue document
         shopId: { type: Types.ObjectId, ref: 'Shop' },
         title: { type: String, default: '' },
         subTitle: { type: String, default: '' },

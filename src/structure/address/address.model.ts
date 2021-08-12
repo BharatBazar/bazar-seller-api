@@ -4,14 +4,15 @@ import { Address } from './address.schema';
 
 class AddressModel {
     public async createAddress(data: IAddressModel) {
-        let address;
+        let address = null;
+        console.log(data);
         if (data.parent && data.parent.length > 0) {
             address = await Address.findOne({ name: data.name, parent: data.parent });
         } else {
             address = await Address.findOne({ name: data.name });
         }
         if (address) {
-            throw new HTTP400Error(data.name + ' ' + data.addressType + ' already exist!');
+            throw new HTTP400Error(data.name + ' ' + data.addressType.toLowerCase() + ' already exist!');
         } else {
             const address = new Address(data);
             await address.save();
@@ -21,17 +22,18 @@ class AddressModel {
 
     public async deleteAddress(data: IAddressModel) {
         const exist = await Address.findById(data._id);
+        console.log('exist =>', exist, data);
         if (exist) {
-            const isKaBacha = await Address.find({ parent: exist.name });
+            const isKaBacha = await Address.find({ parent: exist._id });
             const request = isKaBacha.map(
                 (item) =>
                     new Promise(async (resolve) => {
-                        resolve(await Address.deleteMany({ parent: item.name }));
+                        resolve(await Address.deleteMany({ parent: item._id }));
                     }),
             );
             await Promise.all([
                 ...request,
-                await Address.deleteMany({ parent: exist.name }),
+                await Address.deleteMany({ parent: exist._id }),
                 await Address.deleteOne({ _id: data._id }),
             ]);
             return 'Address Deleted';
@@ -41,7 +43,14 @@ class AddressModel {
     }
 
     public async getAddress(query: { addressType: addressType }) {
-        const exist = await Address.find(query);
+        if (query.addressType !== addressType.state) {
+            var exist = await Address.find(query).populate({
+                path: 'parent',
+                select: 'name',
+            });
+        } else {
+            var exist = await Address.find(query);
+        }
         if (exist.length > 0) {
             return exist;
         } else {
@@ -76,6 +85,9 @@ class AddressModel {
     }
 
     public async updateAddress(data: IAddressModel) {
+        if (data.parent) {
+            delete data['parent'];
+        }
         const done = await Address.findByIdAndUpdate(data._id, data);
         if (done) {
             return 'Address updated';
