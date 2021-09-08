@@ -5,5 +5,15 @@ import product from '../structure/catalogue/product';
 import productSize from '../structure/productSize';
 import productColor from '../structure/productColor';
 import address from '../structure/address';
+import productId from '../structure/shop/productId';
 
-export default [...shop, ...shopMember, ...productCatalogue, ...product, ...productSize, ...productColor, ...address];
+export default [
+    ...shop,
+    ...shopMember,
+    ...productCatalogue,
+    ...product,
+    ...productSize,
+    ...productColor,
+    ...address,
+    ...productId,
+];
