@@ -9,7 +9,6 @@ const JeansSizeSchema: Schema = new Schema(
         quantity: Number,
         parentId: { type: Types.ObjectId, ref: 'JeansColor' },
         itemId: { type: String, default: undefined },
-        idCreationStatus: { type: Number, enum: idCreationStatus },
         shopId: { type: String, defaule: undefined },
     },
     {

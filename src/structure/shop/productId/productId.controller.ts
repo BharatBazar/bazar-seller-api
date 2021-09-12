@@ -7,6 +7,7 @@ class ProductIdController {
     public generateProductId = async(req: Request, res: Response, next: NextFunction)  => {
         const responseHandler = new ResponseHandler();
         try {
+            
             responseHandler
                 .reqRes(req, res)
                 .onFetch('Product id generated.', await productIdModel.generateProductId(req.body))
