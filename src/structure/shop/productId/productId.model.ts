@@ -13,9 +13,9 @@ class ProductIdModel {
     };
 
     private createProductId = async (shopId: string) => {
-        const productId = await new ProductId({ shopId, productCount: '0' });
+        const productId = await new ProductId({ shopId, productCount: '1' });
         await productId.save();
-        return '0';
+        return '1';
     };
 
     private updateProductId = async (data: IProductIdModel) => {

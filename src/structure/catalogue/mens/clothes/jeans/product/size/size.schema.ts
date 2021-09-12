@@ -1,4 +1,4 @@
-import { IJeansSizeModel } from './size.interface';
+import { IJeansSizeModel, idCreationStatus } from './size.interface';
 import { model, Schema, Types, Model } from 'mongoose';
 
 const JeansSizeSchema: Schema = new Schema(
@@ -8,6 +8,9 @@ const JeansSizeSchema: Schema = new Schema(
         sp: String,
         quantity: Number,
         parentId: { type: Types.ObjectId, ref: 'JeansColor' },
+        itemId: { type: String, default: undefined },
+        idCreationStatus: { type: Number, enum: idCreationStatus },
+        shopId: { type: String, defaule: undefined },
     },
     {
         timestamps: true,
