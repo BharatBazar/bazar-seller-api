@@ -2,7 +2,8 @@ import { Date, Types, Document, Model } from 'mongoose';
 
 export enum productStatus {
     NOTCOMPLETED = 'Incomplete',
-    READYTOROLLOUT = 'Rollout',
+    INVENTORY = 'Inventory',
+    REJECTED = 'Rejected',
     OUTOFSTOCK = 'Out of stock',
     WAITINGFORAPPROVAL = 'Waiting for approval',
     LIVE = 'Live',
@@ -11,14 +12,11 @@ export enum productStatus {
 export interface Product {
     //Also i need to think about how i will be dealing with language preferences how can i use multiple language.
 
-    Category: string;
-    SubCategory1: string;
-    SubCategory2: string | undefined;
     shopId: Types.ObjectId;
     //Above field will have predifined information about the size, unit etc.
     title: string; //It can be possible that a shop sells particular brand items on their shop.
     subTitle: string;
-    Color: [Types.ObjectId];
+    color: [Types.ObjectId];
     showPrice: boolean; //Whether dukandar wants to show price to customer or not
     productStatus: productStatus;
     rating: number;
