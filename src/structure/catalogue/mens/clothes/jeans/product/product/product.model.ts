@@ -95,6 +95,14 @@ class JeansModel {
                 ? await Jeans.find({ $and: [condition, query.query] })
                       .sort('-createdAt')
                       .limit(paginationConfig.MAX_PRODUCT)
+                      .populate({
+                          path: 'colors',
+                          populate: {
+                              path: 'color',
+                              select: 'description name',
+                          },
+                          select: 'color',
+                      })
                 : [];
 
         const lastTime = data.length > 0 ? data[data.length - 1].createdAt.getTime() : undefined;

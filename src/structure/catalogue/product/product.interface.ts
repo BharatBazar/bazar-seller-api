@@ -1,12 +1,12 @@
 import { Date, Types, Document, Model } from 'mongoose';
 
 export enum productStatus {
-    NOTCOMPLETED = 'Incomplete',
-    INVENTORY = 'Inventory',
-    REJECTED = 'Rejected',
-    OUTOFSTOCK = 'Out of stock',
-    WAITINGFORAPPROVAL = 'Waiting for approval',
-    LIVE = 'Live',
+    NOTCOMPLETED = 0,
+    INVENTORY = 1,
+    REJECTED = 2,
+    OUTOFSTOCK = 3,
+    WAITINGFORAPPROVAL = 4,
+    LIVE = 5,
 }
 
 export interface Product {

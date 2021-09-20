@@ -13,7 +13,7 @@ const JeansSchema: Schema = new Schema(
         description: { type: String, default: '' },
 
         showPrice: { type: Boolean, default: false },
-        status: { type: String, enum: productStatus, default: productStatus.NOTCOMPLETED },
+        status: { type: Number, enum: productStatus, default: productStatus.NOTCOMPLETED },
         rating: Number,
         new: Boolean,
         newDeadline: Date,
