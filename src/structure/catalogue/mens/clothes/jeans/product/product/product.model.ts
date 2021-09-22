@@ -1,4 +1,3 @@
-import { HTTP400Error } from '../../../../../../../lib/utils/httpErrors';
 import { UpdateQuery, Types } from 'mongoose';
 import { pruneFields } from '../../../../../../../lib/helpers';
 import { IId, paginationConfig } from '../../../../../../../config/index';

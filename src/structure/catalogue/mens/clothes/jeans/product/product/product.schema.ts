@@ -12,11 +12,15 @@ const JeansSchema: Schema = new Schema(
         subTitle: { type: String, default: '' },
         description: { type: String, default: '' },
 
+        //Product settings
         showPrice: { type: Boolean, default: false },
-        status: { type: Number, enum: productStatus, default: productStatus.NOTCOMPLETED },
-        rating: Number,
         new: Boolean,
         newDeadline: Date,
+        returnAllowed: Boolean,
+
+        status: { type: Number, enum: productStatus, default: productStatus.NOTCOMPLETED },
+        rating: Number,
+
         discount: [Number],
         bazarAssured: Boolean,
         discountDeadline: [Date],
