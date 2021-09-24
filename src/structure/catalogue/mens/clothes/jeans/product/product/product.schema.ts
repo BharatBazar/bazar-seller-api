@@ -14,9 +14,9 @@ const JeansSchema: Schema = new Schema(
 
         //Product settings
         showPrice: { type: Boolean, default: false },
-        new: Boolean,
-        newDeadline: Date,
-        returnAllowed: Boolean,
+        new: { type: Boolean, default: false },
+        newDeadline: { type: String, default: '' },
+        returnAllowed: { type: Boolean, default: false },
 
         status: { type: Number, enum: productStatus, default: productStatus.NOTCOMPLETED },
         rating: Number,
