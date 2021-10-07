@@ -1,6 +1,6 @@
-import { HTTP400Error } from './../../lib/utils/httpErrors';
+import { HTTP400Error } from './../../../lib/utils/httpErrors';
 import { Types } from 'mongoose';
-import { pruneFields } from '../../lib/helpers';
+import { pruneFields } from '../../../lib/helpers';
 import { IShopCatalogueModelG, ICategory } from './shopCatalogue.interface';
 import { ShopCatalogue } from './shopCatalogue.schema';
 

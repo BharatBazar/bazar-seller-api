@@ -1,4 +1,3 @@
-import { ObjectId } from './../../datatypes/index';
 import { shop_message } from './../../lib/helpers/customMessage';
 import { paginationConfig } from './../../config/index';
 import { HTTP400Error } from './../../lib/utils/httpErrors';

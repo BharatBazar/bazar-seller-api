@@ -26,6 +26,8 @@ export interface Product {
     discount: [number]; // If a dukandar has decided that he wants to give special discount on particular  so discount will for each color
     discountDeadline: [Date];
     bazarAssured: boolean; // It is the flag if we have personally verified the product and it is really a good product
+
+    releaseDate: String;
 }
 
 export interface IProductModelG extends Document, Product {}
