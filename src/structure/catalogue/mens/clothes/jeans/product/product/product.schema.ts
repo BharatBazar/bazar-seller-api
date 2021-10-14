@@ -26,11 +26,11 @@ const JeansSchema: Schema = new Schema(
         discountDeadline: [Date],
 
         //filters
-        pattern: [{ type: Types.ObjectId, ref: 'JeansClassifier' }],
-        fit: { type: Types.ObjectId, ref: 'JeansClassifier' },
-        brand: { type: Types.ObjectId, ref: 'JeansClassifier' },
+        pattern: [{ type: Types.ObjectId, ref: 'JeansClassifier', default: undefined }],
+        fit: { type: Types.ObjectId, ref: 'JeansClassifier', default: undefined },
+        brand: { type: Types.ObjectId, ref: 'JeansClassifier', default: undefined },
 
-        colors: [{ type: Types.ObjectId, ref: 'JeansColor' }],
+        colors: [{ type: Types.ObjectId, ref: 'JeansColor', default: undefined }],
     },
     { timestamps: true },
 );

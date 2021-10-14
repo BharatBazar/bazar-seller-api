@@ -20,6 +20,12 @@ export default [
         handler: [productCatalogueController.GetProductCatalogue],
     },
     {
+        path: '/catalogue/getAll',
+        method: 'get',
+        escapeAuth: true,
+        handler: [productCatalogueController.GetProductCatalogueWithAncestors],
+    },
+    {
         path: '/catalogue/delete',
         method: 'delete',
         escapeAuth: true,

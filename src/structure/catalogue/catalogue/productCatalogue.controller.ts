@@ -52,6 +52,18 @@ class ProductCatalogueController {
             next(responseHandler.sendError(error));
         }
     }
+    public async GetProductCatalogueWithAncestors(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('All the products', await productCatalogueModel.GetProductCatalogueWithAncestors(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
 
     public async activateCatalogueItem(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
