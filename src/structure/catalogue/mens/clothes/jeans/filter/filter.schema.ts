@@ -11,6 +11,7 @@ const FilterSchema: Schema = new Schema(
         multiple: { type: Boolean, default: false },
         filterLevel: { type: Number, default: 0 },
         active: { type: Boolean, default: false },
+        mandatory: { type: Boolean, default: true },
     },
     {
         timestamps: true,

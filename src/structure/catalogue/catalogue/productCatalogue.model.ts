@@ -62,10 +62,47 @@ class ProductCatalogueModel {
     }
 
     public async GetProductCatalogue(query: IProductCatalogue) {
+        console.log('query => ', query);
         const data = await ProductCatalogue.find(query).populate({ path: 'parent child', select: 'name' });
         return data;
     }
 
+    public async GetProductCatalogueWithAncestors(quer: IProductCatalogue) {
+        const a = new Promise(async (resolve) => {
+            
+        resolve(await ProductCatalogue.find({
+            subCategoryExist: false,
+            categoryType: categoryType.SubCategory1,
+            active:true
+        }).populate({
+            path: 'parent',
+            select: 'name',
+            
+            populate: {
+                path: 'parent',
+                select: 'name',
+            },
+        })
+    });
+
+    const b = new Promise(async (resolve) => {
+            
+        resolve(await ProductCatalogue.find({
+            subCategoryExist: false,
+            categoryType: categoryType.SubCategory,
+            
+            active:true
+        }).populate({
+            path: 'parent',
+            select: 'name',
+           
+        })
+    });
+
+    const data =  await Promise.all([await a,await b]);
+    console.log(data);
+    return [].concat.apply([],data);
+    }
     public async UpdateProductCatalogue(data: IProductCatalogue) {
         if ('activate' in data) {
             throw new HTTP400Error('Cannot activate catelogue item from this api.');

@@ -35,13 +35,17 @@ class JeansModel {
         }
     }
 
-    public async deleteJeansFilter(data: { _id: Types.ObjectId; filter: any }) {
+    public async deleteJeansFilter(data: { _id: Types.ObjectId; filter: any; multiple: boolean }) {
         let exist: boolean = await this.jeansIdExist(data._id);
         if (exist) {
             let jeans: UpdateQuery<IJeansModel> | undefined = {};
-            console.log(data);
-            jeans['$pull'] = { ...data.filter };
-            await Jeans.findByIdAndUpdate(data._id, jeans, { new: true });
+
+            if (data.multiple) jeans['$pull'] = { ...data.filter };
+            else {
+                jeans[Object.keys(data.filter)[0]] = undefined;
+            }
+            const b = await Jeans.findByIdAndUpdate(data._id, jeans, { new: true });
+            console.log(b);
             return '';
         } else {
             throw new HTTP404Error('Jeans not found');
