@@ -37,4 +37,10 @@ export default [
         escapeAuth: true,
         handler: [JeansController.GetAllJeans],
     },
+    {
+        path: '/jeans/get/productMeta',
+        method: 'post',
+        escapeAuth: true,
+        handler: [JeansController.GetJeansMeta],
+    },
 ];

@@ -63,6 +63,18 @@ class JeansController {
         }
     }
 
+    public async GetJeansMeta(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('here is your product!', await JeansModel.getProductMeta(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
+
     public async GetAllJeans(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {

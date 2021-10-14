@@ -1,3 +1,4 @@
+import { productStatus } from './../../../../../product/product.interface';
 import { UpdateQuery, Types } from 'mongoose';
 import { pruneFields } from '../../../../../../../lib/helpers';
 import { IId, paginationConfig } from '../../../../../../../config/index';
@@ -78,6 +79,42 @@ class JeansModel {
         } else {
             throw new HTTP400Error('Jeans not found.');
         }
+    }
+
+    public async getProductMeta(query: { query: { productStatus: productStatus }; lastTime: string }) {
+        if (!query.query) {
+            throw new HTTP400Error('No query available');
+        }
+
+        let condition: any = {};
+        if (query.lastTime) {
+            const dateObj = new Date(parseInt(query.lastTime, 10));
+            condition.createdAt = { $lt: dateObj };
+        }
+        const searchCount = await Jeans.countDocuments({ $and: [query.query, condition] });
+        const data =
+            searchCount > 0
+                ? await Jeans.find({ $and: [condition, query.query] })
+                      .sort('-createdAt')
+                      .limit(paginationConfig.MAX_PRODUCT)
+                      .populate({
+                          path: 'shopId',
+                          select: 'shopName city area',
+                          populate: {
+                              path: 'owner',
+                              select: 'firstName lastName',
+                          },
+                      })
+                : [];
+
+        const lastTime = data.length > 0 ? data[data.length - 1].createdAt.getTime() : undefined;
+
+        return {
+            payload: data,
+            searchCount,
+            lastTime,
+            maxCount: paginationConfig.MAX_PRODUCT,
+        };
     }
 
     public getAllJeans = async (query: any) => {
