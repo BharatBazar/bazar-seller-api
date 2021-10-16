@@ -92,17 +92,19 @@ class JeansModel {
             condition.createdAt = { $lt: dateObj };
         }
         const searchCount = await Jeans.countDocuments({ $and: [query.query, condition] });
+        console.log(query, searchCount);
         const data =
             searchCount > 0
                 ? await Jeans.find({ $and: [condition, query.query] })
                       .sort('-createdAt')
                       .limit(paginationConfig.MAX_PRODUCT)
+                      .select('shopId createdAt')
                       .populate({
                           path: 'shopId',
-                          select: 'shopName city area',
+                          select: 'shopName',
                           populate: {
-                              path: 'owner',
-                              select: 'firstName lastName',
+                              path: 'owner city area',
+                              select: 'firstName lastName name',
                           },
                       })
                 : [];
