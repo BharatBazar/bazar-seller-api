@@ -11,6 +11,7 @@ const JeansSchema: Schema = new Schema(
         title: { type: String, default: '' },
         subTitle: { type: String, default: '' },
         description: { type: String, default: '' },
+        descriptionCustomer: { type: String, default: '' },
 
         //Product settings
         showPrice: { type: Boolean, default: false },
@@ -19,6 +20,8 @@ const JeansSchema: Schema = new Schema(
         returnAllowed: { type: Boolean, default: false },
 
         status: { type: Number, enum: productStatus, default: productStatus.NOTCOMPLETED },
+        note: { type: String, default: '' },
+        alreadyRejected: { type: Boolean, default: false },
         rating: Number,
 
         discount: [Number],
