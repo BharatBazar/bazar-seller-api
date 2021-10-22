@@ -20,7 +20,7 @@ const JeansSchema: Schema = new Schema(
         returnAllowed: { type: Boolean, default: false },
 
         status: { type: Number, enum: productStatus, default: productStatus.NOTCOMPLETED },
-        note: { type: String, default: '' },
+        note: { type: [String], default: [] },
         alreadyRejected: { type: Boolean, default: false },
         rating: Number,
 

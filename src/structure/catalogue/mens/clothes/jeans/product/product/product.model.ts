@@ -119,6 +119,12 @@ class JeansModel {
         };
     }
 
+    private provideSelectString = (status: productStatus) => {
+        if (status == productStatus.REJECTED || status == productStatus.LIVE) {
+            return 'colors';
+        }
+    };
+
     public getAllJeans = async (query: any) => {
         if (!query.query) {
             throw new HTTP400Error('No query available');
