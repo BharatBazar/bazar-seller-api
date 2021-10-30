@@ -43,4 +43,10 @@ export default [
         escapeAuth: true,
         handler: [JeansController.GetJeansMeta],
     },
+    {
+        path: '/jeans/status',
+        method: 'post',
+        escapeAuth: true,
+        handler: [JeansController.GetStatus],
+    },
 ];

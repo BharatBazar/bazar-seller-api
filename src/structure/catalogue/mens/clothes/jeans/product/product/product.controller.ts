@@ -86,6 +86,18 @@ class JeansController {
             next(responseHandler.sendError(error));
         }
     }
+
+    public async GetStatus(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Here is the product you asked for!', await JeansModel.provideStatus(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
 }
 
 export default new JeansController();

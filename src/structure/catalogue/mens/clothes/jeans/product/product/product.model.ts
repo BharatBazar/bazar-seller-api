@@ -162,6 +162,35 @@ class JeansModel {
             maxCount: paginationConfig.MAX_PRODUCT,
         };
     };
+
+    public provideStatus = async ({ shopId }: { shopId: string }) => {
+        if (!shopId) {
+            throw new HTTP400Error('please provide shopid');
+        }
+
+        var a: { _id: number; count: number }[] = await Jeans.aggregate([
+            {
+                $match: { shopId: Types.ObjectId(shopId) },
+            },
+
+            {
+                $group: {
+                    _id: '$status',
+                    count: { $sum: 1 },
+                },
+            },
+            {
+                $project: {
+                    _id: 1,
+                    count: 1,
+                },
+            },
+        ]);
+
+        return a.map((item) => {
+            return { ...item, name: productStatus[item._id] };
+        });
+    };
 }
 
 export default new JeansModel();

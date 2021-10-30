@@ -7,7 +7,7 @@ import JeansColorModel from '../colors/color.model';
 
 const JeansSchema: Schema = new Schema(
     {
-        shopId: { type: Types.ObjectId, ref: 'Shop' },
+        shopId: { type: String, ref: 'Shop' },
         title: { type: String, default: '' },
         subTitle: { type: String, default: '' },
         description: { type: String, default: '' },
