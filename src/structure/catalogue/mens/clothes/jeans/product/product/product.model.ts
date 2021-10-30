@@ -1,4 +1,4 @@
-import { productStatus } from './../../../../../product/product.interface';
+import { productStatus, statusDescription } from './../../../../../product/product.interface';
 import { UpdateQuery, Types } from 'mongoose';
 import { pruneFields } from '../../../../../../../lib/helpers';
 import { IId, paginationConfig } from '../../../../../../../config/index';
@@ -187,8 +187,26 @@ class JeansModel {
             },
         ]);
 
-        return a.map((item) => {
+        const b = a.map((item) => {
             return { ...item, name: productStatus[item._id] };
+        });
+
+        return Object.keys(statusDescription).map((status) => {
+            let index = a.findIndex((item) => item._id == status);
+            if (index > -1) {
+                let c = a[index];
+                return {
+                    ...c,
+                    name: productStatus[c._id],
+                    description: statusDescription[status],
+                };
+            } else {
+                return {
+                    name: productStatus[status],
+                    description: statusDescription[status],
+                    count: 0,
+                };
+            }
         });
     };
 }
