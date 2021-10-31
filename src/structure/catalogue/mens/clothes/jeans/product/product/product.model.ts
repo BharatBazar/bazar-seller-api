@@ -1,4 +1,4 @@
-import { productStatus, statusDescription } from './../../../../../product/product.interface';
+import { productStatus, statusDescription, statusName } from './../../../../../product/product.interface';
 import { UpdateQuery, Types } from 'mongoose';
 import { pruneFields } from '../../../../../../../lib/helpers';
 import { IId, paginationConfig } from '../../../../../../../config/index';
@@ -190,19 +190,26 @@ class JeansModel {
         const b = a.map((item) => {
             return { ...item, name: productStatus[item._id] };
         });
-
-        return Object.keys(statusDescription).map((status) => {
+        //console.log(Object.keys(statusDescription));
+        return [
+            productStatus.LIVE,
+            productStatus.WAITINGFORAPPROVAL,
+            productStatus.INVENTORY,
+            productStatus.NOTCOMPLETED,
+            productStatus.REJECTED,
+            productStatus.OUTOFSTOCK,
+        ].map((status) => {
             let index = a.findIndex((item) => item._id == status);
             if (index > -1) {
                 let c = a[index];
                 return {
                     ...c,
-                    name: productStatus[c._id],
+                    name: statusName[c._id],
                     description: statusDescription[status],
                 };
             } else {
                 return {
-                    name: productStatus[status],
+                    name: statusName[status],
                     description: statusDescription[status],
                     count: 0,
                 };

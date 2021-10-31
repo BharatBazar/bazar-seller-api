@@ -9,12 +9,22 @@ export enum productStatus {
     LIVE = 5,
 }
 
+export const statusName = {
+    0: 'Not Completed',
+    1: 'Inventory',
+    2: 'Rejected',
+    3: 'Out of stock',
+    4: 'Waiting for approval',
+    5: 'Live',
+};
+
 export const statusDescription = {
+    5: 'Items which are live in the market.Your grahak can check this items.',
     0: 'In this section the item which you have not completed yet.',
     1: 'Items which are completed and available in the inventory but not live. You can scan brcode and can do billing for them.',
     4: 'Items which you have applied for going live in the market. Our authority will check the product and will inform you if there is any problem related to product.',
     2: 'Items which are rejected from going live due to some problem.',
-    5: 'Items which are live in the market.Your grahak can check this items.',
+
     3: 'Items which are out of stock currentlty',
 };
 
