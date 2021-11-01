@@ -209,6 +209,7 @@ class JeansModel {
                 };
             } else {
                 return {
+                    _id: status,
                     name: statusName[status],
                     description: statusDescription[status],
                     count: 0,
