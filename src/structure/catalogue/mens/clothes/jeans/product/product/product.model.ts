@@ -204,13 +204,13 @@ class JeansModel {
                 let c = a[index];
                 return {
                     ...c,
-                    name: statusName[c._id],
+                    name: statusName[c._id] + ` ( ${c.count.toString()} )`,
                     description: statusDescription[status],
                 };
             } else {
                 return {
                     _id: status,
-                    name: statusName[status],
+                    name: statusName[status] + ' ( 0 )',
                     description: statusDescription[status],
                     count: 0,
                 };

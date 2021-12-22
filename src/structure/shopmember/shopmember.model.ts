@@ -138,32 +138,32 @@ export class ShopMemberModel {
                         } else if (!member.shop.isVerified) {
                             if (!member.shop.shopName) {
                                 return {
-                                    shopNameAvailable: true,
+                                    notShopNameAvailable: true,
                                     data: member,
                                 };
                             } else if (!member.shop.state) {
                                 return {
-                                    addressAvailable: true,
+                                    notAddressAvailable: true,
                                     data: member,
                                 };
                             } else if (member.shop.coOwner.length == 0 && !member.shop.membersDetailSkipped) {
                                 return {
-                                    memberDetails: true,
+                                    notMemberDetails: true,
                                     data: member,
                                 };
                             } else if (!member.shop.isVerified) {
                                 return {
-                                    shopVerification: true,
+                                    notShopVerification: true,
                                     data: member,
                                 };
                             } else if (member.shop.category.length == 0) {
                                 return {
-                                    category: true,
+                                    notCategory: true,
                                     data: member,
                                 };
                             } else if (member.shop.subCategory.length == 0) {
                                 return {
-                                    subCategory: true,
+                                    notSubCategory: true,
                                     data: member,
                                 };
                             }
