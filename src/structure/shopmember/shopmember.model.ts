@@ -10,6 +10,7 @@ import otpModel from '../otp/otp.model';
 import { pruneFields } from '../../lib/helpers';
 import { Shop } from '../shop/shop.schema';
 import { ShopPermissions } from '../permission/permission.schema';
+import shopmember from '.';
 export class ShopMemberModel {
     async checkPhoneNumber(data: { phoneNumber: string }) {
         const phoneNumber: boolean = await ShopMember.checkPhoneNumber(data.phoneNumber);
@@ -55,6 +56,41 @@ export class ShopMemberModel {
                 await member.save();
                 return member;
             }
+        }
+    }
+
+    async verifyShopMember(data: { phoneNumber: string }) {
+        const memberExist = await ShopMember.find({ phoneNumber: data.phoneNumber });
+        if (memberExist) {
+            throw new HTTP400Error(
+                'Phone number is already registered . If you want to create your own digital dukan tell your previous dukan owner to delete your membership from his dukan.',
+            );
+        } else {
+            //Send a link for setting password page which will be valid for 10 minutes
+            //In 10 minutes they need to set password of the device
+            return otpModel.sendOTP(data);
+        }
+    }
+
+    async addShopMember(data: shopMemberInterface & { otp: string }) {
+        if (data.otp) {
+            const isMatch = await otpModel.verifyOTP({ otp: data.otp.toString(), phoneNumber: data.phoneNumber });
+            if (isMatch) {
+                pruneFields(data, 'otp');
+                let member: IShopMemberModel = new ShopMember({ ...data, isTerminated: true });
+                await Shop.findByIdAndUpdate(data.shop, {
+                    $push: data.role == shopMemberRole.coOwner ? { coOwner: member._id } : { worker: member._id },
+                });
+                member.shop = data.shop;
+                member.permissions = await ShopPermissionModel.createPermisison(member.role);
+
+                await member.save();
+                return member;
+            } else {
+                throw new HTTP400Error('Otp does not match');
+            }
+        } else {
+            throw new HTTP400Error('Please provide otp.');
         }
     }
 

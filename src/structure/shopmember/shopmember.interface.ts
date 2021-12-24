@@ -1,8 +1,8 @@
 import { Document, Schema, Types } from 'mongoose';
 export enum shopMemberRole {
     coOwner = 'Co-owner',
-    owner = 'owner',
-    worker = 'worker',
+    owner = 'Owner',
+    worker = 'Worker',
 }
 
 export interface shopMemberInterface {

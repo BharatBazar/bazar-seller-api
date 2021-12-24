@@ -43,4 +43,16 @@ export default [
         escapeAuth: true,
         handler: [ShopController.DeleteMember],
     },
+    {
+        path: '/shopMember/add',
+        method: 'post',
+        escapeAuth: true,
+        handler: [ShopController.AddShopMember],
+    },
+    {
+        path: '/shopMember/verify',
+        method: 'post',
+        escapeAuth: true,
+        handler: [ShopController.VerifyShopMember],
+    },
 ];
