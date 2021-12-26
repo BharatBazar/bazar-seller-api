@@ -55,4 +55,10 @@ export default [
         escapeAuth: true,
         handler: [ShopController.VerifyShopMember],
     },
+    {
+        path: '/shopMember/update',
+        method: 'patch',
+        escapeAuth: true,
+        handler: [ShopController.UpdateShopMember],
+    },
 ];

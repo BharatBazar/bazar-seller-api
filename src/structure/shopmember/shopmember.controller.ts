@@ -97,6 +97,17 @@ class ShopMemberController {
         try {
             responseHandler
                 .reqRes(req, res)
+                .onCreate('Hurray! otp sent to the dukan member.', await ShopMemberModel.addShopMember(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
+    async UpdateShopMember(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
                 .onCreate(
                     'Hurray! Step one of creating your duka completed.',
                     await ShopMemberModel.addShopMember(req.body),
@@ -112,10 +123,7 @@ class ShopMemberController {
         try {
             responseHandler
                 .reqRes(req, res)
-                .onCreate(
-                    'Hurray! Step one of creating your duka completed.',
-                    await ShopMemberModel.verifyShopMember(req.body),
-                )
+                .onCreate('Hurray! dukan member verified.', await ShopMemberModel.updateShopMember(req.body))
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));
