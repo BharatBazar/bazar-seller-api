@@ -1,10 +1,11 @@
+import { keepFields } from './../../lib/helpers/index';
 import { IShopModel } from './../shop/shop.interface';
 import { HTTP400Error, HTTP404Error } from './../../lib/utils/httpErrors';
 import { log } from 'util';
 import ShopPermissionModel from './../permission/permission.model';
 import { ShopMember } from './shopmember.schema';
 import { IShopMemberModel, shopMemberInterface, shopMemberRole } from './shopmember.interface';
-import { LeanDocument, Types } from 'mongoose';
+import { FilterQuery, LeanDocument, Types } from 'mongoose';
 import { shopMember_message } from '../../lib/helpers/customMessage';
 import otpModel from '../otp/otp.model';
 import { pruneFields } from '../../lib/helpers';
@@ -73,6 +74,46 @@ export class ShopMemberModel {
         }
     }
 
+    async checkMemberExist(data: FilterQuery<IShopMemberModel>) {
+        const memberExist = await ShopMember.findOne(data);
+        if (memberExist) {
+            return memberExist;
+        } else {
+            throw new HTTP400Error('Member does not exist with the given id');
+        }
+    }
+
+    async matchOtp(otp: string, phoneNumber: string) {
+        const isMatch = await otpModel.verifyOTP({ otp: otp.toString(), phoneNumber: phoneNumber });
+        if (isMatch) {
+            return true;
+        } else {
+            if (!otp) {
+                throw new HTTP400Error('Please provide otp.');
+            } else if (!phoneNumber) {
+                throw new HTTP400Error('Please provide phone number.');
+            }
+        }
+    }
+
+    async updateShopMember(data: shopMemberInterface & { otp: string }) {
+        if (data.phoneNumber) {
+            const memberExist = await this.checkMemberExist({ _id: data._id });
+            if (memberExist.phoneNumber == data.phoneNumber) {
+                await otpModel.deleteOTP(memberExist.phoneNumber);
+                keepFields(data, 'firstName lastName');
+                await ShopMember.updateOne({ _id: data._id }, data);
+                return 'Details updated';
+            } else {
+                await this.matchOtp(data.otp, data.phoneNumber);
+                keepFields(data, 'firstName lastName phoneNumber');
+                await ShopMember.updateOne({ _id: data._id }, data);
+                return 'Details updated';
+            }
+        } else {
+            throw new HTTP400Error('Please provide phone number.');
+        }
+    }
     async addShopMember(data: shopMemberInterface & { otp: string }) {
         if (data.otp && data.shop) {
             const isMatch = await otpModel.verifyOTP({ otp: data.otp.toString(), phoneNumber: data.phoneNumber });

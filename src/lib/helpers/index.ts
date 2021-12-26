@@ -21,3 +21,10 @@ export const pruneFields = (body: any, fields: string) => {
         delete body[field];
     });
 };
+
+export const keepFields = (body: any, fields: string) => {
+    const fieldsArray = fields.split(' ');
+    Object(body).keys.forEach((field) => {
+        if (!fieldsArray.includes(field)) delete body[field];
+    });
+};

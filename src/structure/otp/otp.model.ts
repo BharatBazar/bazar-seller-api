@@ -38,6 +38,10 @@ class OtpModel {
             }
         }
     };
+
+    public deleteOTP = async (phoneNumber: string) => {
+        await OTP.deleteOne({ phoneNumber: phoneNumber });
+    };
 }
 
 export default new OtpModel();
