@@ -60,7 +60,8 @@ export class ShopMemberModel {
     }
 
     async verifyShopMember(data: { phoneNumber: string }) {
-        const memberExist = await ShopMember.find({ phoneNumber: data.phoneNumber });
+        const memberExist = await ShopMember.findOne({ phoneNumber: data.phoneNumber });
+        console.log(data);
         if (memberExist) {
             throw new HTTP400Error(
                 'Phone number is already registered . If you want to create your own digital dukan tell your previous dukan owner to delete your membership from his dukan.',
@@ -73,7 +74,7 @@ export class ShopMemberModel {
     }
 
     async addShopMember(data: shopMemberInterface & { otp: string }) {
-        if (data.otp) {
+        if (data.otp && data.shop) {
             const isMatch = await otpModel.verifyOTP({ otp: data.otp.toString(), phoneNumber: data.phoneNumber });
             if (isMatch) {
                 pruneFields(data, 'otp');
@@ -90,7 +91,11 @@ export class ShopMemberModel {
                 throw new HTTP400Error('Otp does not match');
             }
         } else {
-            throw new HTTP400Error('Please provide otp.');
+            if (!data.otp) {
+                throw new HTTP400Error('Please provide otp.');
+            } else if (!data.shop) {
+                throw new HTTP400Error('Please provide shop details.');
+            }
         }
     }
 
