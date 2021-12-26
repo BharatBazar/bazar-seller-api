@@ -5,13 +5,14 @@ import { log } from 'util';
 import ShopPermissionModel from './../permission/permission.model';
 import { ShopMember } from './shopmember.schema';
 import { IShopMemberModel, shopMemberInterface, shopMemberRole } from './shopmember.interface';
-import { FilterQuery, LeanDocument, Types } from 'mongoose';
+import { FilterQuery, LeanDocument, Types, UpdateQuery } from 'mongoose';
 import { shopMember_message } from '../../lib/helpers/customMessage';
 import otpModel from '../otp/otp.model';
 import { pruneFields } from '../../lib/helpers';
 import { Shop } from '../shop/shop.schema';
 import { ShopPermissions } from '../permission/permission.schema';
 import shopmember from '.';
+import { ShopModel } from '../shop/shop.model';
 export class ShopMemberModel {
     async checkPhoneNumber(data: { phoneNumber: string }) {
         const phoneNumber: boolean = await ShopMember.checkPhoneNumber(data.phoneNumber);
@@ -79,7 +80,7 @@ export class ShopMemberModel {
         if (memberExist) {
             return memberExist;
         } else {
-            throw new HTTP400Error('Member does not exist with the given id');
+            throw new HTTP400Error('Member does not exist with the given condition');
         }
     }
 
@@ -96,17 +97,42 @@ export class ShopMemberModel {
         }
     }
 
+    async deleteShopMember(data: string) {
+        const a = await this.checkMemberExist({ _id: data });
+        console.log('a =>', a);
+        if (a) {
+            if (a.role == shopMemberRole.owner) {
+                throw new HTTP400Error('Sorry cannot delete this account');
+            } else {
+                await ShopPermissions.findByIdAndDelete(a.permissions);
+                const condition: UpdateQuery<IShopModel> = {};
+                if (a.role == shopMemberRole.worker) {
+                    condition['$pull'] = { worker: a._id };
+                } else if (a.role == shopMemberRole.coOwner) {
+                    condition['$pull'] = { coOwner: a._id };
+                }
+                await Shop.findOneAndUpdate({ _id: a.shop }, condition);
+                await ShopMember.findByIdAndDelete(a._id);
+                return 'Member deleted';
+            }
+        }
+    }
+
     async updateShopMember(data: shopMemberInterface & { otp: string }) {
+        console.log(data);
         if (data.phoneNumber) {
             const memberExist = await this.checkMemberExist({ _id: data._id });
+            console.log(memberExist);
             if (memberExist.phoneNumber == data.phoneNumber) {
                 await otpModel.deleteOTP(memberExist.phoneNumber);
-                keepFields(data, 'firstName lastName');
+                keepFields(data, 'firstName lastName _id');
+                console.log(data);
                 await ShopMember.updateOne({ _id: data._id }, data);
                 return 'Details updated';
             } else {
                 await this.matchOtp(data.otp, data.phoneNumber);
-                keepFields(data, 'firstName lastName phoneNumber');
+                keepFields(data, 'firstName lastName phoneNumber _id');
+                console.log(data);
                 await ShopMember.updateOne({ _id: data._id }, data);
                 return 'Details updated';
             }

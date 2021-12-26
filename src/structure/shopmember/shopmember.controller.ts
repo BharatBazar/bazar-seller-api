@@ -62,7 +62,7 @@ class ShopMemberController {
         try {
             responseHandler
                 .reqRes(req, res)
-                .onFetch('Shop member deleted.', await ShopMemberModel.deleteMember(req.body))
+                .onFetch('Shop member deleted.', await ShopMemberModel.deleteShopMember(req.query._id))
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));
@@ -110,8 +110,20 @@ class ShopMemberController {
                 .reqRes(req, res)
                 .onCreate(
                     'Hurray! Step one of creating your duka completed.',
-                    await ShopMemberModel.addShopMember(req.body),
+                    await ShopMemberModel.updateShopMember(req.body),
                 )
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
+
+    async DeleteShopMember(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onCreate('Dukan Member Deleted!!.', await ShopMemberModel.deleteShopMember(req.query._id))
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));
@@ -123,7 +135,7 @@ class ShopMemberController {
         try {
             responseHandler
                 .reqRes(req, res)
-                .onCreate('Hurray! dukan member verified.', await ShopMemberModel.updateShopMember(req.body))
+                .onCreate('Hurray! dukan member verified.', await ShopMemberModel.verifyShopMember(req.body))
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));
