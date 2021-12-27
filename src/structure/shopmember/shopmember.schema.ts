@@ -16,6 +16,7 @@ const ShopMemberSchema: Schema = new Schema({
     isTerminated: { type: Boolean, default: true },
     isDeleted: { type: Boolean, default: false },
     languagePreference: { type: String, enum: ['Hindi', 'English', 'Message'] },
+
     // photo: {_id: ObjectId, ref: 'photo'}
 });
 

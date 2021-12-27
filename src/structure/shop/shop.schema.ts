@@ -33,6 +33,8 @@ export const ShopSchema: Schema = new Schema(
         },
 
         membersDetailSkipped: { type: Boolean, default: false },
+        shopMemberOnBoardingDone: { type: Boolean, default: false },
+
         owner: { type: Types.ObjectId, ref: 'ShopMember', unique: true },
         coOwner: [{ type: Types.ObjectId, ref: 'ShopMember' }],
         worker: [{ type: Types.ObjectId, ref: 'ShopMember' }],

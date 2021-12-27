@@ -1,7 +1,6 @@
 import { keepFields } from './../../lib/helpers/index';
 import { IShopModel } from './../shop/shop.interface';
-import { HTTP400Error, HTTP404Error } from './../../lib/utils/httpErrors';
-import { log } from 'util';
+import { HTTP400Error } from './../../lib/utils/httpErrors';
 import ShopPermissionModel from './../permission/permission.model';
 import { ShopMember } from './shopmember.schema';
 import { IShopMemberModel, shopMemberInterface, shopMemberRole } from './shopmember.interface';
@@ -11,8 +10,7 @@ import otpModel from '../otp/otp.model';
 import { pruneFields } from '../../lib/helpers';
 import { Shop } from '../shop/shop.schema';
 import { ShopPermissions } from '../permission/permission.schema';
-import shopmember from '.';
-import { ShopModel } from '../shop/shop.model';
+
 export class ShopMemberModel {
     async checkPhoneNumber(data: { phoneNumber: string }) {
         const phoneNumber: boolean = await ShopMember.checkPhoneNumber(data.phoneNumber);
@@ -140,6 +138,7 @@ export class ShopMemberModel {
             throw new HTTP400Error('Please provide phone number.');
         }
     }
+
     async addShopMember(data: shopMemberInterface & { otp: string }) {
         if (data.otp && data.shop) {
             const isMatch = await otpModel.verifyOTP({ otp: data.otp.toString(), phoneNumber: data.phoneNumber });
@@ -254,7 +253,7 @@ export class ShopMemberModel {
                                     notAddressAvailable: true,
                                     data: member,
                                 };
-                            } else if (member.shop.coOwner.length == 0 && !member.shop.membersDetailSkipped) {
+                            } else if (!member.shop.shopMemberOnBoardingDone && !member.shop.membersDetailSkipped) {
                                 return {
                                     notMemberDetails: true,
                                     data: member,

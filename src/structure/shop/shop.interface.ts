@@ -34,6 +34,7 @@ interface Shop {
     category: [Types.ObjectId];
     subCategory: [[Types.ObjectId]];
     subCategory1: [[[Types.ObjectId]]];
+    shopMemberOnBoardingDone: boolean;
 }
 
 export const ShopFields = {
