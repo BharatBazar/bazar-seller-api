@@ -118,7 +118,7 @@ export class ShopMemberModel {
 
     async updateShopMember(data: shopMemberInterface & { otp: string }) {
         console.log(data);
-        if (data.phoneNumber) {
+        if (data.phoneNumber && data._id) {
             const memberExist = await this.checkMemberExist({ _id: data._id });
             console.log(memberExist);
             if (memberExist.phoneNumber == data.phoneNumber) {
@@ -135,7 +135,10 @@ export class ShopMemberModel {
                 return 'Details updated';
             }
         } else {
-            throw new HTTP400Error('Please provide phone number.');
+            if (!data.phoneNumber) throw new HTTP400Error('Please provide phone number.');
+            else {
+                throw new HTTP400Error('Please provide document id for updation.');
+            }
         }
     }
 

@@ -79,6 +79,18 @@ class ShopController {
         }
     };
 
+    public getShopCatalogueDetails = async (req: Request, res: Response, next: NextFunction) => {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Shop catalogue', await ShopModel.getShopCatalogueDetails(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    };
+
     public searchShopByName = async (req: Request, res: Response, next: NextFunction) => {
         const responseHandler = new ResponseHandler();
         try {

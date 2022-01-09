@@ -59,6 +59,14 @@ export class ShopModel {
         } else throw new HTTP400Error('Shop does not exist');
     };
 
+    public getShopCatalogueDetails = async (body: { _id: ObjectId }) => {
+        const shop: IShopModel | null = await Shop.findById(body._id).select('subCategory category subCategory1');
+
+        if (shop) {
+            return shop;
+        } else throw new HTTP400Error('Shop does not exist');
+    };
+
     public updateShop = async (data: IShopModel) => {
         const shop: IShopModel = await Shop.shopExist({ _id: data._id });
 
@@ -77,7 +85,7 @@ export class ShopModel {
 
             // shopDetails = { ...shopDetails, ...data };
             // console.log(shopDetails);
-
+            console.log('shop Details =>', shop);
             return await Shop.findByIdAndUpdate(data._id, data, { new: true });
         } else {
             throw new HTTP400Error(shop_message.NO_SHOP);

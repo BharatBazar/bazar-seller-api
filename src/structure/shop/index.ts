@@ -43,4 +43,10 @@ export default [
         escapeAuth: true,
         handler: [ShopController.searchShopByName],
     },
+    {
+        path: '/shop/getCatalogue',
+        method: 'post',
+        escapeAuth: true,
+        handler: [ShopController.getShopCatalogueDetails],
+    },
 ];

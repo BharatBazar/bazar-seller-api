@@ -22,6 +22,7 @@ export const ShopSchema: Schema = new Schema(
             type: Types.ObjectId,
             ref: 'Address',
         },
+        //TODO: change pincode every where to id
         pincode: {
             type: String,
         },
