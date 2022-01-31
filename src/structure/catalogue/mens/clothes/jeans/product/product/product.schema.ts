@@ -18,21 +18,23 @@ const JeansSchema: Schema = new Schema(
         new: { type: Boolean, default: false },
         newDeadline: { type: String, default: '' },
         returnAllowed: { type: Boolean, default: false },
+        discount: [Number],
+
+        discountDeadline: [Date],
 
         status: { type: Number, enum: productStatus, default: productStatus.NOTCOMPLETED },
         note: { type: [String], default: [] },
         alreadyRejected: { type: Boolean, default: false },
         rating: Number,
 
-        discount: [Number],
         bazarAssured: Boolean,
-        discountDeadline: [Date],
 
         //filters
         pattern: [{ type: Types.ObjectId, ref: 'JeansClassifier', default: undefined }],
         fit: { type: Types.ObjectId, ref: 'JeansClassifier', default: undefined },
         brand: { type: Types.ObjectId, ref: 'JeansClassifier', default: undefined },
 
+        //distribution
         colors: [{ type: Types.ObjectId, ref: 'JeansColor', default: undefined }],
     },
     { timestamps: true },

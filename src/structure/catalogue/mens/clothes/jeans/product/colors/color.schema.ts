@@ -8,6 +8,7 @@ const JeansColorSchema: Schema = new Schema(
         photos: [{ type: String }],
         includedColor: [{ type: Types.ObjectId, ref: 'JeansClassifier' }],
         parentId: { type: Types.ObjectId, ref: 'Jeans' },
+        identificationPhoto: String,
     },
     { timestamps: true },
 );

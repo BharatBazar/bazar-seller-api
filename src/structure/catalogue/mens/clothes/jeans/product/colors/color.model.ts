@@ -9,6 +9,7 @@ import { Jeans } from '../product/product.schema';
 
 class JeansColorModel {
     public async createJeansColor(data: IJeansColorModel) {
+        console.log(data);
         if (data.parentId) {
             let colors: [Types.ObjectId] = [];
             const color: IJeansColorModel = new JeansColor(data);
@@ -18,9 +19,13 @@ class JeansColorModel {
             color.parentId = data.parentId;
 
             await color.save();
-            return color;
+            return { colorId: color._id, productId: color.parentId };
         } else {
-            throw new HTTP400Error('Please provide parent id');
+            const color: IJeansColorModel = new JeansColor(data);
+            const jeans = await JeansModel.createJeans({ colors: [color._id] });
+
+            await color.save();
+            return { colorId: color._id, productId: jeans._id };
         }
     }
 
@@ -40,11 +45,11 @@ class JeansColorModel {
         }
     }
 
-    public async deleteJeansColor(data: IId & { parenId?: string }) {
+    public async deleteJeansColor(data: IId & { parentId?: string }) {
         const exist: IJeansColorModel | null = await JeansColor.findById(data._id);
         if (exist) {
-            if (data.parenId) {
-                await Jeans.findByIdAndUpdate(data.parenId, { $pull: { colors: data._id } });
+            if (data.parentId) {
+                await Jeans.findByIdAndUpdate(data.parentId, { $pull: { colors: data._id } });
             }
             await exist.delete();
             return '';

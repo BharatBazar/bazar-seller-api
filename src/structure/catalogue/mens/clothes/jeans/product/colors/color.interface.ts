@@ -7,6 +7,7 @@ export interface IJeansColor {
     sizes: [Types.ObjectId]; // will refer to jeans size table
     photos: [string];
     includedColor: [Types.ObjectId];
+    identificationPhoto: string;
 }
 
 export interface IJeansColorModel extends Document, IJeansColor {}

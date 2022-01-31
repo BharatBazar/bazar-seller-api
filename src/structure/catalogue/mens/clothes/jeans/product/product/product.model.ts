@@ -29,8 +29,7 @@ class JeansModel {
 
             jeans = { ...jeans, ...data };
 
-            await Jeans.findByIdAndUpdate(data._id, jeans, { new: true });
-            return '';
+            return await Jeans.findByIdAndUpdate(data._id, jeans, { new: true });
         } else {
             throw new HTTP404Error('Jeans not found.');
         }
@@ -167,6 +166,7 @@ class JeansModel {
         if (!shopId) {
             throw new HTTP400Error('please provide shopid');
         }
+        console.log('shopid', shopId);
 
         var a: { _id: number; count: number }[] = await Jeans.aggregate([
             {
