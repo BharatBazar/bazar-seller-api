@@ -8,6 +8,7 @@ export interface IJeansColor {
     photos: [string];
     includedColor: [Types.ObjectId];
     identificationPhoto: string;
+    shopId: Types.ObjectId;
 }
 
 export interface IJeansColorModel extends Document, IJeansColor {}

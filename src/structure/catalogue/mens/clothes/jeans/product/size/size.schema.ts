@@ -4,8 +4,8 @@ import { model, Schema, Types, Model } from 'mongoose';
 const JeansSizeSchema: Schema = new Schema(
     {
         size: { type: Types.ObjectId, ref: 'JeansClassifier' },
-        mrp: String,
-        sp: String,
+        // mrp: String, //Optional will enable it later
+        // sp: String, //Optional will enable it later
         quantity: Number,
         parentId: { type: Types.ObjectId, ref: 'JeansColor' },
         itemId: { type: String, default: undefined },

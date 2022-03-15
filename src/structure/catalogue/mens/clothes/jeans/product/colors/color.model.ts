@@ -29,14 +29,15 @@ class JeansColorModel {
         }
     }
 
-    public async updateJeansColor(data: IJeansColorModel) {
+    public async updateJeansColor(data: Partial<IJeansColorModel>) {
         const exist = (await JeansColor.findById(data._id).countDocuments()) > 0;
         if (exist) {
             let jeansColor: UpdateQuery<IJeansColorModel> | undefined = {};
             if (data.sizes) {
                 jeansColor['$push'] = { sizes: { $each: data.sizes } };
+                pruneFields(data, 'sizes');
             }
-            pruneFields(data, 'sizes');
+
             jeansColor = { ...jeansColor, ...data };
             console.log(jeansColor, data);
             return (await JeansColor.findByIdAndUpdate(data._id, jeansColor, { new: true }))?._id;

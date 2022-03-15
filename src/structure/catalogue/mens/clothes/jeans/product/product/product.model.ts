@@ -146,6 +146,7 @@ class JeansModel {
                           path: 'colors',
                           populate: {
                               path: 'color',
+
                               select: 'description name',
                           },
                           select: 'color',

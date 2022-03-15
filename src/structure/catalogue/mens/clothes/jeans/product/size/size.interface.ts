@@ -7,12 +7,12 @@ export enum idCreationStatus {
 }
 export interface IJeansSize {
     size: Types.ObjectId; //Will refer to size table
-    mrp: string;
+    //mrp: string;  //Will enable it later on
     quantity: string;
-    sp: string;
+    //sp: string; //Will enable it later on
     parentId: Types.ObjectId;
-    itemId: string;
-    idStatus: idCreationStatus;
+    itemId: string; //default id given by us for produt recognition in shop
+    //idStatus: idCreationStatus; // not required for now
 }
 
 export interface IJeansSizeModel extends Document, IJeansSize {}
