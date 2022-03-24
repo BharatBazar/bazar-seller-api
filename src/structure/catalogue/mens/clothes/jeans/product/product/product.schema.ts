@@ -21,7 +21,7 @@ const JeansSchema: Schema = new Schema(
         discount: [Number],
         discountDeadline: [Date],
 
-        status: { type: Number, enum: productStatus, default: productStatus.NOTCOMPLETED },
+        status: { type: Number, enum: productStatus, default: productStatus.INVENTORY },
         note: { type: [String], default: [] },
         alreadyRejected: { type: Boolean, default: false },
         rating: Number,

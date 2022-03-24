@@ -1,7 +1,6 @@
 import { Date, Types, Document, Model } from 'mongoose';
 
 export enum productStatus {
-    NOTCOMPLETED = 0,
     INVENTORY = 1,
     REJECTED = 2,
     OUTOFSTOCK = 3,
@@ -10,7 +9,6 @@ export enum productStatus {
 }
 
 export const statusName = {
-    0: 'Not Completed',
     1: 'Inventory',
     2: 'Rejected',
     3: 'Out of stock',

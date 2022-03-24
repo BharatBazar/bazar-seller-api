@@ -196,7 +196,7 @@ class JeansModel {
             productStatus.LIVE,
             productStatus.WAITINGFORAPPROVAL,
             productStatus.INVENTORY,
-            productStatus.NOTCOMPLETED,
+
             productStatus.REJECTED,
             productStatus.OUTOFSTOCK,
         ].map((status) => {
