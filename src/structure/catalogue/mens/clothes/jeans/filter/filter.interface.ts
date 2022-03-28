@@ -10,6 +10,8 @@ export interface IFilter {
     filterLevel: number; // 0 means filter only and 1 means It is top level distribution like color 2 means inside distibution that is size or etc.
     active: boolean; // It is used to active a filter and show it publically so that filter can through a verifying flow and all good then they are release to public
     mandatory: boolean;
+    customerHeading: string;
+    customerDescription: string;
 }
 
 export interface IFilterModel extends Document, IFilter {}

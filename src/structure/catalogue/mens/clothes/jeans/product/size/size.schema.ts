@@ -8,8 +8,10 @@ const JeansSizeSchema: Schema = new Schema(
         // sp: String, //Optional will enable it later
         quantity: Number,
         parentId: { type: Types.ObjectId, ref: 'JeansColor' },
+        productId: { type: Types.ObjectId, ref: 'Jeans' },
+
         itemId: { type: String, default: undefined },
-        shopId: { type: String, defaule: undefined },
+        shopId: { type: String, default: 'Shop' },
     },
     {
         timestamps: true,

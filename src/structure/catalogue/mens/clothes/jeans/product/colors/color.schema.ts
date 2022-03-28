@@ -5,11 +5,11 @@ const JeansColorSchema: Schema = new Schema(
     {
         color: { type: Types.ObjectId, ref: 'JeansClassifier' },
         sizes: [{ type: Types.ObjectId, ref: 'JeansSize' }],
-        photos: [{ type: String }],
         includedColor: [{ type: Types.ObjectId, ref: 'JeansClassifier' }],
+        shopId: { type: Types.ObjectId, ref: 'Shop' },
         parentId: { type: Types.ObjectId, ref: 'Jeans' },
         identificationPhoto: String,
-        shopId: { type: Types.ObjectId, ref: 'Shop' },
+        photos: [{ type: String }],
     },
     { timestamps: true },
 );

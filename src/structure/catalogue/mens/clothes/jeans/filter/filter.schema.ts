@@ -6,6 +6,8 @@ const FilterSchema: Schema = new Schema(
     {
         name: String,
         description: String,
+        customerHeading: String,
+        customerDescription: String,
         image: String,
         type: { type: String, enum: classifierTypes },
         multiple: { type: Boolean, default: false },
