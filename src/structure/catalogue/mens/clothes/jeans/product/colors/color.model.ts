@@ -22,7 +22,7 @@ class JeansColorModel {
             return { colorId: color._id, productId: color.parentId };
         } else {
             const color: IJeansColorModel = new JeansColor(data);
-            const jeans = await JeansModel.createJeans({ colors: [color._id] });
+            const jeans = await JeansModel.createJeans({ colors: [color._id], shopId: data.shopId });
 
             await color.save();
             return { colorId: color._id, productId: jeans._id };

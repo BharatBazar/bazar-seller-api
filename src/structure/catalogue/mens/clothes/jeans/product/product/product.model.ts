@@ -173,7 +173,6 @@ class JeansModel {
             {
                 $match: { shopId: Types.ObjectId(shopId) },
             },
-
             {
                 $group: {
                     _id: '$status',
@@ -191,6 +190,7 @@ class JeansModel {
         const b = a.map((item) => {
             return { ...item, name: productStatus[item._id] };
         });
+        //console.log(b, a);
         //console.log(Object.keys(statusDescription));
         return [
             productStatus.LIVE,
