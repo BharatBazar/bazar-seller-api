@@ -1,3 +1,4 @@
+import customerController from './customer/customer.controller';
 import JeansController from './product.controller';
 
 export default [
@@ -48,5 +49,14 @@ export default [
         method: 'post',
         escapeAuth: true,
         handler: [JeansController.GetStatus],
+    },
+
+    // customer apis
+
+    {
+        path: '/jeans/customer/filter/items',
+        method: 'post',
+        escapeAuth: true,
+        handler: [customerController.getItemsOnFiltering],
     },
 ];
