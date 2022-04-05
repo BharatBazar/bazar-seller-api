@@ -17,7 +17,7 @@ export const ProductSchema: Schema = new Schema(
         productDescription: { type: String, default: '' },
         productColor: [{ type: Types.ObjectId, ref: 'ProductColor' }],
         showPrice: { type: Boolean, default: false },
-        productStatus: { type: String, enum: productStatus, default: productStatus.NOTCOMPLETED },
+        productStatus: { type: String, enum: productStatus, default: productStatus.INVENTORY },
         productRating: Number,
         productNew: Boolean,
         productNewDeadline: Date,
