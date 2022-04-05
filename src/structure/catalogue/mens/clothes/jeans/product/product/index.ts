@@ -59,4 +59,10 @@ export default [
         escapeAuth: true,
         handler: [customerController.getItemsOnFiltering],
     },
+    {
+        path: '/jeans/customer/get',
+        method: 'post',
+        escapeAuth: true,
+        handler: [customerController.GetProductDetailsForCustomer],
+    },
 ];

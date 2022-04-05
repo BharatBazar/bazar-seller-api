@@ -1,9 +1,28 @@
+import { HTTP400Error } from './../../../../../../../../lib/utils/httpErrors';
 import { Types } from 'mongoose';
 import { productStatus } from '../../../../../../product/product.interface';
 import { JeansSize } from '../../size/size.schema';
 import { Jeans } from '../product.schema';
 
 class CustomerModel {
+    public async getProductDetailsForCustomer(data: { _id: string }) {
+        let a = await Jeans.findById(data._id).populate({
+            path: 'colors brand fit pattern shopId',
+            populate: {
+                path: 'sizes color includedColor',
+
+                populate: {
+                    path: 'size',
+                },
+            },
+        });
+        if (!a) {
+            throw new HTTP400Error('Jeans not found.');
+        } else {
+            return a;
+        }
+    }
+
     public async getItemsOnApplyingFilter(data: { colors: [string]; size: [string],shop:boolean,status:productStatus }) {
         let query = {};
 
