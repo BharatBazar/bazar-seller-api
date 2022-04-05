@@ -1,7 +1,7 @@
 import { HTTP400Error } from '../../../lib/utils/httpErrors';
 import { NextFunction } from 'express';
 import { Schema, Types, model } from 'mongoose';
-import productColorModel from '../../productColor/productColor.model';
+// import productColorModel from '../../productColor/productColor.model';
 import { IProductModel, IProductModelG, productStatus } from './product.interface';
 
 export const ProductSchema: Schema = new Schema(
@@ -15,7 +15,7 @@ export const ProductSchema: Schema = new Schema(
         productTitle: { type: String, default: '' },
         productSubtitle: { type: String, default: '' },
         productDescription: { type: String, default: '' },
-        productColor: [{ type: Types.ObjectId, ref: 'ProductColor' }],
+        // productColor: [{ type: Types.ObjectId, ref: 'ProductColor' }],
         showPrice: { type: Boolean, default: false },
         productStatus: { type: String, enum: productStatus, default: productStatus.INVENTORY },
         productRating: Number,
@@ -30,7 +30,7 @@ export const ProductSchema: Schema = new Schema(
     },
 );
 
-ProductSchema.statics.productIdExist = async function (_id: Types.ObjectId) {
+{/*ProductSchema.statics.productIdExist = async function (_id: Types.ObjectId) {
     return await this.findById(_id);
 };
 
@@ -46,6 +46,6 @@ ProductSchema.pre('remove', async function (next: NextFunction) {
         .catch((error) => {
             throw new HTTP400Error('Problem deleting produtct');
         });
-});
+});*/}
 
 export const Product: IProductModel = model<IProductModelG, IProductModel>('Product', ProductSchema);
