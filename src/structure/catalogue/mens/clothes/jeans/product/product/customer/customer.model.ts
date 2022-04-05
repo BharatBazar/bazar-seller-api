@@ -1,18 +1,20 @@
 import { Types } from 'mongoose';
 import { productStatus } from '../../../../../../product/product.interface';
 import { JeansSize } from '../../size/size.schema';
+import { Jeans } from '../product.schema';
 
 class CustomerModel {
-    public async getItemsOnApplyingFilter(data: { colors: [string]; sizes: [string],status: productStatus }) {
+    public async getItemsOnApplyingFilter(data: { colors: [string]; size: [string],shop:boolean,status:productStatus }) {
         let query = {};
 
-        if (data['sizes']) {
-            console.log('data', data["sizes"]);
-            let sizes = data["sizes"].map((item) => Types.ObjectId(item));
-            console.log("size",sizes)
-           // return await JeansSize.find({size:{ $in :  sizes}})
+        console.log("data =>",data)
+        if (data['size']) {
+            console.log('data', data["size"]);
+            let size = data["size"].map((item) => Types.ObjectId(item));
+            console.log("size",size)
+           // return await JeansSize.find({size:{ $in :  size}})
             return await JeansSize.aggregate([
-                { $match: {  size:{ $in :  data['sizes'].map((item) => Types.ObjectId(item)) } },
+                { $match: {  size:{ $in :  data['size'].map((item) => Types.ObjectId(item)) } },
                 { $group: { _id: '$productId', count: { $sum: 1 } } },
                 {
                     $lookup: {
@@ -35,31 +37,6 @@ class CustomerModel {
                         as: "newcolors",
                     
                     },
-                //   {
-         
-                //     $lookup: {
-                //         from: 'shops',
-                //         let: {"colors": "$colors"},
-                //        pipeline: [{$match: { '$expr': { '$in':['$_id',"$$colors"] }}, {$project: {color:1,_id:0},}],
-                //        as: "newcolors",
-                //     },
-                    
-                //   $lookup: {
-                //         from: 'jeansclassifiers',
-                //         let: {"colors": "$newcolors"},
-                //        pipeline: [{$match: { '$expr': { '$in':['$_id',"$$colors.color"] }}, {$project: {name:1}}],
-                //        as: "newcolors",
-                //     },
-
-                    // $lookup: {
-                    //     from: 'jeanscolors',
-                    //     localField: 'colors',
-                    //     foreignField: '_id',
-                        
-                    //     as: 'newcolors',
-                        
-                    // },
-                },
                {
         $addFields: {
             newcolors1 : '$newcolors.color'
@@ -71,31 +48,46 @@ class CustomerModel {
                         foreignField: '_id',
                         as: 'populatedColors',
            }
-        
-    },
-     {$addFields: {
+        },
+        {
+            $addFields: {
             newcolors2 : {name: '$populatedColors.name'}
-        }},
+        }
+    },
         {
             $project: {
                 newcolors1:0,populatedColors:0,newcolors:0
             }
         }
-               
-
-                // {
-                //     $unwind: {
-                //         path: '$productDetail',
-                //     },
-                // },
-                //  {
-                //     $unwind: {
-                //         path: '$productDetail',
-                //     },
-                // },
+                
             ]);
         }
+        else if(data.shop) {
+            return await Jeans.aggregate([{
+                $group: {
+                    _id: "$shopId",
+                     count: { $sum: 1 }
+
+                }},
+                {$lookup: {
+                    from:"shops",
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "shop"
+                }},
+               
+                 {$replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$shop", 0 ] }, "$$ROOT" ] } }},
+                 {$project: {shop:0}}
+            ])
+        }
+    else {
+        return await Jeans.find({status:data.status}).populate({  path: 'colors shopId',
+                populate: {
+                    path: 'color',
+                    select: "name description"
+                }})
     }
+}
 }
 
 export default new CustomerModel();
