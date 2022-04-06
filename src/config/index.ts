@@ -23,7 +23,9 @@ export const mongoUrl = (): string => {
     if (configs.dbAccess === 'local') {
         return `mongodb://localhost:27017/${configs.db}`;
     }
-    return `mongodb+srv://${configs.user}:${configs.pass}@${configs.cluster}.mongodb.net/${configs.db}?retryWrites=true`;
+    let url = `mongodb+srv://${configs.user}:${configs.pass}@${configs.cluster}.mongodb.net/${configs.db}?retryWrites=true`;
+    console.log('url', url);
+    return url;
 };
 
 export enum paginationConfig {
