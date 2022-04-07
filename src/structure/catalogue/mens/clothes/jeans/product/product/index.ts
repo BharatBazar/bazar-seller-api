@@ -65,4 +65,10 @@ export default [
         escapeAuth: true,
         handler: [customerController.GetProductDetailsForCustomer],
     },
+    {
+        path: '/jeans/customer/shop/get',
+        method: 'post',
+        escapeAuth: true,
+        handler: [customerController.GetShpopDetailsForCustomer],
+    },
 ];

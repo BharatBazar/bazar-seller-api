@@ -3,6 +3,7 @@ import { Types } from 'mongoose';
 import { productStatus } from '../../../../../../product/product.interface';
 import { JeansSize } from '../../size/size.schema';
 import { Jeans } from '../product.schema';
+import { Shop } from '../../../../../../../shop/shop.schema';
 
 class CustomerModel {
     public async getProductDetailsForCustomer(data: { _id: string }) {
@@ -15,6 +16,20 @@ class CustomerModel {
                     path: 'size',
                 },
             },
+        });
+        if (!a) {
+            throw new HTTP400Error('Jeans not found.');
+        } else {
+            console.log(a,"a")
+            return a;
+        }
+    }
+
+      public async getShopDetailsForCustomer(data: { _id: string }) {
+        let a = await Shop.findById(data._id).populate({
+           
+                path: 'owner coOwner area state city',
+        
         });
         if (!a) {
             throw new HTTP400Error('Jeans not found.');

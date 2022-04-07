@@ -26,6 +26,18 @@ class CustomerController {
             next(responseHandler.sendError(error));
         }
     }
+
+    public async GetShpopDetailsForCustomer(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Here is your product!', await customerModel.getShopDetailsForCustomer(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
 }
 
 export default new CustomerController();
