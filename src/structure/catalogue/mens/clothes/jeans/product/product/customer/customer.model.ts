@@ -9,7 +9,7 @@ class CustomerModel {
         let a = await Jeans.findById(data._id).populate({
             path: 'colors brand fit pattern shopId',
             populate: {
-                path: 'sizes color includedColor',
+                path: 'sizes color includedColor owner coOwner area state city',
 
                 populate: {
                     path: 'size',
@@ -19,6 +19,7 @@ class CustomerModel {
         if (!a) {
             throw new HTTP400Error('Jeans not found.');
         } else {
+            console.log(a,"a")
             return a;
         }
     }
