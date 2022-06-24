@@ -10,6 +10,9 @@ export const ShopSchema: Schema = new Schema(
         shopDescription: {
             type: String,
         },
+        localAddress: {
+            type: String,
+        },
         state: {
             type: Types.ObjectId,
             ref: 'Address',
@@ -26,19 +29,14 @@ export const ShopSchema: Schema = new Schema(
         pincode: {
             type: String,
         },
-        localAddress: {
-            type: String,
-        },
         googleLocation: {
             type: String,
         },
-
-        membersDetailSkipped: { type: Boolean, default: false },
-        shopMemberOnBoardingDone: { type: Boolean, default: false },
-
         owner: { type: Types.ObjectId, ref: 'ShopMember', unique: true },
         coOwner: [{ type: Types.ObjectId, ref: 'ShopMember' }],
         worker: [{ type: Types.ObjectId, ref: 'ShopMember' }],
+        membersDetailSkipped: { type: Boolean, default: false },
+        shopMemberOnBoardingDone: { type: Boolean, default: false },
         isVerified: { type: Boolean, default: false },
         verificationStatus: { type: String, enum: verificationStatus, default: verificationStatus.registered },
         remarks: { type: String, default: '' },
@@ -47,8 +45,9 @@ export const ShopSchema: Schema = new Schema(
         rating: Number,
         numberOfRating: Number,
         category: [{ type: Types.ObjectId, ref: 'ProductCatalogue' }],
-        subCategory: [[{ type: Types.ObjectId, ref: 'ProductCatalogue' }]],
-        subCategory1: [[[{ type: Types.ObjectId, ref: 'ProductCatalogue' }]]],
+
+        // subCategory: [[{ type: Types.ObjectId, ref: 'ProductCatalogue' }]],
+        // subCategory1: [[[{ type: Types.ObjectId, ref: 'ProductCatalogue' }]]],
     },
     {
         timestamps: true,

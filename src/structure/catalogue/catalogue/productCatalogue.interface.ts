@@ -9,10 +9,13 @@ export interface IProductCatalogue {
     name: string;
     description: string;
     image: string;
-    categoryType: categoryType;
+    customer_name: string;
+    customer_description: string;
+    customer_image: string;
     subCategoryExist: boolean;
     parent: Types.ObjectId;
     child: Types.ObjectId[];
+    path: Types.ObjectId[];
     active: boolean;
     filters: [
         {

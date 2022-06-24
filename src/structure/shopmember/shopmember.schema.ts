@@ -7,17 +7,18 @@ const { ObjectId } = Schema.Types;
 const ShopMemberSchema: Schema = new Schema({
     firstName: String,
     lastName: String,
-    phoneNumber: { type: String, require: true, unique: true },
-    role: { type: String, enum: shopMemberRole },
-    shop: { type: ObjectId, ref: 'Shop' },
-    permissions: { type: ObjectId, ref: 'Permission' }, //Warning give reference inside type not as direct object as it throws error
+    image: String,
+    gender: { type: String, enum: ['M', 'F', 'O'] },
     password: String,
     email: String,
+    phoneNumber: { type: String, require: true, unique: true },
+    role: { type: String, enum: shopMemberRole },
+    permissions: { type: ObjectId, ref: 'Permission' }, //Warning give reference inside type not as direct object as it throws error
     isTerminated: { type: Boolean, default: true },
     isDeleted: { type: Boolean, default: false },
-    languagePreference: { type: String, enum: ['Hindi', 'English', 'Message'] },
+    shop: { type: ObjectId, ref: 'Shop' },
 
-    // photo: {_id: ObjectId, ref: 'photo'}
+    languagePreference: { type: String, enum: ['Hindi', 'English', 'Hinglish'] },
 });
 
 ShopMemberSchema.methods.addMember = async function () {
