@@ -60,11 +60,54 @@ export class ShopModel {
     };
 
     public getShopCatalogueDetails = async (body: { _id: ObjectId }) => {
-        const shop: IShopModel | null = await Shop.findById(body._id).select('subCategory category subCategory1');
-
+        const shop: IShopModel | null = await Shop.findById(body._id).select('sellingItems').populate('sellingItems');
+        console.log(shop);
         if (shop) {
-            return shop;
+            if (shop.sellingItems.length > 0) {
+                let biggestArrayIndex = 0;
+                let maxPathlength = 0;
+
+                for (let i = 0; i < shop.sellingItems.length; i++) {
+                    let item = shop.sellingItems[i];
+                    console.log(item);
+                    if (item.path.length > maxPathlength) {
+                        biggestArrayIndex = i;
+                        maxPathlength = item.path.length;
+                    }
+                }
+
+                console.log(biggestArrayIndex, maxPathlength);
+
+                let biggestPath = shop.sellingItems[biggestArrayIndex].path;
+
+                let selectedCategory = biggestPath.map((item, index) => {
+                    let items = shop.sellingItems.map((cataegory) =>
+                        index < cataegory.path.length ? cataegory.path[index] : null,
+                    );
+                    const afterApplyingSet = new Set(items);
+                    console.log(items, 'items', afterApplyingSet);
+                    return Array.from(afterApplyingSet);
+                });
+                console.log(selectedCategory, 'selected Catgory');
+
+                return { sellingItems: shop.sellingItems, selectedCategory };
+            }
+            return { sellingItems: shop.sellingItems, selectedCategory: [] };
         } else throw new HTTP400Error('Shop does not exist');
+    };
+
+    public updateShopCatalogue = async (body: IShopModel) => {
+        if (!body._id) {
+            throw new HTTP400Error('Please provide shop id.');
+        } else {
+            const shop: IShopModel = await Shop.findByIdAndUpdate({ _id: body._id }, body, { new: true });
+            console.log('body', body, shop);
+            if (shop) {
+                return await this.getShopCatalogueDetails({ _id: body._id });
+            } else {
+                throw new HTTP400Error(shop_message.NO_SHOP);
+            }
+        }
     };
 
     public updateShop = async (data: IShopModel) => {
@@ -129,14 +172,6 @@ export class ShopModel {
             }
         } catch (error) {
             throw new Error('Error in removing dukan from market');
-        }
-    };
-
-    public updateShopCategory = async (body: IShopModel) => {
-        const shop: IShopModel = await Shop.shopExist({ _id: body._id });
-        if (shop) {
-        } else {
-            throw new HTTP400Error(shop_message.NO_SHOP);
         }
     };
 

@@ -1,3 +1,4 @@
+import { IProductCatalogue } from './../catalogue/catalogue/productCatalogue.interface';
 import { Document, ObjectId, Schema, Types } from 'mongoose';
 
 export enum verificationStatus {
@@ -31,9 +32,7 @@ interface Shop {
     membersDetailSkipped: boolean;
     rating: Number;
     noOfRating: Number;
-    category: [Types.ObjectId];
-    subCategory: [[Types.ObjectId]];
-    subCategory1: [[[Types.ObjectId]]];
+    sellingItems: IProductCatalogue[];
     shopMemberOnBoardingDone: boolean;
 }
 

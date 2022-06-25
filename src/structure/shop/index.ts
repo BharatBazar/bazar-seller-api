@@ -49,4 +49,10 @@ export default [
         escapeAuth: true,
         handler: [ShopController.getShopCatalogueDetails],
     },
+    {
+        path: '/shop/updateCatalogue',
+        method: 'patch',
+        escapeAuth: true,
+        handler: [ShopController.updateShopCatalogueDetails],
+    },
 ];

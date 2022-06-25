@@ -1,30 +1,43 @@
 import { Types } from 'mongoose';
 import { HTTP400Error } from '../../../lib/utils/httpErrors';
-import { HTTP400Error } from '../../../lib/utils/httpErrors';
 import { categoryType, IProductCatalogue, IProductCatalogueModel } from './productCatalogue.interface';
 import { ProductCatalogue } from './productCatalogue.schema';
 class ProductCatalogueModel {
     public async AddProductCatalogue(data: IProductCatalogue) {
-        if (await ProductCatalogue.findOne({ name: data.name, categoryType: data.categoryType, parent: data.parent })) {
-            throw new HTTP400Error('Product already exist please call update api.');
+        if(!data.type) {
+            throw new HTTP400Error("Please provide unique type for category you are adding");
+        } else
+        if (await ProductCatalogue.findOne({ type:data.type })) {
+            throw new HTTP400Error('Product type already exist.');
         } else {
-            const create = new ProductCatalogue(data);
+            const category: IProductCatalogueModel = new ProductCatalogue(data);
+              console.log("parent", data,category)
+            if (data.parent) {
 
-            if (data.categoryType != categoryType.Category) {
-                if (data.parent) {
                     const parent = await ProductCatalogue.findByIdAndUpdate(data.parent, {
-                        $push: { child: create._id },
-                    });
+                        $push: { child: category._id },
+                    },{new:true});
+
+
+                    console.log("parent",parent)
+
+        
+
                     if (!parent) {
                         throw new HTTP400Error('Parent not found');
-                    }
-                } else {
-                    throw new HTTP400Error('Please provide parent id.');
-                }
-            }
+                    } else {
+                        let parentPath = parent.path;
+                        let parentId: Types.ObjectId = parent._id;
 
-            await create.save();
-            return create;
+                        let childPath = [...parentPath, parentId];
+                        category.path = [...childPath];
+                    }
+                } 
+
+           
+
+            await category.save();
+            return category;
         }
     }
 

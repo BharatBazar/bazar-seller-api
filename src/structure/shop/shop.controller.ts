@@ -91,6 +91,18 @@ class ShopController {
         }
     };
 
+    public updateShopCatalogueDetails = async (req: Request, res: Response, next: NextFunction) => {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Shop catalogue', await ShopModel.updateShopCatalogue(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    };
+
     public searchShopByName = async (req: Request, res: Response, next: NextFunction) => {
         const responseHandler = new ResponseHandler();
         try {
