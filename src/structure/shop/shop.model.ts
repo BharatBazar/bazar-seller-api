@@ -69,7 +69,7 @@ export class ShopModel {
                     path: 'path',
                 },
             });
-
+        console.log('se', shop, 'gett Catalogue');
         if (shop) {
             if (shop.sellingItems.length > 0) {
                 let biggestArrayIndex = 0;
@@ -90,7 +90,7 @@ export class ShopModel {
 
                 let selectedCategory = biggestPath.map((item, index) => {
                     let items = shop.sellingItems.map((cataegory) =>
-                        index < cataegory.path.length ? cataegory.path[index] : cataegory._id,
+                        index < cataegory.path.length ? cataegory.path[index]._id : cataegory._id,
                     );
                     const afterApplyingSet = new Set(items);
                     console.log(items, 'items', afterApplyingSet);
@@ -108,10 +108,12 @@ export class ShopModel {
         if (!body._id) {
             throw new HTTP400Error('Please provide shop id.');
         } else {
-            const shop: IShopModel = await Shop.findByIdAndUpdate({ _id: body._id }, body, { new: true });
+            const shop: IShopModel = await Shop.findByIdAndUpdate({ _id: body._id }, body, { new: true })
+                .populate('sellingItems')
+                .select('sellingItems');
             console.log('body', body, shop);
             if (shop) {
-                return await this.getShopCatalogueDetails({ _id: body._id });
+                return shop;
             } else {
                 throw new HTTP400Error(shop_message.NO_SHOP);
             }
