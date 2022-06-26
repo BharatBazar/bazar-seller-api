@@ -60,8 +60,16 @@ export class ShopModel {
     };
 
     public getShopCatalogueDetails = async (body: { _id: ObjectId }) => {
-        const shop: IShopModel | null = await Shop.findById(body._id).select('sellingItems').populate('sellingItems');
-        console.log(shop);
+        const shop: IShopModel | null = await Shop.findById(body._id)
+            .select('sellingItems')
+            .populate({
+                path: 'sellingItems',
+
+                populate: {
+                    path: 'path',
+                },
+            });
+
         if (shop) {
             if (shop.sellingItems.length > 0) {
                 let biggestArrayIndex = 0;
@@ -82,7 +90,7 @@ export class ShopModel {
 
                 let selectedCategory = biggestPath.map((item, index) => {
                     let items = shop.sellingItems.map((cataegory) =>
-                        index < cataegory.path.length ? cataegory.path[index] : null,
+                        index < cataegory.path.length ? cataegory.path[index] : cataegory._id,
                     );
                     const afterApplyingSet = new Set(items);
                     console.log(items, 'items', afterApplyingSet);
