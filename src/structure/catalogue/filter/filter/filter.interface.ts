@@ -1,6 +1,6 @@
-import { ObjectId } from './../../../../../../datatypes/index';
+import { ObjectId } from '../../../../datatypes/index';
 import { Document } from 'mongoose';
-import { classifierTypes } from '../classifiers/classifier.interface';
+import { classifierTypes } from '../filtervalues/filtervalues.interface';
 
 export interface IFilter {
     name: string; //Filter name Like waist size

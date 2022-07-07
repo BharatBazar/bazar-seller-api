@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
-import { HTTP400Error, HTTP404Error } from '../../../../../../lib/utils/httpErrors';
-import { IClassifierModel } from './classifier.interface';
-import { Classifier } from './classifier.schema';
+import { HTTP400Error, HTTP404Error } from '../../../../lib/utils/httpErrors';
+import { IClassifierModel } from './filtervalues.interface';
+import { Classifier } from './filtervalues.schema';
 
 class ClassifierModel {
     public classifierExist = async (name: string) => {

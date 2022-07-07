@@ -1,5 +1,5 @@
 import { Model, Schema, model, Types } from 'mongoose';
-import { IClassifierModel, classifierTypes } from './classifier.interface';
+import { IClassifierModel, classifierTypes } from './filtervalues.interface';
 
 const ClassifierSchema: Schema = new Schema(
     {

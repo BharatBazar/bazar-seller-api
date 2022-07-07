@@ -1,6 +1,6 @@
 import { IFilterModel } from './filter.interface';
 import { Schema, Document, model, Model } from 'mongoose';
-import { classifierTypes } from '../classifiers/classifier.interface';
+import { classifierTypes } from '../filtervalues/filtervalues.interface';
 
 const FilterSchema: Schema = new Schema(
     {

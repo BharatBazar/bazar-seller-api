@@ -1,11 +1,11 @@
-import { ObjectId } from '../../../../../../datatypes/index';
+import { ObjectId } from '../../../../datatypes/index';
 import { Types } from 'mongoose';
-import { IClassfier, IClassifierModel } from '../classifiers/classifier.interface';
-import { HTTP400Error, HTTP404Error } from '../../../../../../lib/utils/httpErrors';
+import { IClassfier, IClassifierModel } from '../filtervalues/filtervalues.interface';
+import { HTTP400Error, HTTP404Error } from '../../../../lib/utils/httpErrors';
 import { IFilter, IFilterModel } from './filter.interface';
 import { Filter } from './filter.schema';
 import { filter } from 'compression';
-import { Classifier } from '../classifiers/classifier.schema';
+import { Classifier } from '../filtervalues/filtervalues.schema';
 
 class FilterModel {
     public filterExist = async (name: string, type: string) => {

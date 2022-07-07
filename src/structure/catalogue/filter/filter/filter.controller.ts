@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import ResponseHandler from '../../../../../../lib/helpers/responseHandler';
+import ResponseHandler from '../../../../lib/helpers/responseHandler';
 import FilterModel from './filter.model';
 
 class FilterController {

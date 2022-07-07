@@ -1,4 +1,4 @@
-import classifierController from './classifier.controller';
+import classifierController from './filtervalues.controller';
 
 export default [
     {
