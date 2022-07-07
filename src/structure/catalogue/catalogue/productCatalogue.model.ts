@@ -11,16 +11,16 @@ class ProductCatalogueModel {
             throw new HTTP400Error('Product type already exist.');
         } else {
             const category: IProductCatalogueModel = new ProductCatalogue(data);
-              console.log("parent", data,category)
+            // await category.save()
             if (data.parent) {
-
+                    console.log("DP",data.parent)
                     const parent = await ProductCatalogue.findByIdAndUpdate(data.parent, {
                         $push: { child: category._id },
                     },{new:true});
 
 
                     console.log("parent",parent)
-
+            
         
 
                     if (!parent) {
@@ -76,7 +76,13 @@ class ProductCatalogueModel {
 
     public async GetProductCatalogue(query: IProductCatalogue) {
         console.log('query => ', query);
-        const data = await ProductCatalogue.find(query).populate({ path: 'parent child path', select: 'name' });
+        const data = await ProductCatalogue.find(query).populate({ path: 'parent child path', select: 'name description image child ',
+        populate:{
+            path:'child',
+            select:'name image description'
+        }
+    });
+        // const data = await ProductCatalogue.find(query)
         return data;
     }
 
