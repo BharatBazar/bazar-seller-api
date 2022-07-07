@@ -35,24 +35,19 @@ export class ShopModel {
     public getShop = async (body: { _id: ObjectId }) => {
         const shop: IShopModel | null = await Shop.findById(body._id);
 
-        const subCategory = [];
-        const subCategory1 = [];
-
         if (shop) {
-            for (let i = 0; i < shop.subCategory.length; i++) {
-                subCategory.push(`subCategory.${i} `); // Don't delete the last space !
-            }
-            for (let i = 0; i < shop.subCategory1.length; i++) {
-                for (let t = 0; t < shop.subCategory1[i].length; t++) {
-                    subCategory1.push(`subCategory1.${i}.${t}`); // Don't delete the last space !
-                }
-            }
-
-            const populateString =
-                subCategory.join(' ') + subCategory1.join(' ') + ' category' + ' coOwner owner worker state city area';
+            const populateString = 'sellingItems' + ' coOwner owner worker state city area';
             console.log('populate string', typeof populateString, populateString);
 
-            const populatedShop = await Shop.findById(body._id).populate(populateString);
+            const populatedShop = await Shop.findById(body._id).populate({
+                path: populateString,
+                select: 'name image type firstName lastName gender email phoneNumber role permissions',
+                populate: {
+                    path: 'path',
+                    select: 'name ',
+                },
+            });
+            console.log('popu', populatedShop);
 
             pruneFields(populatedShop, 'password');
             return populatedShop;
@@ -84,19 +79,13 @@ export class ShopModel {
                     }
                 }
 
-                console.log(biggestArrayIndex, maxPathlength);
-
                 let biggestPath = shop.sellingItems[biggestArrayIndex].path;
 
                 let selectedCategory = biggestPath.map((item, index) => {
-                    let items = shop.sellingItems.map((cataegory) =>
+                    return shop.sellingItems.map((cataegory) =>
                         index < cataegory.path.length ? cataegory.path[index]._id : cataegory._id,
                     );
-                    const afterApplyingSet = new Set(items);
-                    console.log(items, 'items', afterApplyingSet);
-                    return Array.from(afterApplyingSet);
                 });
-                console.log(selectedCategory, 'selected Catgory');
 
                 return { sellingItems: shop.sellingItems, selectedCategory };
             }
@@ -124,21 +113,6 @@ export class ShopModel {
         const shop: IShopModel = await Shop.shopExist({ _id: data._id });
 
         if (shop) {
-            // let shopDetails: UpdateQuery<IShopModel> = {};
-            // if (data.category) {
-            //     shopDetails['$push'] = { category: { $each: data.category } };
-            //     pruneFields(data, 'category');
-            // }
-            // // if (data.subCategory) {
-            // //     shopDetails['$push'] = { subCategory: { $each: data.subCategory } };
-            // // }
-            // // if (data.subCategory1) {
-            // //     shopDetails['$push'] = { subCategory1: { $each: data.subCategory1 } };
-            // // }
-
-            // shopDetails = { ...shopDetails, ...data };
-            // console.log(shopDetails);
-            console.log('shop Details =>', shop);
             return await Shop.findByIdAndUpdate(data._id, data, { new: true });
         } else {
             throw new HTTP400Error(shop_message.NO_SHOP);
