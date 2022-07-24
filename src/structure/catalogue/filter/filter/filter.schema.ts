@@ -1,5 +1,5 @@
 import { IFilterModel } from './filter.interface';
-import { Schema, Document, model, Model } from 'mongoose';
+import { Schema, Document, model, Model, Types } from 'mongoose';
 import { classifierTypes } from '../filtervalues/filtervalues.interface';
 
 const FilterSchema: Schema = new Schema(
@@ -17,6 +17,7 @@ const FilterSchema: Schema = new Schema(
         active: { type: Boolean, default: false }, 
         mandatory: { type: Boolean, default: true }, 
         defaultSelectAll: { type: Boolean },
+        parent:{type:Types.ObjectId}
     },
     {
         timestamps: true,
