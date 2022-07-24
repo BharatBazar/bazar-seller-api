@@ -85,6 +85,7 @@ class FilterModel {
         console.log(condition);
         const filterWithValue: { values: IClassfier }[] = await Filter.aggregate([
             { $match: condition ? condition : {} },
+            // { $match: {'parent':condition.parent}  },
             {
                 $lookup: {
                     from: 'filtervalues',
