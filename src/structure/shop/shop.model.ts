@@ -172,6 +172,20 @@ export class ShopModel {
         return data;
     };
 
+    // Method to save filter values in the shop
+    public saveFilterValuesForShop = async (data: { [key: string]: string[] } & { _id: string }) => {
+        if (data._id) {
+            const updateShop = await Shop.findByIdAndUpdate(data._id, data);
+            if (updateShop) {
+                return { message: 'Shop filter updated' };
+            } else {
+                throw new HTTP400Error('Shop Not Found');
+            }
+        } else {
+            throw new Error('Please provide shop id');
+        }
+    };
+
     public getAllShop = async (query: { query: any; selectString: string }) => {
         if (!query.query) {
             throw new HTTP400Error('No query available');

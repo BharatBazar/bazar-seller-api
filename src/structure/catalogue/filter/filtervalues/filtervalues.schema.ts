@@ -7,6 +7,7 @@ const ClassifierSchema: Schema = new Schema(
         description: String,
         customerName: String,
         customerDescription: String,
+        customerImage: String,
         image: String,
         type: { type: String, enum: classifierTypes },
         parent: { type: Types.ObjectId, ref: 'JeansFilter' },
@@ -17,4 +18,4 @@ const ClassifierSchema: Schema = new Schema(
     },
 );
 
-export const Classifier: Model<IClassifierModel> = model<IClassifierModel>('JeansClassifier', ClassifierSchema);
+export const Classifier: Model<IClassifierModel> = model<IClassifierModel>('FilterValues', ClassifierSchema);

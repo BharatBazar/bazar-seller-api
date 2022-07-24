@@ -114,6 +114,18 @@ class ShopController {
             next(responseHandler.sendError(error));
         }
     };
+
+    public updateShopWithFilterValues = async (req: Request, res: Response, next: NextFunction) => {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Shop Filters Updated', await ShopModel.saveFilterValuesForShop(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    };
 }
 
 export default new ShopController();
