@@ -82,7 +82,7 @@ class FilterModel {
     };
 
     public getAllFilterWithValue = async (condition: Partial<IFilter>) => {
-        console.log(122)
+        console.log(condition);
         const filterWithValue: { values: IClassfier }[] = await Filter.aggregate([
             { $match: condition ? condition : {} },
             {
