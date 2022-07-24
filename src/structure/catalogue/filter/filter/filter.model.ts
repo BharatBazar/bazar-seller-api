@@ -87,10 +87,9 @@ class FilterModel {
             { $match: condition ? condition : {} },
             {
                 $lookup: {
-                    from: 'jeansclassifiers',
-
-                    localField: 'type',
-                    foreignField: 'type',
+                    from: 'filtervalues',
+                    localField: '_id',
+                    foreignField: 'parent',
                     as: 'values',
                 },
             },
