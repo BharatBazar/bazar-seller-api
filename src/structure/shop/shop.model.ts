@@ -100,6 +100,18 @@ export class ShopModel {
             const shop: IShopModel = await Shop.findByIdAndUpdate({ _id: body._id }, body, { new: true })
                 .populate('sellingItems')
                 .select('sellingItems');
+
+            let newSellingItemFilterProvideList = { ...shop.filterProvidedForSellingItems };
+
+            for (let i = 0; i < shop.sellingItems.length; i++) {
+                if (newSellingItemFilterProvideList[shop.sellingItems[i]] == undefined)
+                    newSellingItemFilterProvideList[shop.sellingItems[i]] = false;
+            }
+            await Shop.findByIdAndUpdate(
+                { _id: body._id },
+                { filterProvidedForSellingItems: newSellingItemFilterProvideList },
+            );
+
             console.log('body', body, shop);
             if (shop) {
                 return shop;

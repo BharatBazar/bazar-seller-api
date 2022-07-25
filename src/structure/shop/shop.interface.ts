@@ -32,7 +32,8 @@ interface Shop {
     membersDetailSkipped: boolean;
     rating: Number;
     noOfRating: Number;
-    sellingItems: IProductCatalogue[];
+    sellingItems: string[];
+    filterProvidedForSellingItems: { [key: string]: boolean };
     shopMemberOnBoardingDone: boolean;
 }
 
