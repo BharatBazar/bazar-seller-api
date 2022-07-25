@@ -61,4 +61,10 @@ export default [
         escapeAuth: true,
         handler: [ShopController.updateShopWithFilterValues],
     },
+    {
+        path: '/shop/getFilterValues',
+        method: 'get',
+        escapeAuth: true,
+        handler: [ShopController.getFilterWithValuesAndSelectedFilterForShop],
+    },
 ];

@@ -6,6 +6,7 @@ import { Shop } from './shop.schema';
 import { IShopModel } from './shop.interface';
 import { pruneFields } from '../../lib/helpers';
 import ShopMemberModel from '../shopmember/shopmember.model';
+import filterModel from '../catalogue/filter/filter/filter.model';
 
 export class ShopModel {
     public createShop = async (body: IShopModel) => {
@@ -92,6 +93,38 @@ export class ShopModel {
             return { sellingItems: shop.sellingItems, selectedCategory: [] };
         } else throw new HTTP400Error('Shop does not exist');
     };
+
+    public getFilterAndTheirValuesForACatalogueAndSelectedValuesByShop = async (body: { _id: string; catalogueId: string }) {
+        if (body._id) {
+            if (body.catalogueId) {
+                console.log('bo', body);
+                const getCatalgoueAndValues: {filter:{}[],distribution:{}[]} = await filterModel.getAllFilterWithValue({ parent:Types.ObjectId(body.catalogueId) });
+                let allFilters = [...getCatalgoueAndValues.filter,...getCatalgoueAndValues.distribution];
+                let filterKeys = allFilters.map(item => item.key);
+                let selectedValues = {}
+                if(filterKeys.length>0) {
+                    let shopDetails:IShopModel | null = await Shop.findById(body._id);
+                    if(shopDetails) {
+                    filterKeys.forEach(item => {
+                        if(shopDetails[item]) {
+                            selectedValues[item] = shopDetails[item]
+                        }
+                    })
+
+
+                }else {
+                    throw new Error("Shop does not exist with this id")
+                }
+
+                return {selectedValues,allFilters}
+                }
+            } else {
+                throw new Error('Missing catalgoue id in request');
+            }
+        } else {
+            throw new Error('Missing shop id in request');
+        }
+    }
 
     public updateShopCatalogue = async (body: IShopModel) => {
         if (!body._id) {
