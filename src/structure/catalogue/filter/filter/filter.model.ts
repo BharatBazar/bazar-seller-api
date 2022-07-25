@@ -8,16 +8,20 @@ import { filter } from 'compression';
 import { Classifier } from '../filtervalues/filtervalues.schema';
 
 class FilterModel {
-    public filterExist = async (name: string, type: string) => {
-        const exist = Filter.findOne({ $or: [{ name }, { type: type }] }).countDocuments();
-        return exist;
+    public filterExist = async (name: string, type: string,parent:string) => {
+        // const exist = Filter.findOne({ $or: [{ name }, { type: type }] }).countDocuments();
+        const exist = await Filter.findOne({ parent:parent})
+        if(exist?.type=== type){
+             return exist;
+        }
+       
     };
 
     public createFilter = async (data: IFilterModel) => {
         if (!data.type || !data.name) {
             throw new HTTP400Error('Please provide all fields to create filter');
         }
-        const exist = await this.filterExist(data.name, data.type);
+        const exist = await this.filterExist(data.name, data.type,data.parent);
         if (exist) {
             throw new HTTP400Error('Filter already exist with either same name or same type');
         } else {
