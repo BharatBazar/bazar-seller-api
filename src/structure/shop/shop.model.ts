@@ -7,6 +7,7 @@ import { IShopModel } from './shop.interface';
 import { pruneFields } from '../../lib/helpers';
 import ShopMemberModel from '../shopmember/shopmember.model';
 import filterModel from '../catalogue/filter/filter/filter.model';
+import shop from '.';
 
 export class ShopModel {
     public createShop = async (body: IShopModel) => {
@@ -110,8 +111,6 @@ export class ShopModel {
                             selectedValues[item] = shopDetails[item]
                         }
                     })
-
-
                 }else {
                     throw new Error("Shop does not exist with this id")
                 }
@@ -130,7 +129,9 @@ export class ShopModel {
         if (!body._id) {
             throw new HTTP400Error('Please provide shop id.');
         } else {
-            const shop: IShopModel = await Shop.findByIdAndUpdate({ _id: body._id }, body, { new: true })
+            let shopId = body._id;
+
+            const shop: IShopModel = await Shop.findByIdAndUpdate({ _id: shopId }, body, { new: true })
                 .populate('sellingItems')
                 .select('sellingItems');
 
@@ -138,7 +139,7 @@ export class ShopModel {
 
             for (let i = 0; i < shop.sellingItems.length; i++) {
                 if (newSellingItemFilterProvideList[shop.sellingItems[i]] == undefined)
-                    newSellingItemFilterProvideList[shop.sellingItems[i]] = false;
+                    newSellingItemFilterProvideList[shop.sellingItems[i]] = 0 ;
             }
             await Shop.findByIdAndUpdate(
                 { _id: body._id },
@@ -218,14 +219,30 @@ export class ShopModel {
     };
 
     // Method to save filter values in the shop
-    public saveFilterValuesForShop = async (data: { [key: string]: string[] } & { _id: string }) => {
+    public saveFilterValuesForShop = async (data: { [key: string]: string[] } & { _id: string,parent:string }) => {
         if (data._id) {
-            const updateShop = await Shop.findByIdAndUpdate(data._id, data);
+            let id = data._id;
+            let parent = data.parent;
+            pruneFields(data,"_id parent");
+
+            const shopDetails:IShopModel | null = await Shop.findById(id).select("filterProvidedForSellingItems");
+
+            if(shopDetails) {
+                             let newSellingItemFilterProvideList = { ...shopDetails.filterProvidedForSellingItems };
+             
+                             newSellingItemFilterProvideList[parent] = Object.keys(data).length;  
+
+            const updateShop = await Shop.findByIdAndUpdate(data._id, {...data,filterProvidedForSellingItems: newSellingItemFilterProvideList});
+           
+
             if (updateShop) {
                 return { message: 'Shop filter updated' };
             } else {
                 throw new HTTP400Error('Shop Not Found');
             }
+        } else {
+            throw new Error("Shop does not exist")
+        }
         } else {
             throw new Error('Please provide shop id');
         }

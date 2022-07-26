@@ -6,27 +6,26 @@ import { IFilter, IFilterModel } from './filter.interface';
 import { Filter } from './filter.schema';
 import { filter } from 'compression';
 import { Classifier } from '../filtervalues/filtervalues.schema';
+import productCatalogueModel from '../../catalogue/productCatalogue.model';
 
 class FilterModel {
-    public filterExist = async (name: string, type: string,parent:string) => {
+    public filterExist = async (type: string, parent: string) => {
         // const exist = Filter.findOne({ $or: [{ name }, { type: type }] }).countDocuments();
-        const exist = await Filter.findOne({ parent:parent})
-        if(exist?.type=== type){
-             return exist;
-        }
-       
+        const exist = await Filter.findOne({ type: type });
+        return exist;
     };
 
     public createFilter = async (data: IFilterModel) => {
         if (!data.type || !data.name) {
             throw new HTTP400Error('Please provide all fields to create filter');
         }
-        const exist = await this.filterExist(data.name, data.type,data.parent);
+        const exist = await this.filterExist(data.type, data.parent);
+
         if (exist) {
             throw new HTTP400Error('Filter already exist with either same name or same type');
         } else {
             const filter: IFilterModel = new Filter(data);
-
+            await productCatalogueModel.UpdateProductCatalogue({ _id: filter.parent, $inc: { totalFilterAdded: 1 } });
             await filter.save();
             return filter;
         }
