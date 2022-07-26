@@ -231,6 +231,10 @@ export class ShopModel {
         }
     };
 
+    public changeFilterValuesProvidedFlagWhenNewFilterAdded = async (data: {parent:string,_id:string}) => {
+
+    }
+
     public getAllShop = async (query: { query: any; selectString: string }) => {
         if (!query.query) {
             throw new HTTP400Error('No query available');

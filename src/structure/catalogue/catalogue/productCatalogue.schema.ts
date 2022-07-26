@@ -15,6 +15,7 @@ const ProductCatalogueSchema: Schema = new Schema(
         child: [{ type: Types.ObjectId, ref: 'ProductCatalogue', default: undefined }],
         active: { type: Boolean, default: false },
         type: { type: String, unique: true, required: true },
+        totalFilterAdded: { type: Number, default: 0 },
     },
     { timestamps: true },
 );

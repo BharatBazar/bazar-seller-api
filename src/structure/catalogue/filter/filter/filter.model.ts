@@ -21,7 +21,8 @@ class FilterModel {
         if (exist) {
             throw new HTTP400Error('Filter already exist with either same name or same type');
         } else {
-            const filter = new Filter(data);
+            const filter: IFilterModel = new Filter(data);
+
             await filter.save();
             return filter;
         }
@@ -65,7 +66,7 @@ class FilterModel {
     };
 
     public getFilter = async () => {
-        this.getAllFilterWithValue();
+        //  this.getAllFilterWithValue();
         return await Filter.find();
     };
 

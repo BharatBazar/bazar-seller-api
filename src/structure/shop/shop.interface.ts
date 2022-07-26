@@ -33,7 +33,8 @@ interface Shop {
     rating: Number;
     noOfRating: Number;
     sellingItems: string[];
-    filterProvidedForSellingItems: { [key: string]: boolean };
+    //Here key is parent id and value is total filter added up to now
+    filterProvidedForSellingItems: { [key: string]: number };
     shopMemberOnBoardingDone: boolean;
 }
 

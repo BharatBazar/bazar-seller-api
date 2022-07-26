@@ -17,12 +17,7 @@ class ProductCatalogueModel {
                     const parent = await ProductCatalogue.findByIdAndUpdate(data.parent, {
                         $push: { child: category._id },
                     },{new:true});
-
-
                     console.log("parent",parent)
-            
-        
-
                     if (!parent) {
                         throw new HTTP400Error('Parent not found');
                     } else {
@@ -33,9 +28,6 @@ class ProductCatalogueModel {
                         category.path = [...childPath];
                     }
                 } 
-
-           
-
             await category.save();
             return category;
         }
