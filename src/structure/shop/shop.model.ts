@@ -1,3 +1,4 @@
+import { IFilter } from './../catalogue/filter/filter/filter.interface';
 import { shop_message } from './../../lib/helpers/customMessage';
 import { paginationConfig } from './../../config/index';
 import { HTTP400Error } from './../../lib/utils/httpErrors';
@@ -8,6 +9,7 @@ import { pruneFields } from '../../lib/helpers';
 import ShopMemberModel from '../shopmember/shopmember.model';
 import filterModel from '../catalogue/filter/filter/filter.model';
 import shop from '.';
+import e from 'express';
 
 export class ShopModel {
     public createShop = async (body: IShopModel) => {
@@ -38,12 +40,12 @@ export class ShopModel {
         const shop: IShopModel | null = await Shop.findById(body._id);
 
         if (shop) {
-            const populateString = 'sellingItems' + ' coOwner owner worker state city area';
+            const populateString = 'sellingItems' + ' coOwner owner worker state city area ';
             console.log('populate string', typeof populateString, populateString);
 
             const populatedShop = await Shop.findById(body._id).populate({
                 path: populateString,
-                select: 'name image type firstName lastName gender email phoneNumber role permissions',
+                select: 'totalFilterAdded name image type firstName lastName gender email phoneNumber role permissions',
                 populate: {
                     path: 'path',
                     select: 'name ',
@@ -100,22 +102,30 @@ export class ShopModel {
             if (body.catalogueId) {
                 console.log('bo', body);
                 const getCatalgoueAndValues: {filter:{}[],distribution:{}[]} = await filterModel.getAllFilterWithValue({ parent:Types.ObjectId(body.catalogueId) });
-                let allFilters = [...getCatalgoueAndValues.filter,...getCatalgoueAndValues.distribution];
+                let allFilters : IFilter[] = [...getCatalgoueAndValues.filter,...getCatalgoueAndValues.distribution];
                 let filterKeys = allFilters.map(item => item.key);
                 let selectedValues = {}
                 if(filterKeys.length>0) {
                     let shopDetails:IShopModel | null = await Shop.findById(body._id);
+                    console.log("shop details",shopDetails,filterKeys)
                     if(shopDetails) {
                     filterKeys.forEach(item => {
+                        console.log(item,"item", shopDetails[item],shopDetails,typeof shopDetails,shopDetails?.shopDescription,shopDetails?.means_jeans_brand)
                         if(shopDetails[item]) {
+                         
                             selectedValues[item] = shopDetails[item]
+                               console.log("se;ectedVa",selectedValues,"inside")
                         }
                     })
+                    console.log("se;ectedVa",selectedValues)
+                      return {selectedValues,allFilters}
                 }else {
                     throw new Error("Shop does not exist with this id")
                 }
 
-                return {selectedValues,allFilters}
+              
+                } else {
+                    return {allFilters,selectedValues: {}}
                 }
             } else {
                 throw new Error('Missing catalgoue id in request');
@@ -138,8 +148,8 @@ export class ShopModel {
             let newSellingItemFilterProvideList = { ...shop.filterProvidedForSellingItems };
 
             for (let i = 0; i < shop.sellingItems.length; i++) {
-                if (newSellingItemFilterProvideList[shop.sellingItems[i]] == undefined)
-                    newSellingItemFilterProvideList[shop.sellingItems[i]] = 0 ;
+                if (newSellingItemFilterProvideList[shop.sellingItems[i]._id] == undefined)
+                    newSellingItemFilterProvideList[shop.sellingItems[i]._id] = 0 ;
             }
             await Shop.findByIdAndUpdate(
                 { _id: body._id },
@@ -225,14 +235,17 @@ export class ShopModel {
             let parent = data.parent;
             pruneFields(data,"_id parent");
 
+            console.log(data,id,parent)
+
             const shopDetails:IShopModel | null = await Shop.findById(id).select("filterProvidedForSellingItems");
 
             if(shopDetails) {
                              let newSellingItemFilterProvideList = { ...shopDetails.filterProvidedForSellingItems };
              
                              newSellingItemFilterProvideList[parent] = Object.keys(data).length;  
+                             console.log(newSellingItemFilterProvideList,"neww")
 
-            const updateShop = await Shop.findByIdAndUpdate(data._id, {...data,filterProvidedForSellingItems: newSellingItemFilterProvideList});
+            const updateShop = await Shop.findByIdAndUpdate(id, {...data,filterProvidedForSellingItems: newSellingItemFilterProvideList},{strict:false});
            
 
             if (updateShop) {
