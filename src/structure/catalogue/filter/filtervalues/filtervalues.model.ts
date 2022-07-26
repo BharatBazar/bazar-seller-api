@@ -4,20 +4,19 @@ import { IClassifierModel } from './filtervalues.interface';
 import { Classifier } from './filtervalues.schema';
 
 class ClassifierModel {
-    public classifierExist = async (name: string,parent:string,type:string) => {
+    public classifierExist = async (name: string, parent: string, type: string) => {
         const exist = await Classifier.findOne({ name }).countDocuments();
-    //     const exist = await Classifier.find({ parent:parent })
-    //     console.log("EXIIIIS",exist)
+        //     const exist = await Classifier.find({ parent:parent })
+        //     console.log("EXIIIIS",exist)
 
-    //    const y = exist.map((e)=>{
-    //         return e.type===type ?true :false
-    //     })
-    //    return y
-    return exist
+        //    const y = exist.map((e)=>{
+        //         return e.type===type ?true :false
+        //     })
+        //    return y
+        return exist;
     };
     public createClassifier = async (data: IClassifierModel) => {
-  
-        const exist = await this.classifierExist(data.name,data.parent,data.type);
+        const exist = await this.classifierExist(data.name, data.parent, data.type);
         if (exist) {
             throw new HTTP400Error('Filter item already exist or have written same type');
         } else {
