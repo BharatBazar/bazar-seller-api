@@ -19,6 +19,7 @@ export interface IProductCatalogue {
     path: Types.ObjectId[];
     active: boolean;
     type: string;
+    totalFilterAdded: number;
     filters: [
         {
             name: 'Size';

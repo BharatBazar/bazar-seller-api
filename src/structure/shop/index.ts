@@ -63,7 +63,7 @@ export default [
     },
     {
         path: '/shop/getFilterValues',
-        method: 'get',
+        method: 'post',
         escapeAuth: true,
         handler: [ShopController.getFilterWithValuesAndSelectedFilterForShop],
     },

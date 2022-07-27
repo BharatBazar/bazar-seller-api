@@ -3,6 +3,12 @@ import { HTTP400Error } from '../../../lib/utils/httpErrors';
 import { categoryType, IProductCatalogue, IProductCatalogueModel } from './productCatalogue.interface';
 import { ProductCatalogue } from './productCatalogue.schema';
 class ProductCatalogueModel {
+    
+    public async CatalogueExistOrNot(_id:string) {
+      return await ProductCatalogue.findById(_id);
+    }
+
+
     public async AddProductCatalogue(data: IProductCatalogue) {
         if(!data.type) {
             throw new HTTP400Error("Please provide unique type for category you are adding");
@@ -17,12 +23,7 @@ class ProductCatalogueModel {
                     const parent = await ProductCatalogue.findByIdAndUpdate(data.parent, {
                         $push: { child: category._id },
                     },{new:true});
-
-
                     console.log("parent",parent)
-            
-        
-
                     if (!parent) {
                         throw new HTTP400Error('Parent not found');
                     } else {
@@ -33,9 +34,6 @@ class ProductCatalogueModel {
                         category.path = [...childPath];
                     }
                 } 
-
-           
-
             await category.save();
             return category;
         }
