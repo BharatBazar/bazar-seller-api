@@ -62,13 +62,15 @@ class FilterModel {
             if (data.parent) {
                 if (await productCatalogueModel.CatalogueExistOrNot(data.parent)) {
                     if (data.key) {
-                        let fieldName = `${data.key}`;
+                        const unsetField = {};
+                        unsetField[data.key] = 1;
+
                         await Promise.all([
                             await productCatalogueModel.UpdateProductCatalogue({
                                 _id: data.parent,
                                 $inc: { totalFilterAdded: -1 },
                             }),
-                            await Shop.updateMany({}, { $unset: { fieldName: 1 } }),
+                            await Shop.updateMany({}, { $unset: unsetField }),
                             await Classifier.deleteMany({ parent: exist._id }),
                             await Filter.findByIdAndDelete(data._id),
                         ]);
