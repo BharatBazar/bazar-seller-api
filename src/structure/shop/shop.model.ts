@@ -121,8 +121,9 @@ export class ShopModel {
                      allFilters.sort((a,b) => {
                     let isAinSelectedValue= selectedValues[a.key];
                     let isBinSelectedValue = selectedValues[b.key];
-                    return isAinSelectedValue && isBinSelectedValue?0:!isAinSelectedValue && isBinSelectedValue?-1:1;
+                    return isAinSelectedValue && isBinSelectedValue?0:!isAinSelectedValue && isBinSelectedValue?1:-1;
                 })
+
                let currentIndex =  allFilters.findIndex(a => !selectedValues[a.key]);
                                  return {selectedValues,allFilters,currentIndex}
                 }else {

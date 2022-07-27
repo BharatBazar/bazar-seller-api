@@ -7,6 +7,7 @@ import { Filter } from './filter.schema';
 import { filter } from 'compression';
 import { Classifier } from '../filtervalues/filtervalues.schema';
 import productCatalogueModel from '../../catalogue/productCatalogue.model';
+import { Shop } from '../../../shop/shop.schema';
 
 class FilterModel {
     public filterExist = async (key: string) => {
@@ -55,14 +56,32 @@ class FilterModel {
         return ['pattern', 'size', 'brand', 'color', 'fit'];
     };
 
-    public deleteFilter = async (data: IFilterModel) => {
+    public deleteFilter = async (data: IFilter) => {
         const exist = await Filter.findById(data._id);
         if (exist) {
-            await Promise.all([
-                await Classifier.deleteMany({ parent: exist._id }),
-                await Filter.findByIdAndDelete(data._id),
-            ]);
-            return 'Deleted';
+            if (data.parent) {
+                if (await productCatalogueModel.CatalogueExistOrNot(data.parent)) {
+                    if (data.key) {
+                        let fieldName = `${data.key}`;
+                        await Promise.all([
+                            await productCatalogueModel.UpdateProductCatalogue({
+                                _id: data.parent,
+                                $inc: { totalFilterAdded: -1 },
+                            }),
+                            await Shop.updateMany({}, { $unset: { fieldName: 1 } }),
+                            await Classifier.deleteMany({ parent: exist._id }),
+                            await Filter.findByIdAndDelete(data._id),
+                        ]);
+                        return 'Deleted';
+                    } else {
+                        throw new HTTP400Error('Key does not exist');
+                    }
+                } else {
+                    throw new HTTP400Error('Parent does not exist');
+                }
+            } else {
+                throw new HTTP400Error('Filter parent not provided');
+            }
         } else {
             throw new HTTP400Error('Filter does not exist');
         }
