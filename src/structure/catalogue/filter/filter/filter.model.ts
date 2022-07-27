@@ -9,9 +9,9 @@ import { Classifier } from '../filtervalues/filtervalues.schema';
 import productCatalogueModel from '../../catalogue/productCatalogue.model';
 
 class FilterModel {
-    public filterExist = async (type: string, parent: string) => {
+    public filterExist = async (key: string) => {
         // const exist = Filter.findOne({ $or: [{ name }, { type: type }] }).countDocuments();
-        const exist = await Filter.findOne({ type: type });
+        const exist = await Filter.findOne({ key: key });
         return exist;
     };
 
@@ -19,10 +19,10 @@ class FilterModel {
         if (!data.type || !data.name) {
             throw new HTTP400Error('Please provide all fields to create filter');
         }
-        const exist = await this.filterExist(data.type, data.parent);
+        const exist = await this.filterExist(data.key);
 
         if (exist) {
-            throw new HTTP400Error('Filter already exist with either same name or same type');
+            throw new HTTP400Error('A Filter already exist with same key');
         } else {
             const filter: IFilterModel = new Filter(data);
             await productCatalogueModel.UpdateProductCatalogue({ _id: filter.parent, $inc: { totalFilterAdded: 1 } });

@@ -103,22 +103,28 @@ export class ShopModel {
                 console.log('bo', body);
                 const getCatalgoueAndValues: {filter:{}[],distribution:{}[]} = await filterModel.getAllFilterWithValue({ parent:Types.ObjectId(body.catalogueId) });
                 let allFilters : IFilter[] = [...getCatalgoueAndValues.filter,...getCatalgoueAndValues.distribution];
+               
                 let filterKeys = allFilters.map(item => item.key);
                 let selectedValues = {}
                 if(filterKeys.length>0) {
-                    let shopDetails:IShopModel | null = await Shop.findById(body._id);
+                    let shopDetails:IShopModel | null = await Shop.findById(body._id).lean();
                     console.log("shop details",shopDetails,filterKeys)
                     if(shopDetails) {
                     filterKeys.forEach(item => {
-                        console.log(item,"item", shopDetails[item],shopDetails,typeof shopDetails,shopDetails?.shopDescription,shopDetails?.means_jeans_brand)
                         if(shopDetails[item]) {
                          
                             selectedValues[item] = shopDetails[item]
-                               console.log("se;ectedVa",selectedValues,"inside")
+                               
                         }
                     })
-                    console.log("se;ectedVa",selectedValues)
-                      return {selectedValues,allFilters}
+                   
+                     allFilters.sort((a,b) => {
+                    let isAinSelectedValue= selectedValues[a.key];
+                    let isBinSelectedValue = selectedValues[b.key];
+                    return isAinSelectedValue && isBinSelectedValue?0:!isAinSelectedValue && isBinSelectedValue?-1:1;
+                })
+               let currentIndex =  allFilters.findIndex(a => !selectedValues[a.key]);
+                                 return {selectedValues,allFilters,currentIndex}
                 }else {
                     throw new Error("Shop does not exist with this id")
                 }

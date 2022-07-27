@@ -16,7 +16,7 @@ export interface IFilter {
     customerImage: string;
     defaultSelectAll: boolean;
     parent: ObjectId;
-
+    showSearch: boolean;
     key: string;
 }
 
