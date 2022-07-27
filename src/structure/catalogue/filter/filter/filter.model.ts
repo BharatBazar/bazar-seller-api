@@ -18,7 +18,8 @@ class FilterModel {
     };
 
     public createFilter = async (data: IFilterModel) => {
-        if (!data.type || !data.name) {
+
+        if (!data.key || !data.name) {
             throw new HTTP400Error('Please provide all fields to create filter');
         }
         const exist = await this.filterExist(data.name, data.type,data.parent);
@@ -33,12 +34,18 @@ class FilterModel {
 
     public activateFilter = async (data: { _id: Types.ObjectId; active: boolean }) => {
         const exist = await Filter.findById(data._id);
+       
         if (exist) {
-            const filterItem: IClassifierModel[] = await Classifier.find({ parent: exist._id });
-            if (filterItem.length == 0) {
+            console.log("LLLLLLLLLLL",exist._id)
+            const filterItem: IClassifierModel[] = await Classifier.find({parent:exist._id});
+  
+            if (filterItem.length === 0) {
                 throw new HTTP400Error('No items in the filter');
             } else {
+                console.log("FI",filterItem)
                 const flag = filterItem.some((item) => item.active);
+                console.log("FLLLLAG",flag)
+                
                 if (flag) {
                     await Filter.findByIdAndUpdate(data._id, { active: data.active });
                     return data.active ? 'Filter activated' : 'Filter deactivated';
