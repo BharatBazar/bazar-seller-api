@@ -62,6 +62,18 @@ class ClassifierController {
             next(responseHandler.sendError(error));
         }
     }
+
+       public async ActivateFilter(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Filter activated!', await ClassifierModel.activateFilter(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
 }
 
 export default new ClassifierController();

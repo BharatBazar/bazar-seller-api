@@ -41,13 +41,30 @@ class ClassifierModel {
     };
 
     public updateClassifier = async (data: IClassifierModel & { _id: Types.ObjectId }) => {
-        const exist = await Classifier.findByIdAndUpdate(data._id, data);
+
+
+        const exist = await Classifier.findByIdAndUpdate(data._id, data,{new:true});
         if (exist) {
-            return 'Filter item updated';
+            return exist;
         } else {
             throw new HTTP404Error('Filter item not found!');
         }
     };
+
+    
+    public activateFilter = async (data: { _id: Types.ObjectId; active: boolean }) => {
+        try {
+            console.log("CLASSFIER",data)
+                  const classifier=  await Classifier.findByIdAndUpdate(data._id, { active: data.active });
+                    return data.active ? 'Classfier activated' : 'Classfier deactivated';
+        } catch (error) {
+            throw new HTTP400Error('Filter does not exist');
+        }
+              
+         
+    };
+
+    
 }
 
 export default new ClassifierModel();
