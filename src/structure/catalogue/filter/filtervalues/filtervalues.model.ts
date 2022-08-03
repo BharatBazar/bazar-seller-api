@@ -16,6 +16,7 @@ class ClassifierModel {
         return exist;
     };
     public createClassifier = async (data: IClassifierModel) => {
+        console.log("CACHINGSATA",data);
         const exist = await this.classifierExist(data.name, data.parent, data.type);
         if (exist) {
             throw new HTTP400Error('Filter item already exist or have written same type');
@@ -43,7 +44,6 @@ class ClassifierModel {
     public updateClassifier = async (data: IClassifierModel & { _id: Types.ObjectId }) => {
 
 
-        const exist = await Classifier.findByIdAndUpdate(data._id, data,{new:true});
         if (exist) {
             return exist;
         } else {

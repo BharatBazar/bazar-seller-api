@@ -16,9 +16,9 @@ const FilterSchema: Schema = new Schema(
         filterLevel: { type: Number, default: 0 },
         active: { type: Boolean, default: false },
         mandatory: { type: Boolean, default: true },
-        defaultSelectAll: { type: Boolean },
+        defaultSelectAll: { type: Boolean,default:true },
         parent: { type: Types.ObjectId, ref: 'ProductCatalogue' },
-        showSearch: Boolean,
+        showSearch:{ type: Boolean, default: false },
     },
     {
         timestamps: true,
