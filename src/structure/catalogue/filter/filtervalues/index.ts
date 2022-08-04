@@ -1,26 +1,26 @@
-import classifierController from './classifier.controller';
+import classifierController from './filtervalues.controller';
 
 export default [
     {
-        path: '/jeans/classifiers/create',
+        path: '/classifiers/create',
         method: 'post',
         escapeAuth: true,
         handler: [classifierController.CreateClassifier],
     },
     {
-        path: '/jeans/classifiers/update',
+        path: '/classifiers/update',
         method: 'patch',
         escapeAuth: true,
         handler: [classifierController.UpdateClassifier],
     },
     {
-        path: '/jeans/classifiers/getAll',
+        path: '/classifiers/getAll',
         method: 'post',
         escapeAuth: true,
         handler: [classifierController.GetAllClassifier],
     },
     {
-        path: '/jeans/classifiers/delete',
+        path: '/classifiers/delete',
         method: 'delete',
         escapeAuth: true,
         handler: [classifierController.DeleteClassifier],

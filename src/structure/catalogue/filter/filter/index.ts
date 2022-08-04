@@ -2,43 +2,43 @@ import filterController from './filter.controller';
 
 export default [
     {
-        path: '/jeans/filter/create',
+        path: '/filter/create',
         method: 'post',
         escapeAuth: true,
         handler: [filterController.CreateFilter],
     },
     {
-        path: '/jeans/filter/getAll',
+        path: '/filter/getAll',
         method: 'post',
         escapeAuth: true,
         handler: [filterController.GetAllFilter],
     },
     {
-        path: '/jeans/filter/getAllWithValue',
+        path: '/filter/getAllWithValue',
         method: 'post',
         escapeAuth: true,
         handler: [filterController.GetAllFilterWithValue],
     },
     {
-        path: '/jeans/filter/update',
+        path: '/filter/update',
         method: 'patch',
         escapeAuth: true,
         handler: [filterController.UpdateFilter],
     },
     {
-        path: '/jeans/filter/delete',
+        path: '/filter/delete',
         method: 'delete',
         escapeAuth: true,
         handler: [filterController.DeleteFilter],
     },
     {
-        path: '/jeans/filter/activate',
+        path: '/filter/activate',
         method: 'patch',
         escapeAuth: true,
         handler: [filterController.ActivateFilter],
     },
     {
-        path: '/jeans/filter/classifier',
+        path: '/filter/classifier',
         method: 'get',
         escapeAuth: true,
         handler: [filterController.GetAllClassifier],

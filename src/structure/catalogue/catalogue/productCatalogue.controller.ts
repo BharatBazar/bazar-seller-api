@@ -1,4 +1,3 @@
-import { log } from 'util';
 import { NextFunction, Request, Response } from 'express';
 import ResponseHandler from '../../../lib/helpers/responseHandler';
 import productCatalogueModel from './productCatalogue.model';

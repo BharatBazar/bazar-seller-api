@@ -1,3 +1,4 @@
+import { IFilter } from './../catalogue/filter/filter/filter.interface';
 import { shop_message } from './../../lib/helpers/customMessage';
 import { paginationConfig } from './../../config/index';
 import { HTTP400Error } from './../../lib/utils/httpErrors';
@@ -6,6 +7,9 @@ import { Shop } from './shop.schema';
 import { IShopModel } from './shop.interface';
 import { pruneFields } from '../../lib/helpers';
 import ShopMemberModel from '../shopmember/shopmember.model';
+import filterModel from '../catalogue/filter/filter/filter.model';
+import shop from '.';
+import e from 'express';
 
 export class ShopModel {
     public createShop = async (body: IShopModel) => {
@@ -35,24 +39,19 @@ export class ShopModel {
     public getShop = async (body: { _id: ObjectId }) => {
         const shop: IShopModel | null = await Shop.findById(body._id);
 
-        const subCategory = [];
-        const subCategory1 = [];
-
         if (shop) {
-            for (let i = 0; i < shop.subCategory.length; i++) {
-                subCategory.push(`subCategory.${i} `); // Don't delete the last space !
-            }
-            for (let i = 0; i < shop.subCategory1.length; i++) {
-                for (let t = 0; t < shop.subCategory1[i].length; t++) {
-                    subCategory1.push(`subCategory1.${i}.${t}`); // Don't delete the last space !
-                }
-            }
-
-            const populateString =
-                subCategory.join(' ') + subCategory1.join(' ') + ' category' + ' coOwner owner worker state city area';
+            const populateString = 'sellingItems' + ' coOwner owner worker state city area ';
             console.log('populate string', typeof populateString, populateString);
 
-            const populatedShop = await Shop.findById(body._id).populate(populateString);
+            const populatedShop = await Shop.findById(body._id).populate({
+                path: populateString,
+                select: 'totalFilterAdded name image type firstName lastName gender email phoneNumber role permissions',
+                populate: {
+                    path: 'path',
+                    select: 'name ',
+                },
+            });
+            console.log('popu', populatedShop);
 
             pruneFields(populatedShop, 'password');
             return populatedShop;
@@ -60,32 +59,123 @@ export class ShopModel {
     };
 
     public getShopCatalogueDetails = async (body: { _id: ObjectId }) => {
-        const shop: IShopModel | null = await Shop.findById(body._id).select('subCategory category subCategory1');
+        const shop: IShopModel | null = await Shop.findById(body._id)
+            .select('sellingItems')
+            .populate({
+                path: 'sellingItems',
 
+                populate: {
+                    path: 'path',
+                },
+            });
+        console.log('se', shop, 'gett Catalogue');
         if (shop) {
-            return shop;
+            if (shop.sellingItems.length > 0) {
+                let biggestArrayIndex = 0;
+                let maxPathlength = 0;
+
+                for (let i = 0; i < shop.sellingItems.length; i++) {
+                    let item = shop.sellingItems[i];
+                    console.log(item);
+                    if (item.path.length > maxPathlength) {
+                        biggestArrayIndex = i;
+                        maxPathlength = item.path.length;
+                    }
+                }
+
+                let biggestPath = shop.sellingItems[biggestArrayIndex].path;
+
+                let selectedCategory = biggestPath.map((item, index) => {
+                    return shop.sellingItems.map((cataegory) =>
+                        index < cataegory.path.length ? cataegory.path[index]._id : cataegory._id,
+                    );
+                });
+
+                return { sellingItems: shop.sellingItems, selectedCategory };
+            }
+            return { sellingItems: shop.sellingItems, selectedCategory: [] };
         } else throw new HTTP400Error('Shop does not exist');
+    };
+
+    public getFilterAndTheirValuesForACatalogueAndSelectedValuesByShop = async (body: { _id: string; catalogueId: string }) {
+        if (body._id) {
+            if (body.catalogueId) {
+                console.log('bo', body);
+                const getCatalgoueAndValues: {filter:{}[],distribution:{}[]} = await filterModel.getAllFilterWithValue({ parent:Types.ObjectId(body.catalogueId) });
+                let allFilters : IFilter[] = [...getCatalgoueAndValues.filter,...getCatalgoueAndValues.distribution];
+               
+                let filterKeys = allFilters.map(item => item.key);
+                let selectedValues = {}
+                if(filterKeys.length>0) {
+                    let shopDetails:IShopModel | null = await Shop.findById(body._id).lean();
+                    console.log("shop details",shopDetails,filterKeys)
+                    if(shopDetails) {
+                    filterKeys.forEach(item => {
+                        if(shopDetails[item]) {
+                         
+                            selectedValues[item] = shopDetails[item]
+                               
+                        }
+                    })
+                   
+                     allFilters.sort((a,b) => {
+                    let isAinSelectedValue= selectedValues[a.key];
+                    let isBinSelectedValue = selectedValues[b.key];
+                    return isAinSelectedValue && isBinSelectedValue?0:!isAinSelectedValue && isBinSelectedValue?1:-1;
+                })
+
+               let currentIndex =  allFilters.findIndex(a => !selectedValues[a.key]);
+                                 return {selectedValues,allFilters,currentIndex}
+                }else {
+                    throw new Error("Shop does not exist with this id")
+                }
+
+              
+                } else {
+                    return {allFilters,selectedValues: {}}
+                }
+            } else {
+                throw new Error('Missing catalgoue id in request');
+            }
+        } else {
+            throw new Error('Missing shop id in request');
+        }
+    }
+
+    public updateShopCatalogue = async (body: IShopModel) => {
+        if (!body._id) {
+            throw new HTTP400Error('Please provide shop id.');
+        } else {
+            let shopId = body._id;
+
+            const shop: IShopModel = await Shop.findByIdAndUpdate({ _id: shopId }, body, { new: true })
+                .populate('sellingItems')
+                .select('sellingItems');
+
+            let newSellingItemFilterProvideList = { ...shop.filterProvidedForSellingItems };
+
+            for (let i = 0; i < shop.sellingItems.length; i++) {
+                if (newSellingItemFilterProvideList[shop.sellingItems[i]._id] == undefined)
+                    newSellingItemFilterProvideList[shop.sellingItems[i]._id] = 0 ;
+            }
+            await Shop.findByIdAndUpdate(
+                { _id: body._id },
+                { filterProvidedForSellingItems: newSellingItemFilterProvideList },
+            );
+
+            console.log('body', body, shop);
+            if (shop) {
+                return shop;
+            } else {
+                throw new HTTP400Error(shop_message.NO_SHOP);
+            }
+        }
     };
 
     public updateShop = async (data: IShopModel) => {
         const shop: IShopModel = await Shop.shopExist({ _id: data._id });
 
         if (shop) {
-            // let shopDetails: UpdateQuery<IShopModel> = {};
-            // if (data.category) {
-            //     shopDetails['$push'] = { category: { $each: data.category } };
-            //     pruneFields(data, 'category');
-            // }
-            // // if (data.subCategory) {
-            // //     shopDetails['$push'] = { subCategory: { $each: data.subCategory } };
-            // // }
-            // // if (data.subCategory1) {
-            // //     shopDetails['$push'] = { subCategory1: { $each: data.subCategory1 } };
-            // // }
-
-            // shopDetails = { ...shopDetails, ...data };
-            // console.log(shopDetails);
-            console.log('shop Details =>', shop);
             return await Shop.findByIdAndUpdate(data._id, data, { new: true });
         } else {
             throw new HTTP400Error(shop_message.NO_SHOP);
@@ -132,14 +222,6 @@ export class ShopModel {
         }
     };
 
-    public updateShopCategory = async (body: IShopModel) => {
-        const shop: IShopModel = await Shop.shopExist({ _id: body._id });
-        if (shop) {
-        } else {
-            throw new HTTP400Error(shop_message.NO_SHOP);
-        }
-    };
-
     public searchShopByName = async (shopName: string) => {
         const searchCount = await Shop.countDocuments({ shopName: { $regex: shopName, $options: 'i' } });
         console.log(searchCount, shopName);
@@ -152,6 +234,43 @@ export class ShopModel {
         console.log(data);
         return data;
     };
+
+    // Method to save filter values in the shop
+    public saveFilterValuesForShop = async (data: { [key: string]: string[] } & { _id: string,parent:string }) => {
+        if (data._id) {
+            let id = data._id;
+            let parent = data.parent;
+            pruneFields(data,"_id parent");
+
+            console.log(data,id,parent)
+
+            const shopDetails:IShopModel | null = await Shop.findById(id).select("filterProvidedForSellingItems");
+
+            if(shopDetails) {
+                             let newSellingItemFilterProvideList = { ...shopDetails.filterProvidedForSellingItems };
+             
+                             newSellingItemFilterProvideList[parent] = Object.keys(data).length;  
+                             console.log(newSellingItemFilterProvideList,"neww")
+
+            const updateShop = await Shop.findByIdAndUpdate(id, {...data,filterProvidedForSellingItems: newSellingItemFilterProvideList},{strict:false});
+           
+
+            if (updateShop) {
+                return { message: 'Shop filter updated' };
+            } else {
+                throw new HTTP400Error('Shop Not Found');
+            }
+        } else {
+            throw new Error("Shop does not exist")
+        }
+        } else {
+            throw new Error('Please provide shop id');
+        }
+    };
+
+    public changeFilterValuesProvidedFlagWhenNewFilterAdded = async (data: {parent:string,_id:string}) => {
+
+    }
 
     public getAllShop = async (query: { query: any; selectString: string }) => {
         if (!query.query) {

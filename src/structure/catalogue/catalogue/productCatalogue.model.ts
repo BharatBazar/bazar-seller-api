@@ -1,30 +1,41 @@
 import { Types } from 'mongoose';
 import { HTTP400Error } from '../../../lib/utils/httpErrors';
-import { HTTP400Error } from '../../../lib/utils/httpErrors';
 import { categoryType, IProductCatalogue, IProductCatalogueModel } from './productCatalogue.interface';
 import { ProductCatalogue } from './productCatalogue.schema';
 class ProductCatalogueModel {
-    public async AddProductCatalogue(data: IProductCatalogue) {
-        if (await ProductCatalogue.findOne({ name: data.name, categoryType: data.categoryType, parent: data.parent })) {
-            throw new HTTP400Error('Product already exist please call update api.');
-        } else {
-            const create = new ProductCatalogue(data);
+    
+    public async CatalogueExistOrNot(_id:string) {
+      return await ProductCatalogue.findById(_id);
+    }
 
-            if (data.categoryType != categoryType.Category) {
-                if (data.parent) {
+
+    public async AddProductCatalogue(data: IProductCatalogue) {
+        if(!data.type) {
+            throw new HTTP400Error("Please provide unique type for category you are adding");
+        } else
+        if (await ProductCatalogue.findOne({ type:data.type })) {
+            throw new HTTP400Error('Product type already exist.');
+        } else {
+            const category: IProductCatalogueModel = new ProductCatalogue(data);
+            // await category.save()
+            if (data.parent) {
+                    console.log("DP",data.parent)
                     const parent = await ProductCatalogue.findByIdAndUpdate(data.parent, {
-                        $push: { child: create._id },
-                    });
+                        $push: { child: category._id },
+                    },{new:true});
+                    console.log("parent",parent)
                     if (!parent) {
                         throw new HTTP400Error('Parent not found');
-                    }
-                } else {
-                    throw new HTTP400Error('Please provide parent id.');
-                }
-            }
+                    } else {
+                        let parentPath = parent.path;
+                        let parentId: Types.ObjectId = parent._id;
 
-            await create.save();
-            return create;
+                        let childPath = [...parentPath, parentId];
+                        category.path = [...childPath];
+                    }
+                } 
+            await category.save();
+            return category;
         }
     }
 
@@ -63,7 +74,13 @@ class ProductCatalogueModel {
 
     public async GetProductCatalogue(query: IProductCatalogue) {
         console.log('query => ', query);
-        const data = await ProductCatalogue.find(query).populate({ path: 'parent child', select: 'name' });
+        const data = await ProductCatalogue.find(query).populate({ path: 'parent child path', select: 'name description image child ',
+        populate:{
+            path:'child',
+            select:'name image description'
+        }
+    });
+        // const data = await ProductCatalogue.find(query)
         return data;
     }
 

@@ -1,5 +1,5 @@
-import MensJeansClassifiers from '../structure/catalogue/mens/clothes/jeans/classifiers';
-import MensJeansFilters from '../structure/catalogue/mens/clothes/jeans/filter';
+import MensJeansClassifiers from '../structure/catalogue/filter/filtervalues';
+import MensJeansFilters from '../structure/catalogue/filter/filter';
 import MensJeans from '../structure/catalogue/mens/clothes/jeans/product/product';
 import MensJeansColor from '../structure/catalogue/mens/clothes/jeans/product/colors';
 import MensJeansSize from '../structure/catalogue/mens/clothes/jeans/product/size';

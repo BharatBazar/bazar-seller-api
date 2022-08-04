@@ -1,3 +1,4 @@
+import { IProductCatalogue } from './../catalogue/catalogue/productCatalogue.interface';
 import { Document, ObjectId, Schema, Types } from 'mongoose';
 
 export enum verificationStatus {
@@ -31,9 +32,9 @@ interface Shop {
     membersDetailSkipped: boolean;
     rating: Number;
     noOfRating: Number;
-    category: [Types.ObjectId];
-    subCategory: [[Types.ObjectId]];
-    subCategory1: [[[Types.ObjectId]]];
+    sellingItems: string[];
+    //Here key is parent id and value is total filter added up to now
+    filterProvidedForSellingItems: { [key: string]: number };
     shopMemberOnBoardingDone: boolean;
 }
 

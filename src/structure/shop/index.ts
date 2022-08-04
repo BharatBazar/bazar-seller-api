@@ -49,4 +49,22 @@ export default [
         escapeAuth: true,
         handler: [ShopController.getShopCatalogueDetails],
     },
+    {
+        path: '/shop/updateCatalogue',
+        method: 'patch',
+        escapeAuth: true,
+        handler: [ShopController.updateShopCatalogueDetails],
+    },
+    {
+        path: '/shop/saveFilterValues',
+        method: 'patch',
+        escapeAuth: true,
+        handler: [ShopController.updateShopWithFilterValues],
+    },
+    {
+        path: '/shop/getFilterValues',
+        method: 'post',
+        escapeAuth: true,
+        handler: [ShopController.getFilterWithValuesAndSelectedFilterForShop],
+    },
 ];

@@ -1,15 +1,18 @@
-import { ObjectId } from '../../../../../../datatypes/index';
+import { ObjectId } from '../../../../datatypes/index';
 import { Types } from 'mongoose';
-import { IClassfier, IClassifierModel } from '../classifiers/classifier.interface';
-import { HTTP400Error, HTTP404Error } from '../../../../../../lib/utils/httpErrors';
+import { IClassfier, IClassifierModel } from '../filtervalues/filtervalues.interface';
+import { HTTP400Error, HTTP404Error } from '../../../../lib/utils/httpErrors';
 import { IFilter, IFilterModel } from './filter.interface';
 import { Filter } from './filter.schema';
 import { filter } from 'compression';
-import { Classifier } from '../classifiers/classifier.schema';
+import { Classifier } from '../filtervalues/filtervalues.schema';
+import productCatalogueModel from '../../catalogue/productCatalogue.model';
+import { Shop } from '../../../shop/shop.schema';
 
 class FilterModel {
-    public filterExist = async (name: string, type: string) => {
-        const exist = Filter.findOne({ $or: [{ name }, { type: type }] }).countDocuments();
+    public filterExist = async (key: string) => {
+        // const exist = Filter.findOne({ $or: [{ name }, { type: type }] }).countDocuments();
+        const exist = await Filter.findOne({ key: key });
         return exist;
     };
 
@@ -17,11 +20,13 @@ class FilterModel {
         if (!data.type || !data.name) {
             throw new HTTP400Error('Please provide all fields to create filter');
         }
-        const exist = await this.filterExist(data.name, data.type);
+        const exist = await this.filterExist(data.key);
+
         if (exist) {
-            throw new HTTP400Error('Filter already exist with either same name or same type');
+            throw new HTTP400Error('A Filter already exist with same key');
         } else {
-            const filter = new Filter(data);
+            const filter: IFilterModel = new Filter(data);
+            await productCatalogueModel.UpdateProductCatalogue({ _id: filter.parent, $inc: { totalFilterAdded: 1 } });
             await filter.save();
             return filter;
         }
@@ -51,21 +56,41 @@ class FilterModel {
         return ['pattern', 'size', 'brand', 'color', 'fit'];
     };
 
-    public deleteFilter = async (data: IFilterModel) => {
+    public deleteFilter = async (data: IFilter) => {
         const exist = await Filter.findById(data._id);
         if (exist) {
-            await Promise.all([
-                await Classifier.deleteMany({ parent: exist._id }),
-                await Filter.findByIdAndDelete(data._id),
-            ]);
-            return 'Deleted';
+            if (data.parent) {
+                if (await productCatalogueModel.CatalogueExistOrNot(data.parent)) {
+                    if (data.key) {
+                        const unsetField = {};
+                        unsetField[data.key] = 1;
+
+                        await Promise.all([
+                            await productCatalogueModel.UpdateProductCatalogue({
+                                _id: data.parent,
+                                $inc: { totalFilterAdded: -1 },
+                            }),
+                            await Shop.updateMany({}, { $unset: unsetField }),
+                            await Classifier.deleteMany({ parent: exist._id }),
+                            await Filter.findByIdAndDelete(data._id),
+                        ]);
+                        return 'Deleted';
+                    } else {
+                        throw new HTTP400Error('Key does not exist');
+                    }
+                } else {
+                    throw new HTTP400Error('Parent does not exist');
+                }
+            } else {
+                throw new HTTP400Error('Filter parent not provided');
+            }
         } else {
             throw new HTTP400Error('Filter does not exist');
         }
     };
 
     public getFilter = async () => {
-        this.getAllFilterWithValue();
+        //  this.getAllFilterWithValue();
         return await Filter.find();
     };
 
@@ -82,14 +107,15 @@ class FilterModel {
     };
 
     public getAllFilterWithValue = async (condition: Partial<IFilter>) => {
+        console.log(condition);
         const filterWithValue: { values: IClassfier }[] = await Filter.aggregate([
             { $match: condition ? condition : {} },
+            // { $match: {'parent':condition.parent}  },
             {
                 $lookup: {
-                    from: 'jeansclassifiers',
-
-                    localField: 'type',
-                    foreignField: 'type',
+                    from: 'filtervalues',
+                    localField: '_id',
+                    foreignField: 'parent',
                     as: 'values',
                 },
             },

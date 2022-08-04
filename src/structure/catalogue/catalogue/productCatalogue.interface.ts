@@ -7,6 +7,7 @@ export enum categoryType {
 }
 export interface IProductCatalogue {
     name: string;
+    _id: Types.ObjectId;
     description: string;
     image: string;
     customer_name: string;
@@ -17,6 +18,8 @@ export interface IProductCatalogue {
     child: Types.ObjectId[];
     path: Types.ObjectId[];
     active: boolean;
+    type: string;
+    totalFilterAdded: number;
     filters: [
         {
             name: 'Size';

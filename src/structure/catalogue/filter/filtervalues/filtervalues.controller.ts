@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import ResponseHandler from '../../../../../../lib/helpers/responseHandler';
-import ClassifierModel from './classifier.model';
+import ResponseHandler from '../../../../lib/helpers/responseHandler';
+import ClassifierModel from './filtervalues.model';
 
 class ClassifierController {
     public async CreateClassifier(req: Request, res: Response, next: NextFunction) {
