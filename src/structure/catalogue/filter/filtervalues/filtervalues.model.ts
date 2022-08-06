@@ -42,10 +42,9 @@ class ClassifierModel {
     };
 
     public updateClassifier = async (data: IClassifierModel & { _id: Types.ObjectId }) => {
-
-
+        const exist = await Classifier.findByIdAndUpdate(data._id, data);
         if (exist) {
-            return exist;
+            return 'Filter item updated';
         } else {
             throw new HTTP404Error('Filter item not found!');
         }
