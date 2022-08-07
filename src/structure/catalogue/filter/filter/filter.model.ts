@@ -17,7 +17,6 @@ class FilterModel {
     };
 
     public createFilter = async (data: IFilterModel) => {
-        console.log("CACHING_DATA",data)
         if (!data.key || !data.name) {
             throw new HTTP400Error('Please provide all fields to create filter');
         }

@@ -16,7 +16,6 @@ class ClassifierModel {
         return exist;
     };
     public createClassifier = async (data: IClassifierModel) => {
-        console.log("CACHINGSATA",data);
         const exist = await this.classifierExist(data.name, data.parent, data.type);
         if (exist) {
             throw new HTTP400Error('Filter item already exist or have written same type');
@@ -37,7 +36,6 @@ class ClassifierModel {
     };
 
     public getClassifier = async (data: IClassifierModel) => {
-        console.log(data);
         return await Classifier.find(data);
     };
 
@@ -53,7 +51,6 @@ class ClassifierModel {
     
     public activateFilter = async (data: { _id: Types.ObjectId; active: boolean }) => {
         try {
-            console.log("CLASSFIER",data)
                   const classifier=  await Classifier.findByIdAndUpdate(data._id, { active: data.active });
                     return data.active ? 'Classfier activated' : 'Classfier deactivated';
         } catch (error) {
