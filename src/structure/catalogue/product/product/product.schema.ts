@@ -25,6 +25,7 @@ export const ProductSchema: Schema = new Schema(
     },
 );
 
-//ProductSchema.index({ item: 1, ratings: 1 });
+ProductSchema.index({ parentId: 1, shopId: 1, status: 1 });
+ProductSchema.index({ parentId: 1, status: 1, _id: 1 });
 
 export const Product: IProductModel = model<IProductModelG, IProductModel>('Product', ProductSchema);
