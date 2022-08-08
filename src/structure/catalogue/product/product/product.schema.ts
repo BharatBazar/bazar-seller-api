@@ -19,6 +19,7 @@ export const ProductSchema: Schema = new Schema(
         newDeadline: Date,
         discount: [Number],
         discountDeadline: [Date],
+        note: { type: [String], default: [] },
     },
     {
         timestamps: true,
