@@ -1,11 +1,11 @@
-import MensJeansClassifiers from '../structure/catalogue/filter/filtervalues';
-import MensJeansFilters from '../structure/catalogue/filter/filter';
-import MensJeans from '../structure/catalogue/mens/clothes/jeans/product/product';
-import MensJeansColor from '../structure/catalogue/mens/clothes/jeans/product/colors';
-import MensJeansSize from '../structure/catalogue/mens/clothes/jeans/product/size';
+import FilterValue from '../structure/catalogue/filter/filtervalues';
+import Filter from '../structure/catalogue/filter/filter';
+import Product from '../structure/catalogue/mens/clothes/jeans/product/product';
+import ProductColor from '../structure/catalogue/mens/clothes/jeans/product/colors';
+import ProductSize from '../structure/catalogue/mens/clothes/jeans/product/size';
 
-export default [...MensJeansFilters, ...MensJeansSize, ...MensJeans, ...MensJeansClassifiers, ...MensJeansColor];
+export default [...FilterValue, ...ProductSize, ...Product, ...Filter, ...ProductColor];
 
-// import Jeans from '../structure/productCatalogue/mens/clothes/jeans/routes';
+// import Product from '../structure/productCatalogue/mens/clothes/jeans/routes';
 
-// export default [...Jeans];
+// export default [...Product];

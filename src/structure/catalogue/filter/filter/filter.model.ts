@@ -8,6 +8,7 @@ import { filter } from 'compression';
 import { Classifier } from '../filtervalues/filtervalues.schema';
 import productCatalogueModel from '../../catalogue/productCatalogue.model';
 import { Shop } from '../../../shop/shop.schema';
+import { Product } from '../../product/product/product.schema';
 
 class FilterModel {
     public filterExist = async (key: string) => {
@@ -27,6 +28,12 @@ class FilterModel {
         } else {
             const filter: IFilterModel = new Filter(data);
             await productCatalogueModel.UpdateProductCatalogue({ _id: filter.parent, $inc: { totalFilterAdded: 1 } });
+            let addFieldInSchema = {};
+            addFieldInSchema[data.key] = { type: [Types.ObjectId], ref: 'FilterValues' };
+
+            console.log('addFieldIn', addFieldInSchema);
+            await Product.schema.add(addFieldInSchema);
+
             await filter.save();
             return filter;
         }
