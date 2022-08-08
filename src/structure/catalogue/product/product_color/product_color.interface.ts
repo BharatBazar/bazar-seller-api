@@ -1,4 +1,4 @@
-import { Types } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export interface ProductColor {
     /*
@@ -42,4 +42,9 @@ export interface ProductColor {
     Shop to which this product belongs
     */
     shopId: Types.ObjectId;
+
+    createdAt: Date;
+    _id: Types.ObjectId;
 }
+
+export interface ProductColorModelInterface extends Document, ProductColor {}

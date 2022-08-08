@@ -38,4 +38,4 @@ export interface ProductSizeInterface {
     itemId: string;
 }
 
-export interface IJeansSizeModel extends Document, IJeansSize {}
+export interface ProductSizeModelInterface extends Document, ProductSizeInterface {}
