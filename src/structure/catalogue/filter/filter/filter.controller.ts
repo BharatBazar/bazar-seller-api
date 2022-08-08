@@ -44,7 +44,7 @@ class FilterController {
         try {
             responseHandler
                 .reqRes(req, res)
-                .onFetch('Filter deleted!', await FilterModel.deleteFilter(req.query))
+                .onFetch('Filter deleted!', await FilterModel.deleteFilter(req.query ))
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));

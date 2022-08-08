@@ -36,7 +36,6 @@ class ClassifierModel {
     };
 
     public getClassifier = async (data: IClassifierModel) => {
-        console.log(data);
         return await Classifier.find(data);
     };
 
@@ -48,6 +47,20 @@ class ClassifierModel {
             throw new HTTP404Error('Filter item not found!');
         }
     };
+
+    
+    public activateFilter = async (data: { _id: Types.ObjectId; active: boolean }) => {
+        try {
+                  const classifier=  await Classifier.findByIdAndUpdate(data._id, { active: data.active });
+                    return data.active ? 'Classfier activated' : 'Classfier deactivated';
+        } catch (error) {
+            throw new HTTP400Error('Filter does not exist');
+        }
+              
+         
+    };
+
+    
 }
 
 export default new ClassifierModel();

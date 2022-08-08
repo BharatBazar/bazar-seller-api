@@ -18,7 +18,7 @@ class FilterModel {
     };
 
     public createFilter = async (data: IFilterModel) => {
-        if (!data.type || !data.name) {
+        if (!data.key || !data.name) {
             throw new HTTP400Error('Please provide all fields to create filter');
         }
         const exist = await this.filterExist(data.key);
@@ -40,18 +40,24 @@ class FilterModel {
     };
 
     public activateFilter = async (data: { _id: Types.ObjectId; active: boolean }) => {
+        console.log("FILTER ACTIVE",data)
         const exist = await Filter.findById(data._id);
+       
         if (exist) {
-            const filterItem: IClassifierModel[] = await Classifier.find({ parent: exist._id });
-            if (filterItem.length == 0) {
+            const filterItem: IClassifierModel[] = await Classifier.find({parent:exist._id});
+  
+            if (filterItem.length === 0) {
                 throw new HTTP400Error('No items in the filter');
             } else {
+                console.log("FI",filterItem)
                 const flag = filterItem.some((item) => item.active);
-                if (flag) {
+                console.log("FLLLLAG",flag)
+                
+                if (flag === false||true) {
                     await Filter.findByIdAndUpdate(data._id, { active: data.active });
                     return data.active ? 'Filter activated' : 'Filter deactivated';
                 } else {
-                    throw new HTTP400Error('None of the filter item is activated');
+                    return throw new HTTP400Error('None of the filter item is activated');
                 }
             }
         } else {
@@ -64,17 +70,18 @@ class FilterModel {
     };
 
     public deleteFilter = async (data: IFilter) => {
+   
         const exist = await Filter.findById(data._id);
         if (exist) {
-            if (data.parent) {
-                if (await productCatalogueModel.CatalogueExistOrNot(data.parent)) {
-                    if (data.key) {
+            if (exist.parent) {
+                if (await productCatalogueModel.CatalogueExistOrNot(exist.parent)) {
+                    if (exist.key) {
                         const unsetField = {};
-                        unsetField[data.key] = 1;
+                        unsetField[exist.key] = 1;
 
                         await Promise.all([
                             await productCatalogueModel.UpdateProductCatalogue({
-                                _id: data.parent,
+                                _id: exist.parent,
                                 $inc: { totalFilterAdded: -1 },
                             }),
                             await Shop.updateMany({}, { $unset: unsetField }),
@@ -89,7 +96,7 @@ class FilterModel {
                     throw new HTTP400Error('Parent does not exist');
                 }
             } else {
-                throw new HTTP400Error('Filter parent not provided');
+                throw new HTTP400Error('Filter parent not providedd');
             }
         } else {
             throw new HTTP400Error('Filter does not exist');

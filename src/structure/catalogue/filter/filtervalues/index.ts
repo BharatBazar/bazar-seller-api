@@ -25,4 +25,10 @@ export default [
         escapeAuth: true,
         handler: [classifierController.DeleteClassifier],
     },
+     {
+        path: '/classifiers/activate',
+        method: 'patch',
+        escapeAuth: true,
+        handler: [classifierController.ActivateFilter],
+    },
 ];
