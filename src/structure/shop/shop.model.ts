@@ -28,8 +28,9 @@ export class ShopModel {
 
     public shopVerificationDetails = async (body: IShopModel) => {
         const shop: IShopModel | null = await Shop.findOne({ _id: body._id }, 'isVerified verificationStatus remarks');
-
+console.log("shop check here")
         if (shop) {
+            
             return shop;
         } else {
             throw new HTTP400Error('Shop does not exist');
@@ -40,18 +41,28 @@ export class ShopModel {
         const shop: IShopModel | null = await Shop.findById(body._id);
 
         if (shop) {
-            const populateString = 'sellingItems' + ' coOwner owner worker state city area ';
+            console.log("Shop",shop,body)
+            const populateString = 'sellingItems coOwner owner worker ';
             console.log('populate string', typeof populateString, populateString);
 
-            const populatedShop = await Shop.findById(body._id).populate({
-                path: populateString,
-                select: 'totalFilterAdded name image type firstName lastName gender email phoneNumber role permissions',
+            const populatedShop = await Shop.findById(body._id).populate([{
+
+                path: 'coOwner worker owner',
+                select: 'name image firstName lastName gender email phoneNumber role permissions',
+               
+            },{
+               path:'sellingItems',
+               select:"totalFilterAdded type" ,
                 populate: {
                     path: 'path',
                     select: 'name ',
                 },
-            });
-            console.log('popu', populatedShop);
+            },{
+                path:'state city area',
+                select: "name"
+
+            }]).lean();
+         
 
             pruneFields(populatedShop, 'password');
             return populatedShop;
