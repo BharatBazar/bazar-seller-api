@@ -74,13 +74,17 @@ class ProductCatalogueModel {
 
     public async GetProductCatalogue(query: IProductCatalogue) {
         console.log('query => ', query);
-        const data = await ProductCatalogue.find(query).populate({ path: 'parent child path', select: 'name description image child ',
-        populate:{
-            path:'child',
-            select:'name image description'
-        }
+        const data = await ProductCatalogue.find(query)
+        .populate
+        ({ path: 'parent child',
+           select: 'name child image description' ,
+           
+              populate: {
+                path: 'child',
+                select: 'name image description',
+            },
+    
     });
-        // const data = await ProductCatalogue.find(query)
         return data;
     }
 

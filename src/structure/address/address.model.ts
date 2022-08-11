@@ -74,6 +74,7 @@ class AddressModel {
             const areas = await Address.find({ parent: exist.parent._id, addressType: addressType.area })
                 .select('name _id')
                 .lean();
+                console.log("AREASB",areas)
             return {
                 city: exist.parent,
                 state: exist.parent.parent,
