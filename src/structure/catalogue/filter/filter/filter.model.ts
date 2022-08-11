@@ -33,7 +33,6 @@ class FilterModel {
     };
 
     public activateFilter = async (data: { _id: Types.ObjectId; active: boolean }) => {
-        console.log("FILTER ACTIVE",data)
         const exist = await Filter.findById(data._id);
        
         if (exist) {
