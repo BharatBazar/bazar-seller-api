@@ -46,10 +46,8 @@ console.log("shop check here")
             console.log('populate string', typeof populateString, populateString);
 
             const populatedShop = await Shop.findById(body._id).populate([{
-
                 path: 'coOwner worker owner',
                 select: 'name image firstName lastName gender email phoneNumber role permissions',
-               
             },{
                path:'sellingItems',
                select:"totalFilterAdded type" ,
@@ -119,7 +117,7 @@ console.log("shop check here")
                 let selectedValues = {}
                 if(filterKeys.length>0) {
                     let shopDetails:IShopModel | null = await Shop.findById(body._id).lean();
-                    console.log("shop details",shopDetails,filterKeys)
+                    //console.log("shop details",shopDetails,filterKeys)
                     if(shopDetails) {
                     filterKeys.forEach(item => {
                         if(shopDetails[item]) {

@@ -7,7 +7,7 @@ export const ProductSchema: Schema = new Schema(
         shopId: { type: Types.ObjectId, ref: 'Shop' },
         status: { type: String, enum: productStatus, default: productStatus.INVENTORY },
         parentId: { type: Types.ObjectId, ref: 'ProductCatalogue' },
-        colors: { type: Types.ObjectId, ref: 'ProductColor' },
+        colors: { type: [Types.ObjectId], ref: 'ProductColor' },
         sellerIdentificationPhoto: String,
         customerIdentificationPhoto: String,
         descriptionGivenByCustomer: String,

@@ -10,7 +10,7 @@ const ClassifierSchema: Schema = new Schema(
         customerImage: String,
         image: String,
 
-        parent: { type: Types.ObjectId, ref: 'JeansFilter' },
+        parent: { type: Types.ObjectId, ref: 'Filter' },
         active: { type: Boolean, default: false },
     },
     {

@@ -3,7 +3,7 @@ import { model, Schema, Types, Model } from 'mongoose';
 
 const ProductSizeSchema: Schema = new Schema(
     {
-        size: { type: Types.ObjectId, ref: 'FilerValues' },
+        size: { type: Types.ObjectId, ref: 'FilterValues' },
         // mrp: String, //Optional will enable it later
         // sp: String, //Optional will enable it later
         quantity: Number,

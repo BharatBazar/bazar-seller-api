@@ -1,8 +1,8 @@
 import FilterValue from '../structure/catalogue/filter/filtervalues';
 import Filter from '../structure/catalogue/filter/filter';
-import Product from '../structure/catalogue/mens/clothes/jeans/product/product';
-import ProductColor from '../structure/catalogue/mens/clothes/jeans/product/colors';
-import ProductSize from '../structure/catalogue/mens/clothes/jeans/product/size';
+import Product from '../structure/catalogue/product/product';
+import ProductColor from '../structure/catalogue/product/product_color';
+import ProductSize from '../structure/catalogue/product/product_size';
 
 export default [...FilterValue, ...ProductSize, ...Product, ...Filter, ...ProductColor];
 

@@ -7,10 +7,14 @@ import { Product } from './product.schema';
 import { HTTP400Error, HTTP404Error } from '../../../../lib/utils/httpErrors';
 
 class ProductModel {
-    public async createProduct(data: IProductModel) {
-        const product = new Product(data);
-        await product.save();
-        return product;
+    public async createProduct(data: ProductInterface) {
+        if (!data.shopId) {
+            throw new HTTP400Error('Incomplete data');
+        } else {
+            const product = new Product(data);
+            await product.save();
+            return product;
+        }
     }
 
     private async productIdExist(_id: Types.ObjectId) {
@@ -65,16 +69,24 @@ class ProductModel {
     public async getProduct(data: ProductInterface) {
         const exist = await this.productIdExist(data._id);
         if (exist) {
-            return await Product.findById(data._id).populate({
-                path: 'colors brand fit pattern',
-                populate: {
-                    path: 'sizes color includedColor',
-
-                    populate: {
-                        path: 'size',
+            let dataToSend = await Product.findById(data._id).populate({
+                path: 'colors',
+                populate: [
+                    {
+                        path: 'color',
                     },
-                },
+                    {
+                        path: 'sizes',
+                        populate: [
+                            {
+                                path: 'size',
+                            },
+                        ],
+                    },
+                ],
             });
+            console.log(dataToSend);
+            return dataToSend;
         } else {
             throw new HTTP400Error('Product not found.');
         }
@@ -186,11 +198,13 @@ class ProductModel {
             },
         ]);
 
+        console.log(await Product.find());
+
         const b = a.map((item) => {
             return { ...item, name: productStatus[item._id] };
         });
-        //console.log(b, a);
-        //console.log(Object.keys(statusDescription));
+        console.log(b, a, shopId);
+        console.log(Object.keys(statusDescription));
         return [
             productStatus.LIVE,
             productStatus.WAITINGFORAPPROVAL,
