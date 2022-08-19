@@ -8,7 +8,7 @@ import { ProductColor } from './product_color.schema';
 import { Product } from '../product/product.schema';
 
 class ProductColorModel {
-    public async createProductColor(data: ProductColorModelInterface) {
+    public async createProductColor(data: ProductColorModelInterface & { catalogueId: Types.ObjectId }) {
         console.log(data);
         if (data.parentId) {
             let colors: [Types.ObjectId] = [];
@@ -22,7 +22,11 @@ class ProductColorModel {
             return { colorId: color._id, productId: color.parentId };
         } else {
             const color: ProductColorModelInterface = new ProductColor(data);
-            const product = await ProductModel.createProduct({ colors: [color._id], shopId: data.shopId });
+            const product = await ProductModel.createProduct({
+                colors: [color._id],
+                shopId: data.shopId,
+                parentId: data.catalogueId,
+            });
 
             await color.save();
             return { colorId: color._id, productId: product._id };

@@ -7,8 +7,10 @@ import { Product } from './product.schema';
 import { HTTP400Error, HTTP404Error } from '../../../../lib/utils/httpErrors';
 
 class ProductModel {
-    public async createProduct(data: ProductInterface) {
+    public async createProduct(data: Partial<ProductInterface>) {
         if (!data.shopId) {
+            throw new HTTP400Error('Incomplete data');
+        } else if (!data.parentId) {
             throw new HTTP400Error('Incomplete data');
         } else {
             const product = new Product(data);

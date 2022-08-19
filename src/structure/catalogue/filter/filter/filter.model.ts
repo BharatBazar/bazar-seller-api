@@ -1,10 +1,8 @@
-import { ObjectId } from '../../../../datatypes/index';
 import { Types } from 'mongoose';
 import { IClassfier, IClassifierModel } from '../filtervalues/filtervalues.interface';
 import { HTTP400Error, HTTP404Error } from '../../../../lib/utils/httpErrors';
 import { IFilter, IFilterModel } from './filter.interface';
 import { Filter } from './filter.schema';
-import { filter } from 'compression';
 import { Classifier } from '../filtervalues/filtervalues.schema';
 import productCatalogueModel from '../../catalogue/productCatalogue.model';
 import { Shop } from '../../../shop/shop.schema';
@@ -30,17 +28,17 @@ class FilterModel {
             await productCatalogueModel.UpdateProductCatalogue({ _id: filter.parent, $inc: { totalFilterAdded: 1 } });
             let addFieldInSchema = {};
             let indexes = {};
-            indexes["parentId"] = 1;
-            indexes["shopId"] = 1;
-            indexes["status"] = 1;
+            indexes['parentId'] = 1;
+            indexes['shopId'] = 1;
+            indexes['status'] = 1;
             indexes[data.key] = 1;
 
             addFieldInSchema[data.key] = { type: [Types.ObjectId], ref: 'FilterValues' };
 
-            console.log('addFieldIn', addFieldInSchema,indexes);
+            console.log('addFieldIn', addFieldInSchema, indexes);
             await Product.schema.add(addFieldInSchema);
 
-            await Product.schema.clearIndexes(indexes)
+            await Product.schema.clearIndexes(indexes);
 
             await filter.save();
             return filter;
@@ -48,24 +46,24 @@ class FilterModel {
     };
 
     public activateFilter = async (data: { _id: Types.ObjectId; active: boolean }) => {
-        console.log("FILTER ACTIVE",data)
+        console.log('FILTER ACTIVE', data);
         const exist = await Filter.findById(data._id);
-       
+
         if (exist) {
-            const filterItem: IClassifierModel[] = await Classifier.find({parent:exist._id});
-  
+            const filterItem: IClassifierModel[] = await Classifier.find({ parent: exist._id });
+
             if (filterItem.length === 0) {
                 throw new HTTP400Error('No items in the filter');
             } else {
-                console.log("FI",filterItem)
+                console.log('FI', filterItem);
                 const flag = filterItem.some((item) => item.active);
-                console.log("FLLLLAG",flag)
-                
-                if (flag === false||true) {
+                console.log('FLLLLAG', flag);
+
+                if (flag === false || true) {
                     await Filter.findByIdAndUpdate(data._id, { active: data.active });
                     return data.active ? 'Filter activated' : 'Filter deactivated';
                 } else {
-                    return throw new HTTP400Error('None of the filter item is activated');
+                    throw new HTTP400Error('None of the filter item is activated');
                 }
             }
         } else {
@@ -78,7 +76,6 @@ class FilterModel {
     };
 
     public deleteFilter = async (data: IFilter) => {
-   
         const exist = await Filter.findById(data._id);
         if (exist) {
             if (exist.parent) {
@@ -120,8 +117,8 @@ class FilterModel {
         if (data.type) {
             delete data['type'];
         }
-        
-//console.log("response",response)
+
+        //console.log("response",response)
         const exist = await Filter.findByIdAndUpdate(data._id, data);
         if (exist) {
             return 'Filter updated';
