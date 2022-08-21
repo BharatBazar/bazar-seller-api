@@ -6,6 +6,7 @@ import { HTTP400Error } from '../../../../lib/utils/httpErrors';
 import { ProductColorModelInterface } from './product_color.interface';
 import { ProductColor } from './product_color.schema';
 import { Product } from '../product/product.schema';
+import { ProductInterface } from '../product/product.interface';
 
 class ProductColorModel {
     public async createProductColor(data: ProductColorModelInterface & { catalogueId: Types.ObjectId }) {
@@ -14,7 +15,14 @@ class ProductColorModel {
             let colors: [Types.ObjectId] = [];
             const color: ProductColorModelInterface = new ProductColor(data);
             colors.push(color._id);
-            const item = await ProductModel.updateProduct({ colors, _id: data.parentId });
+            let productData: Partial<ProductInterface> = {
+                colors: colors,
+                _id: data.parentId,
+            };
+            pruneFields(data, 'catalogueId shopId parentId photos');
+            productData = { ...data, ...productData };
+            console.log('product data', productData);
+            const item = await ProductModel.updateProduct(productData);
 
             color.parentId = data.parentId;
 
@@ -24,13 +32,16 @@ class ProductColorModel {
             const color: ProductColorModelInterface = new ProductColor(data);
             const filterExistInSchema = await Product.find({ ilter: { $exists: true } });
             console.log('fil4te exisrt in schem', filterExistInSchema);
-            // const response = await Product.schema.index({ parentId: 1, status: 1, means_jeans_brand: 1 });
-            // console.log('Index', response);
-            const product = await ProductModel.createProduct({
+
+            let productData: Partial<ProductInterface> = {
                 colors: [color._id],
                 shopId: data.shopId,
                 parentId: data.catalogueId,
-            });
+                sellerIdentificationPhoto: data.photos[0],
+            };
+            pruneFields(data, 'catalogueId shopId parentId photos');
+            productData = { ...data, ...productData };
+            const product = await ProductModel.createProduct(productData);
 
             await color.save();
             return { colorId: color._id, productId: product._id };

@@ -8,8 +8,7 @@ import { IShopModel } from './shop.interface';
 import { pruneFields } from '../../lib/helpers';
 import ShopMemberModel from '../shopmember/shopmember.model';
 import filterModel from '../catalogue/filter/filter/filter.model';
-import shop from '.';
-import e from 'express';
+
 
 export class ShopModel {
     public createShop = async (body: IShopModel) => {

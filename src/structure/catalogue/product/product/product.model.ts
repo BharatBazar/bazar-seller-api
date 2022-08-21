@@ -77,25 +77,30 @@ class ProductModel {
         }
     }
 
-    public async getProduct(data: ProductInterface) {
+    public async getProduct(data: { _id: Types.ObjectId }) {
         const exist = await this.productIdExist(data._id);
         if (exist) {
-            let dataToSend = await Product.findById(data._id).populate({
-                path: 'colors',
-                populate: [
-                    {
-                        path: 'color',
-                    },
-                    {
-                        path: 'sizes',
-                        populate: [
-                            {
-                                path: 'size',
-                            },
-                        ],
-                    },
-                ],
-            });
+            let dataToSend = await Product.findById(data._id).populate([
+                {
+                    path: 'colors',
+                    populate: [
+                        {
+                            path: 'color',
+                        },
+                        {
+                            path: 'sizes',
+                            populate: [
+                                {
+                                    path: 'size',
+                                },
+                            ],
+                        },
+                    ],
+                },
+                {
+                    path: 'mens_jeans_waist_size means_jeans_brand mans_jeans_pattern mans_jeans_colors',
+                },
+            ]);
             console.log(dataToSend);
             return dataToSend;
         } else {

@@ -18,6 +18,7 @@ export interface IFilter {
     parent: ObjectId;
     showSearch: boolean;
     key: string;
+    filterLevel: number;
 }
 
 export interface IFilterModel extends Document, IFilter {}

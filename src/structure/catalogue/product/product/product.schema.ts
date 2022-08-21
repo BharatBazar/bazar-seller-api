@@ -20,6 +20,12 @@ export const ProductSchema: Schema = new Schema(
         discount: [Number],
         discountDeadline: [Date],
         note: { type: [String], default: [] },
+
+        //Mens Jeans Filter
+        mens_jeans_waist_size: { type: [Types.ObjectId], ref: 'FilterValues' },
+        means_jeans_brand: { type: [Types.ObjectId], ref: 'FilterValues' },
+        mans_jeans_pattern: { type: [Types.ObjectId], ref: 'FilterValues' },
+        mans_jeans_colors: { type: [Types.ObjectId], ref: 'FilterValues' },
     },
     {
         timestamps: true,
@@ -28,5 +34,6 @@ export const ProductSchema: Schema = new Schema(
 
 ProductSchema.index({ parentId: 1, shopId: 1, status: 1 });
 ProductSchema.index({ parentId: 1, status: 1, _id: 1 });
+ProductSchema.index({ parentId: 1, status: 1, shopId: 1, mens_jeans_brand: 1 });
 
 export const Product: IProductModel = model<IProductModelG, IProductModel>('Product', ProductSchema);
