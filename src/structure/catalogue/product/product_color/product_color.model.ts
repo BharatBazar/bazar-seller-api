@@ -22,6 +22,10 @@ class ProductColorModel {
             return { colorId: color._id, productId: color.parentId };
         } else {
             const color: ProductColorModelInterface = new ProductColor(data);
+            const filterExistInSchema = await Product.find({ ilter: { $exists: true } });
+            console.log('fil4te exisrt in schem', filterExistInSchema);
+            // const response = await Product.schema.index({ parentId: 1, status: 1, means_jeans_brand: 1 });
+            // console.log('Index', response);
             const product = await ProductModel.createProduct({
                 colors: [color._id],
                 shopId: data.shopId,

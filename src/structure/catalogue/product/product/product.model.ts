@@ -35,6 +35,15 @@ class ProductModel {
 
             product = { ...product, ...data };
 
+            console.log('product', product);
+
+            // const filterExistInSchema = await Product.findOne({ ilter: { $exists: true, $ne: null } });
+            // console.log('fil4te exisrt in schem', filterExistInSchema);
+            // const response = await Product.schema.index({ parentId: 1, status: 1, means_jeans_brand: 1 });
+            // console.log('Index', response);
+
+            // await Product.schema.add({ means_jeans_brand: { type: [Types.ObjectId], ref: 'FilterValues' } });
+            await Product.schema.index({ parentId: 1, shopId: 1, status: 1, means_jeans_brand: 1 });
             return await Product.findByIdAndUpdate(data._id, product, { new: true });
         } else {
             throw new HTTP404Error('Product not found.');
