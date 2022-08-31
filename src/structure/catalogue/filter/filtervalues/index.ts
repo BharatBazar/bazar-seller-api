@@ -2,31 +2,31 @@ import classifierController from './filtervalues.controller';
 
 export default [
     {
-        path: '/classifiers/create',
+        path: '/filtervalues/create',
         method: 'post',
         escapeAuth: true,
         handler: [classifierController.CreateClassifier],
     },
     {
-        path: '/classifiers/update',
+        path: '/filtervalues/update',
         method: 'patch',
         escapeAuth: true,
         handler: [classifierController.UpdateClassifier],
     },
     {
-        path: '/classifiers/getAll',
+        path: '/filtervalues/getAll',
         method: 'post',
         escapeAuth: true,
         handler: [classifierController.GetAllClassifier],
     },
     {
-        path: '/classifiers/delete',
+        path: '/filtervalues/delete',
         method: 'delete',
         escapeAuth: true,
         handler: [classifierController.DeleteClassifier],
     },
-     {
-        path: '/classifiers/activate',
+    {
+        path: '/filtervalues/activate',
         method: 'patch',
         escapeAuth: true,
         handler: [classifierController.ActivateFilter],

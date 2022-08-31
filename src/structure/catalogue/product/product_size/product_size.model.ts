@@ -5,11 +5,14 @@ import { ProductColor } from '../product_color/product_color.schema';
 import { HTTP400Error } from '../../../../lib/utils/httpErrors';
 import { ProductSizeModelInterface, ProductSizeInterface } from './product_size.interface';
 import { ProductSize } from './product_size.schema';
+import productModel from '../product/product.model';
 
 class ProductSizeModel {
-    public async createProductSize(data: ProductSizeInterface) {
+    public async createProductSize(data: ProductSizeInterface & ) {
         if (data.parentId) {
             const size: ProductSizeModelInterface = new ProductSize(data);
+
+          
             let sizes: [Types.ObjectId] = [];
             sizes.push(size._id);
             await productColorModel.updateProductColor({ sizes, _id: data.parentId });

@@ -52,13 +52,15 @@ class ProductColorModel {
         const exist = (await ProductColor.findById(data._id).countDocuments()) > 0;
         if (exist) {
             let productColor: UpdateQuery<ProductColorModelInterface> | undefined = {};
+
+            console.log('Data', data, 'sizes');
             if (data.sizes) {
                 productColor['$push'] = { sizes: { $each: data.sizes } };
                 pruneFields(data, 'sizes');
             }
 
             productColor = { ...productColor, ...data };
-            console.log(productColor, data);
+            console.log(productColor, data, 'ssize creation');
             return (await ProductColor.findByIdAndUpdate(data._id, productColor, { new: true }))?._id;
         } else {
             throw new HTTP400Error('Product color does not exist.');
