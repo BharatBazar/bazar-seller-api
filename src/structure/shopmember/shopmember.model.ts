@@ -266,19 +266,14 @@ export class ShopMemberModel {
                                     notShopVerification: true,
                                     data: member,
                                 };
-                            } else if (member.shop.category.length == 0) {
+                            }
+                        } else {
+                            if (member.shop.sellingItems.length == 0) {
                                 return {
                                     notCategory: true,
                                     data: member,
                                 };
-                            } else if (member.shop.subCategory.length == 0) {
-                                return {
-                                    notSubCategory: true,
-                                    data: member,
-                                };
-                            }
-                        } else {
-                            return { data: member };
+                            } else return { data: member };
                         }
                     } else throw new HTTP400Error(shopMember_message.PASSWORD_NOT_MATCH);
                 }

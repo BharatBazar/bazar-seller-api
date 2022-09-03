@@ -109,7 +109,7 @@ console.log("shop check here")
         if (body._id) {
             if (body.catalogueId) {
                 console.log('bo', body);
-                const getCatalgoueAndValues: {filter:{}[],distribution:{}[]} = await filterModel.getAllFilterWithValue({ parent:Types.ObjectId(body.catalogueId) });
+                const getCatalgoueAndValues: {filter:{}[],distribution:{}[]} = await filterModel.getAllFilterWithValue({ parent:Types.ObjectId(body.catalogueId),active:true });
                 let allFilters : IFilter[] = [...getCatalgoueAndValues.filter,...getCatalgoueAndValues.distribution];
                
                 let filterKeys = allFilters.map(item => item.key);

@@ -26,19 +26,19 @@ class FilterModel {
         } else {
             const filter: IFilterModel = new Filter(data);
             await productCatalogueModel.UpdateProductCatalogue({ _id: filter.parent, $inc: { totalFilterAdded: 1 } });
-            let addFieldInSchema = {};
-            let indexes = {};
-            indexes['parentId'] = 1;
-            indexes['shopId'] = 1;
-            indexes['status'] = 1;
-            indexes[data.key] = 1;
+            // let addFieldInSchema = {};
+            // let indexes = {};
+            // indexes['parentId'] = 1;
+            // indexes['shopId'] = 1;
+            // indexes['status'] = 1;
+            // indexes[data.key] = 1;
 
-            addFieldInSchema[data.key] = { type: [Types.ObjectId], ref: 'FilterValues' };
+            // addFieldInSchema[data.key] = { type: [Types.ObjectId], ref: 'FilterValues' };
 
-            console.log('addFieldIn', addFieldInSchema, indexes);
-            await Product.schema.add(addFieldInSchema);
+            // console.log('addFieldIn', addFieldInSchema, indexes);
+            // await Product.schema.add(addFieldInSchema);
 
-            await Product.schema.clearIndexes(indexes);
+            // await Product.schema.clearIndexes(indexes);
 
             await filter.save();
             return filter;

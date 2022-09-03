@@ -138,7 +138,7 @@ class ProductCatalogueModel {
             select: 'active',
         });
 
-        if (exist.subCategoryExist && exist.child.length > 0) {
+        if (categoryList && exist.subCategoryExist && exist.child.length > 0) {
             let flag = categoryList.child.some((child) => child.active);
             if (flag) {
                 await ProductCatalogue.findByIdAndUpdate(exist._id, { active: !exist.active });
@@ -151,7 +151,7 @@ class ProductCatalogueModel {
             return 'Catalogue item activated';
         } else {
             throw new HTTP400Error(
-                'Catalogoue item cannot be activated since it no child has been added but child exist.',
+                'Catalogoue item cannot be activated since no child has been added but child exist.',
             );
         }
     }
