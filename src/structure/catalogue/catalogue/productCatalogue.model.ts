@@ -88,10 +88,12 @@ class ProductCatalogueModel {
         const a = new Promise(async (resolve) => {
             
         resolve(await ProductCatalogue.find({
-            subCategoryExist: false,
-            categoryType: categoryType.SubCategory1,
-            active:true
-        }).populate({
+           // child:undefined,
+           child:[],
+            
+            active:false
+        })
+        .populate({
             path: 'parent',
             select: 'name',
             
@@ -102,21 +104,9 @@ class ProductCatalogueModel {
         })
     });
 
-    const b = new Promise(async (resolve) => {
-            
-        resolve(await ProductCatalogue.find({
-            subCategoryExist: false,
-            categoryType: categoryType.SubCategory,
-            
-            active:true
-        }).populate({
-            path: 'parent',
-            select: 'name',
-           
-        })
-    });
+   
 
-    const data =  await Promise.all([await a,await b]);
+    const data =  await Promise.all([await a]);
     console.log(data);
     return [].concat.apply([],data);
     }

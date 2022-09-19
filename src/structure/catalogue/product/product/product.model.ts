@@ -98,7 +98,7 @@ class ProductModel {
                     ],
                 },
                 {
-                    path: 'mens_jeans_waist_size means_jeans_brand mans_jeans_pattern mans_jeans_colors',
+                    path: 'mens_footwear_sneaker_brand mens_footwear_sneaker_color mens_footwear_sneaker_size',
                 },
             ]);
             console.log(dataToSend);

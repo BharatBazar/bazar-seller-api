@@ -79,7 +79,7 @@ export interface ProductInterface {
     on hold Sunday 7 August 2022
     */
     descriptionGivenByCustomer: string;
-    descriptionShowToCustomer: string[];
+    descriptionShownToCustomer: string[];
     titleGenerated: string;
 
     // Product Settings //

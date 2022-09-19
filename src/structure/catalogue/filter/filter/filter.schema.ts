@@ -15,10 +15,11 @@ const FilterSchema: Schema = new Schema(
         multiple: { type: Boolean, default: false },
         filterLevel: { type: Number, default: 0 },
         active: { type: Boolean, default: false },
+        filterActivatedCount: { type: Number, default: 0 },
         mandatory: { type: Boolean, default: true },
-        defaultSelectAll: { type: Boolean,default:true },
+        defaultSelectAll: { type: Boolean, default: true },
         parent: { type: Types.ObjectId, ref: 'ProductCatalogue' },
-        showSearch:{ type: Boolean, default: false },
+        showSearch: { type: Boolean, default: false },
     },
     {
         timestamps: true,

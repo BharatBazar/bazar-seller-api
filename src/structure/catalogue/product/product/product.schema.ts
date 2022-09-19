@@ -11,7 +11,7 @@ export const ProductSchema: Schema = new Schema(
         sellerIdentificationPhoto: String,
         customerIdentificationPhoto: String,
         descriptionGivenByCustomer: String,
-        descriptionShowToCustomer: String,
+        descriptionShownToCustomer: String,
         titleGenerated: String,
         showPrice: { type: Boolean, default: false },
         productRating: Number,
@@ -22,10 +22,9 @@ export const ProductSchema: Schema = new Schema(
         note: { type: [String], default: [] },
 
         //Mens Jeans Filter
-        mens_jeans_waist_size: { type: [Types.ObjectId], ref: 'FilterValues' },
-        means_jeans_brand: { type: [Types.ObjectId], ref: 'FilterValues' },
-        mans_jeans_pattern: { type: [Types.ObjectId], ref: 'FilterValues' },
-        mans_jeans_colors: { type: [Types.ObjectId], ref: 'FilterValues' },
+        mens_footwear_sneaker_brand: { type: [Types.ObjectId], ref: 'FilterValues' },
+        mens_footwear_sneaker_color: { type: [Types.ObjectId], ref: 'FilterValues' },
+        mens_footwear_sneaker_size: { type: [Types.ObjectId], ref: 'FilterValues' },
     },
     {
         timestamps: true,
