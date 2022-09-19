@@ -1,4 +1,4 @@
-import { Types } from 'mongoose';
+import { Types, FilterQuery } from 'mongoose';
 import { IClassfier, IFilterValuesModel } from '../filtervalues/filtervalues.interface';
 import { HTTP400Error, HTTP404Error } from '../../../../lib/utils/httpErrors';
 import { IFilter, IFilterModel } from './filter.interface';
@@ -7,6 +7,8 @@ import { FilterValues } from '../filtervalues/filtervalues.schema';
 import productCatalogueModel from '../../catalogue/productCatalogue.model';
 import { Shop } from '../../../shop/shop.schema';
 import { ProductCatalogue } from '../../catalogue/productCatalogue.schema';
+import { IShopModel } from '../../../shop/shop.interface';
+import { Product } from '../../product/product/product.schema';
 
 class FilterModel {
     public filterExist = async (key: string) => {
@@ -47,7 +49,7 @@ class FilterModel {
 
     public activateFilter = async (data: { _id: Types.ObjectId; active: boolean }) => {
         console.log('FILTER ACTIVE', data);
-        const exist = await Filter.findById(data._id);
+        const exist:IFilter | null= await Filter.findById(data._id);
 
         if (exist) {
             const filterItem: IFilterValuesModel[] = await FilterValues.find({ parent: exist._id });
@@ -55,26 +57,47 @@ class FilterModel {
             if (filterItem.length === 0) {
                 throw new HTTP400Error('No items in the filter');
             } else {
-                console.log('FI', filterItem);
+               
                 const flag = filterItem.some((item) => item.active);
-                console.log('FLLLLAG', flag);
+              
 
                 if (flag == true) {
-                    if (exist.filterActivatedCount == 0) {
-                        await productCatalogueModel.UpdateProductCatalogue({
-                            _id: filter.parent,
-                            $inc: { totalFilterAdded: 1 },
-                        });
-                    }
-                    await Filter.findByIdAndUpdate(data._id, {
-                        active: data.active,
-                        $inc: { filterActivatedCount: 1 },
-                    });
-                    return data.active ? 'Filter activated' : 'Filter deactivated';
-                } else {
+                    const checkKeyExistQuery:FilterQuery<IShopModel>  = {};
+                    checkKeyExistQuery[exist.key] = {$exists:true}
+
+                    const doFilterKeyExistInShopSchema = await Shop.find(checkKeyExistQuery);
+                    if(doFilterKeyExistInShopSchema) {
+                        
+                        const doFilterKeyExistInProductSchema = await Product.find(checkKeyExistQuery);
+                        
+                        if(doFilterKeyExistInProductSchema) {
+
+                            if (exist.filterActivatedCount == 0) {
+
+                                await productCatalogueModel.UpdateProductCatalogue({
+                                    _id: exist.parent,
+                                    $inc: { totalFilterAdded: 1 },
+                                });
+
+                            }
+                                await Filter.findByIdAndUpdate(data._id, {
+                                    active: data.active,
+                                    $inc: { filterActivatedCount: 1 },
+                                });
+                        
+                                return data.active ? 'Filter activated' : 'Filter deactivated';
+                        } else 
+                            throw new HTTP400Error("Filter key does not exist in product schema")
+
+                  } else 
+                    throw new HTTP400Error("Filter key does not exist in shop schema")
+                
+                }
+                 else {
                     throw new HTTP400Error('None of the filter item is activated');
                 }
             }
+            
         } else {
             throw new HTTP400Error('Filter does not exist');
         }
