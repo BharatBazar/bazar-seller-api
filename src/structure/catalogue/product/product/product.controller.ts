@@ -1,98 +1,98 @@
 import { Request, Response, NextFunction } from 'express';
 import ResponseHandler from '../../../../lib/helpers/responseHandler';
-import FilterModel from './filter.model';
+import ProductModel from './product.model';
 
-class FilterController {
-    public async CreateFilter(req: Request, res: Response, next: NextFunction) {
+class ProductController {
+    public async CreateProduct(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {
             responseHandler
                 .reqRes(req, res)
-                .onCreate('Filter created!', await FilterModel.createFilter(req.body))
+                .onCreate('Product created!', await ProductModel.createProduct(req.body))
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));
         }
     }
 
-    public async UpdateFilter(req: Request, res: Response, next: NextFunction) {
+    public async UpdateProduct(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {
             responseHandler
                 .reqRes(req, res)
-                .onFetch('Filter updated!', await FilterModel.updateFilter(req.body))
+                .onFetch('Product updated!', await ProductModel.updateProduct(req.body))
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));
         }
     }
 
-    public async ActivateFilter(req: Request, res: Response, next: NextFunction) {
+    public async DeleteProduct(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {
             responseHandler
                 .reqRes(req, res)
-                .onFetch('Filter activated!', await FilterModel.activateFilter(req.body))
+                .onFetch('Product deleted!', await ProductModel.deleteProduct({ _id: req.query._id }))
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));
         }
     }
 
-    public async DeleteFilter(req: Request, res: Response, next: NextFunction) {
+    public async DeleteProductFilter(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {
             responseHandler
                 .reqRes(req, res)
-                .onFetch('Filter deleted!', await FilterModel.deleteFilter(req.query))
+                .onFetch('Product filters deleted!', await ProductModel.deleteProductFilter({ ...req.body }))
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));
         }
     }
 
-    public async GetAllFilterValues(req: Request, res: Response, next: NextFunction) {
+    public async GetProduct(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {
             responseHandler
                 .reqRes(req, res)
-                .onFetch('All the filterValues!!', await FilterModel.getAllFilterValues())
+                .onFetch('Here is your product!', await ProductModel.getProduct(req.body))
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));
         }
     }
 
-    // public async DeleteFilter(req: Request, res: Response, next: NextFunction) {
-    //     const responseHandler = new ResponseHandler();
-    //     try {
-    //         responseHandler
-    //             .reqRes(req, res)
-    //             .onFetch('Filter deleted!', await FilterModel.deleteFilter({ _id: req.query._id }))
-    //             .send();
-    //     } catch (error) {
-    //         next(responseHandler.sendError(error));
-    //     }
-    // }
-
-    public async GetAllFilterWithValue(req: Request, res: Response, next: NextFunction) {
+    public async GetProductMeta(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {
             responseHandler
                 .reqRes(req, res)
-                .onFetch('Here is all the filters!', await FilterModel.getAllFilterWithValue())
+                .onFetch('here is your product!', await ProductModel.getProductMeta(req.body))
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));
         }
     }
 
-    public async GetAllFilter(req: Request, res: Response, next: NextFunction) {
+    public async GetAllProduct(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {
             responseHandler
                 .reqRes(req, res)
-                .onFetch('Filters..!', await FilterModel.getFilter())
+                .onFetch('Here is the product you asked for!', await ProductModel.getAllProduct(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
+
+    public async GetStatus(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Here is the product you asked for!', await ProductModel.provideStatus(req.body))
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));
@@ -100,4 +100,4 @@ class FilterController {
     }
 }
 
-export default new FilterController();
+export default new ProductController();

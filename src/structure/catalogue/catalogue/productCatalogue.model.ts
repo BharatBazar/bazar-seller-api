@@ -88,10 +88,12 @@ class ProductCatalogueModel {
         const a = new Promise(async (resolve) => {
             
         resolve(await ProductCatalogue.find({
-            subCategoryExist: false,
-            categoryType: categoryType.SubCategory1,
-            active:true
-        }).populate({
+           // child:undefined,
+           child:[],
+            
+            active:false
+        })
+        .populate({
             path: 'parent',
             select: 'name',
             
@@ -102,21 +104,9 @@ class ProductCatalogueModel {
         })
     });
 
-    const b = new Promise(async (resolve) => {
-            
-        resolve(await ProductCatalogue.find({
-            subCategoryExist: false,
-            categoryType: categoryType.SubCategory,
-            
-            active:true
-        }).populate({
-            path: 'parent',
-            select: 'name',
-           
-        })
-    });
+   
 
-    const data =  await Promise.all([await a,await b]);
+    const data =  await Promise.all([await a]);
     console.log(data);
     return [].concat.apply([],data);
     }
@@ -138,7 +128,7 @@ class ProductCatalogueModel {
             select: 'active',
         });
 
-        if (exist.subCategoryExist && exist.child.length > 0) {
+        if (categoryList && exist.subCategoryExist && exist.child.length > 0) {
             let flag = categoryList.child.some((child) => child.active);
             if (flag) {
                 await ProductCatalogue.findByIdAndUpdate(exist._id, { active: !exist.active });
@@ -151,7 +141,7 @@ class ProductCatalogueModel {
             return 'Catalogue item activated';
         } else {
             throw new HTTP400Error(
-                'Catalogoue item cannot be activated since it no child has been added but child exist.',
+                'Catalogoue item cannot be activated since no child has been added but child exist.',
             );
         }
     }

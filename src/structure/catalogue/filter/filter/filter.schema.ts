@@ -1,6 +1,6 @@
 import { IFilterModel } from './filter.interface';
 import { Schema, Document, model, Model, Types } from 'mongoose';
-import { classifierTypes } from '../filtervalues/filtervalues.interface';
+import { filterValuesTypes } from '../filtervalues/filtervalues.interface';
 
 const FilterSchema: Schema = new Schema(
     {
@@ -10,15 +10,16 @@ const FilterSchema: Schema = new Schema(
         customerDescription: String,
         image: String,
         customerImage: String,
-        type: { type: String, enum: classifierTypes },
+        type: { type: String, enum: filterValuesTypes },
         key: { type: String, unique: true },
         multiple: { type: Boolean, default: false },
         filterLevel: { type: Number, default: 0 },
         active: { type: Boolean, default: false },
+        filterActivatedCount: { type: Number, default: 0 },
         mandatory: { type: Boolean, default: true },
-        defaultSelectAll: { type: Boolean },
+        defaultSelectAll: { type: Boolean, default: true },
         parent: { type: Types.ObjectId, ref: 'ProductCatalogue' },
-        showSearch: Boolean,
+        showSearch: { type: Boolean, default: false },
     },
     {
         timestamps: true,

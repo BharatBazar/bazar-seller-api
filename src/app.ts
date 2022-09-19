@@ -42,7 +42,7 @@ const r2 = express.Router();
 // Different router required to initialize different apis call.
 
 app.use('/', applyRoutes(v1, r1));
-app.use('/catalogue/', applyRoutes(v2, r2));
+app.use('/', applyRoutes(v2, r2));
 
 /*---------------------------------------
 | API VERSIONS CONFIGURATION [END]
