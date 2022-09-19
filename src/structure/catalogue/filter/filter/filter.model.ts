@@ -6,7 +6,7 @@ import { Filter } from './filter.schema';
 import { FilterValues } from '../filtervalues/filtervalues.schema';
 import productCatalogueModel from '../../catalogue/productCatalogue.model';
 import { Shop } from '../../../shop/shop.schema';
-import { Product } from '../../product/product/product.schema';
+import { ProductCatalogue } from '../../catalogue/productCatalogue.schema';
 
 class FilterModel {
     public filterExist = async (key: string) => {
@@ -25,7 +25,7 @@ class FilterModel {
             throw new HTTP400Error('A Filter already exist with same key');
         } else {
             const filter: IFilterModel = new Filter(data);
-            await productCatalogueModel.UpdateProductCatalogue({ _id: filter.parent, $inc: { totalFilterAdded: 1 } });
+
             // let addFieldInSchema = {};
             // let indexes = {};
             // indexes['parentId'] = 1;
@@ -59,8 +59,17 @@ class FilterModel {
                 const flag = filterItem.some((item) => item.active);
                 console.log('FLLLLAG', flag);
 
-                if (flag === false || true) {
-                    await Filter.findByIdAndUpdate(data._id, { active: data.active });
+                if (flag == true) {
+                    if (exist.filterActivatedCount == 0) {
+                        await productCatalogueModel.UpdateProductCatalogue({
+                            _id: filter.parent,
+                            $inc: { totalFilterAdded: 1 },
+                        });
+                    }
+                    await Filter.findByIdAndUpdate(data._id, {
+                        active: data.active,
+                        $inc: { filterActivatedCount: 1 },
+                    });
                     return data.active ? 'Filter activated' : 'Filter deactivated';
                 } else {
                     throw new HTTP400Error('None of the filter item is activated');
@@ -84,6 +93,9 @@ class FilterModel {
                         const unsetField = {};
                         unsetField[exist.key] = 1;
 
+                        if(await Shop.find({$exist:unsetField})) {
+                            await Shop.updateMany({$inc:{filterProvidedForSellingItems[exist.key]:-1}});
+                        }
                         await Promise.all([
                             await productCatalogueModel.UpdateProductCatalogue({
                                 _id: exist.parent,
