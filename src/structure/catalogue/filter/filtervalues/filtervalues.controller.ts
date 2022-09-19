@@ -1,74 +1,74 @@
 import { Request, Response, NextFunction } from 'express';
 import ResponseHandler from '../../../../lib/helpers/responseHandler';
-import ClassifierModel from './filtervalues.model';
+import FilterValuesModel from './filtervalues.model';
 
-class ClassifierController {
-    public async CreateClassifier(req: Request, res: Response, next: NextFunction) {
+class FilterValuesController {
+    public async CreateFilterValues(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {
             responseHandler
                 .reqRes(req, res)
-                .onCreate('Classifier created!', await ClassifierModel.createClassifier(req.body))
+                .onCreate('FilterValues created!', await FilterValuesModel.createFilterValues(req.body))
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));
         }
     }
 
-    public async UpdateClassifier(req: Request, res: Response, next: NextFunction) {
+    public async UpdateFilterValues(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {
             responseHandler
                 .reqRes(req, res)
-                .onFetch('Classifier updated!', await ClassifierModel.updateClassifier(req.body))
+                .onFetch('FilterValues updated!', await FilterValuesModel.updateFilterValues(req.body))
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));
         }
     }
 
-    public async DeleteClassifier(req: Request, res: Response, next: NextFunction) {
+    public async DeleteFilterValues(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {
             responseHandler
                 .reqRes(req, res)
-                .onFetch('Filter item deleted!', await ClassifierModel.deleteClassifier({ _id: req.query._id }))
+                .onFetch('Filter item deleted!', await FilterValuesModel.deleteFilterValues({ _id: req.query._id }))
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));
         }
     }
 
-    // public async GetClassifier(req: Request, res: Response, next: NextFunction) {
+    // public async GetFilterValues(req: Request, res: Response, next: NextFunction) {
     //     const responseHandler = new ResponseHandler();
     //     try {
     //         responseHandler
     //             .reqRes(req, res)
-    //             .onFetch('Here is your product!', await ClassifierModel.getClassifier(req.body))
+    //             .onFetch('Here is your product!', await FilterValuesModel.getFilterValues(req.body))
     //             .send();
     //     } catch (error) {
     //         next(responseHandler.sendError(error));
     //     }
     // }
 
-    public async GetAllClassifier(req: Request, res: Response, next: NextFunction) {
+    public async GetAllFilterValues(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {
             responseHandler
                 .reqRes(req, res)
-                .onFetch('Here is the classifier!', await ClassifierModel.getClassifier(req.body))
+                .onFetch('Here is the filterValues!', await FilterValuesModel.getFilterValues(req.body))
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));
         }
     }
 
-       public async ActivateFilter(req: Request, res: Response, next: NextFunction) {
+    public async ActivateFilter(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {
             responseHandler
                 .reqRes(req, res)
-                .onFetch('Filter activated!', await ClassifierModel.activateFilter(req.body))
+                .onFetch('Filter activated!', await FilterValuesModel.activateFilter(req.body))
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));
@@ -76,4 +76,4 @@ class ClassifierController {
     }
 }
 
-export default new ClassifierController();
+export default new FilterValuesController();

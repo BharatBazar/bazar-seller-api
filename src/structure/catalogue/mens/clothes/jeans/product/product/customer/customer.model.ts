@@ -78,7 +78,7 @@ class CustomerModel {
         }},
         {
            $lookup: {
-                from: 'jeansclassifiers',
+                from: 'jeansfilterValuess',
                         localField: 'newcolors1',
                         foreignField: '_id',
                         as: 'populatedColors',

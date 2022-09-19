@@ -44,19 +44,19 @@ class FilterController {
         try {
             responseHandler
                 .reqRes(req, res)
-                .onFetch('Filter deleted!', await FilterModel.deleteFilter(req.query ))
+                .onFetch('Filter deleted!', await FilterModel.deleteFilter(req.query))
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));
         }
     }
 
-    public async GetAllClassifier(req: Request, res: Response, next: NextFunction) {
+    public async GetAllFilterValues(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {
             responseHandler
                 .reqRes(req, res)
-                .onFetch('All the classifier!!', await FilterModel.getAllClassifier())
+                .onFetch('All the filterValues!!', await FilterModel.getAllFilterValues())
                 .send();
         } catch (error) {
             next(responseHandler.sendError(error));

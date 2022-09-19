@@ -1,34 +1,34 @@
-import classifierController from './filtervalues.controller';
+import filterValuesController from './filtervalues.controller';
 
 export default [
     {
         path: '/filtervalues/create',
         method: 'post',
         escapeAuth: true,
-        handler: [classifierController.CreateClassifier],
+        handler: [filterValuesController.CreateFilterValues],
     },
     {
         path: '/filtervalues/update',
         method: 'patch',
         escapeAuth: true,
-        handler: [classifierController.UpdateClassifier],
+        handler: [filterValuesController.UpdateFilterValues],
     },
     {
         path: '/filtervalues/getAll',
         method: 'post',
         escapeAuth: true,
-        handler: [classifierController.GetAllClassifier],
+        handler: [filterValuesController.GetAllFilterValues],
     },
     {
         path: '/filtervalues/delete',
         method: 'delete',
         escapeAuth: true,
-        handler: [classifierController.DeleteClassifier],
+        handler: [filterValuesController.DeleteFilterValues],
     },
     {
         path: '/filtervalues/activate',
         method: 'patch',
         escapeAuth: true,
-        handler: [classifierController.ActivateFilter],
+        handler: [filterValuesController.ActivateFilter],
     },
 ];

@@ -38,9 +38,9 @@ export default [
         handler: [filterController.ActivateFilter],
     },
     {
-        path: '/filter/classifier',
+        path: '/filter/filterValues',
         method: 'get',
         escapeAuth: true,
-        handler: [filterController.GetAllClassifier],
+        handler: [filterController.GetAllFilterValues],
     },
 ];

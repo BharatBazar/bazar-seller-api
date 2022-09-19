@@ -1,9 +1,9 @@
 import { Types } from 'mongoose';
-import { IClassfier, IClassifierModel } from '../filtervalues/filtervalues.interface';
+import { IClassfier, IFilterValuesModel } from '../filtervalues/filtervalues.interface';
 import { HTTP400Error, HTTP404Error } from '../../../../lib/utils/httpErrors';
 import { IFilter, IFilterModel } from './filter.interface';
 import { Filter } from './filter.schema';
-import { Classifier } from '../filtervalues/filtervalues.schema';
+import { FilterValues } from '../filtervalues/filtervalues.schema';
 import productCatalogueModel from '../../catalogue/productCatalogue.model';
 import { Shop } from '../../../shop/shop.schema';
 import { Product } from '../../product/product/product.schema';
@@ -50,7 +50,7 @@ class FilterModel {
         const exist = await Filter.findById(data._id);
 
         if (exist) {
-            const filterItem: IClassifierModel[] = await Classifier.find({ parent: exist._id });
+            const filterItem: IFilterValuesModel[] = await FilterValues.find({ parent: exist._id });
 
             if (filterItem.length === 0) {
                 throw new HTTP400Error('No items in the filter');
@@ -71,7 +71,7 @@ class FilterModel {
         }
     };
 
-    public getAllClassifier = async () => {
+    public getAllFilterValues = async () => {
         return ['pattern', 'size', 'brand', 'color', 'fit'];
     };
 
@@ -90,7 +90,7 @@ class FilterModel {
                                 $inc: { totalFilterAdded: -1 },
                             }),
                             await Shop.updateMany({}, { $unset: unsetField }),
-                            await Classifier.deleteMany({ parent: exist._id }),
+                            await FilterValues.deleteMany({ parent: exist._id }),
                             await Filter.findByIdAndDelete(data._id),
                         ]);
                         return 'Deleted';

@@ -1,7 +1,7 @@
 import { Model, Schema, model, Types } from 'mongoose';
-import { IClassifierModel, classifierTypes } from './filtervalues.interface';
+import { IFilterValuesModel, filterValuesTypes } from './filtervalues.interface';
 
-const ClassifierSchema: Schema = new Schema(
+const FilterValuesSchema: Schema = new Schema(
     {
         name: String,
         description: String,
@@ -18,4 +18,4 @@ const ClassifierSchema: Schema = new Schema(
     },
 );
 
-export const Classifier: Model<IClassifierModel> = model<IClassifierModel>('FilterValues', ClassifierSchema);
+export const FilterValues: Model<IFilterValuesModel> = model<IFilterValuesModel>('FilterValues', FilterValuesSchema);
