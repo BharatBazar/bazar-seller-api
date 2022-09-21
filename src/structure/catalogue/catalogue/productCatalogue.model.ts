@@ -10,6 +10,7 @@ class ProductCatalogueModel {
 
 
     public async AddProductCatalogue(data: IProductCatalogue) {
+        console.log("PPOOO",data);
         if(!data.type) {
             throw new HTTP400Error("Please provide unique type for category you are adding");
         } else
@@ -85,6 +86,7 @@ class ProductCatalogueModel {
             },
     
     });
+    console.log("GET_DATA",data)
         return data;
     }
 

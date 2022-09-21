@@ -59,6 +59,7 @@ export class ShopModel {
     };
 
     public getShopCatalogueDetails = async (body: { _id: ObjectId }) => {
+        console.log("INTERNAL_DATA",body._id)
         const shop: IShopModel | null = await Shop.findById(body._id)
             .select('sellingItems')
             .populate({
