@@ -49,11 +49,12 @@ class FilterModel {
 
     public activateFilter = async (data: { _id: Types.ObjectId; active: boolean }) => {
         console.log('FILTER ACTIVE', data);
-        const exist:IFilter | null= await Filter.findById(data._id);
+        const exist:IFilter | null= await Filter.findById(data._id).lean();
 
+        console.log("exist ",exist)
         if (exist) {
             const filterItem: IFilterValuesModel[] = await FilterValues.find({ parent: exist._id });
-
+console.log("filter",filterItem)
             if (filterItem.length === 0) {
                 throw new HTTP400Error('No items in the filter');
             } else {
@@ -63,13 +64,15 @@ class FilterModel {
 
                 if (flag == true) {
                     const checkKeyExistQuery:FilterQuery<IShopModel>  = {};
-                    checkKeyExistQuery[exist.key] = {$exists:true}
+                    checkKeyExistQuery[`reandom`] = { $exists: true,"$ne": null}
 
-                    const doFilterKeyExistInShopSchema = await Shop.find(checkKeyExistQuery);
+                    const doFilterKeyExistInShopSchema = await Shop.find(checkKeyExistQuery).countDocuments()>0;
+
+                    console.log(doFilterKeyExistInShopSchema,await Shop.find({"randomfield":{$ne: null}}).lean(), await Shop.find({ mens_clothes_jeans_color: { '$eq': null } }).countDocuments())
                     if(doFilterKeyExistInShopSchema) {
                         
-                        const doFilterKeyExistInProductSchema = await Product.find(checkKeyExistQuery);
-                        
+                        const doFilterKeyExistInProductSchema = await Product.find(checkKeyExistQuery).countDocuments()!=0;
+                           console.log(doFilterKeyExistInShopSchema,checkKeyExistQuery,doFilterKeyExistInProductSchema, )
                         if(doFilterKeyExistInProductSchema) {
 
                             if (exist.filterActivatedCount == 0) {
@@ -176,7 +179,7 @@ class FilterModel {
                 },
             },
         ]);
-        console.log('Filter =>', filterWithValue);
+      //  console.log('Filter =>', filterWithValue);
         return {
             filter: filterWithValue.filter((filter: IFilter) => filter.filterLevel == 0),
             distribution: filterWithValue
