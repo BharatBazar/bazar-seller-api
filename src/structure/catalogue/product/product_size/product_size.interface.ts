@@ -36,6 +36,8 @@ export interface ProductSizeInterface {
     easily and do updation on it
     */
     itemId: string;
+
+    shopId: string;
 }
 
 export interface ProductSizeModelInterface extends Document, ProductSizeInterface {}
