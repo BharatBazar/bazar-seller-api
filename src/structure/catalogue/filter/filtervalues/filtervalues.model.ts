@@ -5,7 +5,7 @@ import { FilterValues } from './filtervalues.schema';
 
 class FilterValuesModel {
     public filterValuesExist = async (name: string, parent: string, type: string) => {
-        const exist = await FilterValues.findOne({ name }).countDocuments();
+        const exist = await FilterValues.findOne({ name, parent }).countDocuments();
         //     const exist = await FilterValues.find({ parent:parent })
         //     console.log("EXIIIIS",exist)
 
