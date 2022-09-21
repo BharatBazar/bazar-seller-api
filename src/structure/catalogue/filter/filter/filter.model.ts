@@ -1,13 +1,12 @@
-import { ObjectId } from '../../../../datatypes/index';
 import { Types } from 'mongoose';
-import { IClassfier, IClassifierModel } from '../filtervalues/filtervalues.interface';
+import { IClassfier, IFilterValuesModel } from '../filtervalues/filtervalues.interface';
 import { HTTP400Error, HTTP404Error } from '../../../../lib/utils/httpErrors';
 import { IFilter, IFilterModel } from './filter.interface';
 import { Filter } from './filter.schema';
-import { filter } from 'compression';
-import { Classifier } from '../filtervalues/filtervalues.schema';
+import { FilterValues } from '../filtervalues/filtervalues.schema';
 import productCatalogueModel from '../../catalogue/productCatalogue.model';
 import { Shop } from '../../../shop/shop.schema';
+import { ProductCatalogue } from '../../catalogue/productCatalogue.schema';
 
 class FilterModel {
     public filterExist = async (key: string) => {
@@ -26,30 +25,57 @@ class FilterModel {
             throw new HTTP400Error('A Filter already exist with same key');
         } else {
             const filter: IFilterModel = new Filter(data);
-            await productCatalogueModel.UpdateProductCatalogue({ _id: filter.parent, $inc: { totalFilterAdded: 1 } });
+
+            // let addFieldInSchema = {};
+            // let indexes = {};
+            // indexes['parentId'] = 1;
+            // indexes['shopId'] = 1;
+            // indexes['status'] = 1;
+            // indexes[data.key] = 1;
+
+            // addFieldInSchema[data.key] = { type: [Types.ObjectId], ref: 'FilterValues' };
+
+            // console.log('addFieldIn', addFieldInSchema, indexes);
+            // await Product.schema.add(addFieldInSchema);
+
+            // await Product.schema.clearIndexes(indexes);
+
             await filter.save();
             return filter;
         }
     };
 
     public activateFilter = async (data: { _id: Types.ObjectId; active: boolean }) => {
+<<<<<<< HEAD
+=======
+        console.log('FILTER ACTIVE', data);
+>>>>>>> e7f587dc74e75cb03ea372cf187e27cb659f069f
         const exist = await Filter.findById(data._id);
-       
+
         if (exist) {
-            const filterItem: IClassifierModel[] = await Classifier.find({parent:exist._id});
-  
+            const filterItem: IFilterValuesModel[] = await FilterValues.find({ parent: exist._id });
+
             if (filterItem.length === 0) {
                 throw new HTTP400Error('No items in the filter');
             } else {
-                console.log("FI",filterItem)
+                console.log('FI', filterItem);
                 const flag = filterItem.some((item) => item.active);
-                console.log("FLLLLAG",flag)
-                
-                if (flag === false||true) {
-                    await Filter.findByIdAndUpdate(data._id, { active: data.active });
+                console.log('FLLLLAG', flag);
+
+                if (flag == true) {
+                    if (exist.filterActivatedCount == 0) {
+                        await productCatalogueModel.UpdateProductCatalogue({
+                            _id: filter.parent,
+                            $inc: { totalFilterAdded: 1 },
+                        });
+                    }
+                    await Filter.findByIdAndUpdate(data._id, {
+                        active: data.active,
+                        $inc: { filterActivatedCount: 1 },
+                    });
                     return data.active ? 'Filter activated' : 'Filter deactivated';
                 } else {
-                    return throw new HTTP400Error('None of the filter item is activated');
+                    throw new HTTP400Error('None of the filter item is activated');
                 }
             }
         } else {
@@ -57,12 +83,11 @@ class FilterModel {
         }
     };
 
-    public getAllClassifier = async () => {
+    public getAllFilterValues = async () => {
         return ['pattern', 'size', 'brand', 'color', 'fit'];
     };
 
     public deleteFilter = async (data: IFilter) => {
-   
         const exist = await Filter.findById(data._id);
         if (exist) {
             if (exist.parent) {
@@ -71,13 +96,16 @@ class FilterModel {
                         const unsetField = {};
                         unsetField[exist.key] = 1;
 
+                        if(await Shop.find({$exist:unsetField})) {
+                            await Shop.updateMany({$inc:{filterProvidedForSellingItems[exist.key]:-1}});
+                        }
                         await Promise.all([
                             await productCatalogueModel.UpdateProductCatalogue({
                                 _id: exist.parent,
                                 $inc: { totalFilterAdded: -1 },
                             }),
                             await Shop.updateMany({}, { $unset: unsetField }),
-                            await Classifier.deleteMany({ parent: exist._id }),
+                            await FilterValues.deleteMany({ parent: exist._id }),
                             await Filter.findByIdAndDelete(data._id),
                         ]);
                         return 'Deleted';
@@ -104,6 +132,8 @@ class FilterModel {
         if (data.type) {
             delete data['type'];
         }
+
+        //console.log("response",response)
         const exist = await Filter.findByIdAndUpdate(data._id, data);
         if (exist) {
             return 'Filter updated';

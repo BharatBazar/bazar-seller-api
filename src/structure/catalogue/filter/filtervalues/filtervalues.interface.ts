@@ -1,9 +1,9 @@
 import { Document } from 'mongoose';
 
-//classifier type is very important as this gives what filter to update in ui
+//filterValues type is very important as this gives what filter to update in ui
 // so name should match the document field
 // also this is the medium of connection between filter and its value
-export enum classifierTypes {
+export enum filterValuesTypes {
     SIZE = 'size',
     COLOR = 'color',
     BRAND = 'brand',
@@ -23,4 +23,4 @@ export interface IClassfier {
     active: boolean;
 }
 
-export interface IClassifierModel extends IClassfier, Document {}
+export interface IFilterValuesModel extends IClassfier, Document {}

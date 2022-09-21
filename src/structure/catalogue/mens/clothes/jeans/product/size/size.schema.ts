@@ -3,7 +3,7 @@ import { model, Schema, Types, Model } from 'mongoose';
 
 const JeansSizeSchema: Schema = new Schema(
     {
-        size: { type: Types.ObjectId, ref: 'JeansClassifier' },
+        size: { type: Types.ObjectId, ref: 'JeansFilterValues' },
         // mrp: String, //Optional will enable it later
         // sp: String, //Optional will enable it later
         quantity: Number,

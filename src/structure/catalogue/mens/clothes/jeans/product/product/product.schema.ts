@@ -29,9 +29,9 @@ const JeansSchema: Schema = new Schema(
         bazarAssured: Boolean,
 
         //filters
-        pattern: [{ type: Types.ObjectId, ref: 'JeansClassifier', default: undefined }],
-        fit: [{ type: Types.ObjectId, ref: 'JeansClassifier', default: undefined }],
-        brand: [{ type: Types.ObjectId, ref: 'JeansClassifier', default: undefined }],
+        pattern: [{ type: Types.ObjectId, ref: 'JeansFilterValues', default: undefined }],
+        fit: [{ type: Types.ObjectId, ref: 'JeansFilterValues', default: undefined }],
+        brand: [{ type: Types.ObjectId, ref: 'JeansFilterValues', default: undefined }],
 
         //distribution
         colors: [{ type: Types.ObjectId, ref: 'JeansColor', default: undefined }],

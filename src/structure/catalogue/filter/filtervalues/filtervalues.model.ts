@@ -1,12 +1,12 @@
 import { Types } from 'mongoose';
 import { HTTP400Error, HTTP404Error } from '../../../../lib/utils/httpErrors';
-import { IClassifierModel } from './filtervalues.interface';
-import { Classifier } from './filtervalues.schema';
+import { IFilterValuesModel } from './filtervalues.interface';
+import { FilterValues } from './filtervalues.schema';
 
-class ClassifierModel {
-    public classifierExist = async (name: string, parent: string, type: string) => {
-        const exist = await Classifier.findOne({ name }).countDocuments();
-        //     const exist = await Classifier.find({ parent:parent })
+class FilterValuesModel {
+    public filterValuesExist = async (name: string, parent: string, type: string) => {
+        const exist = await FilterValues.findOne({ name }).countDocuments();
+        //     const exist = await FilterValues.find({ parent:parent })
         //     console.log("EXIIIIS",exist)
 
         //    const y = exist.map((e)=>{
@@ -15,32 +15,32 @@ class ClassifierModel {
         //    return y
         return exist;
     };
-    public createClassifier = async (data: IClassifierModel) => {
-        const exist = await this.classifierExist(data.name, data.parent, data.type);
+    public createFilterValues = async (data: IFilterValuesModel) => {
+        const exist = await this.filterValuesExist(data.name, data.parent, data.type);
         if (exist) {
             throw new HTTP400Error('Filter item already exist or have written same type');
         } else {
-            const classifier = new Classifier(data);
-            await classifier.save();
-            return classifier;
+            const filterValues = new FilterValues(data);
+            await filterValues.save();
+            return filterValues;
         }
     };
 
-    public deleteClassifier = async (data: IClassifierModel) => {
-        const exist = await Classifier.findById(data._id);
+    public deleteFilterValues = async (data: IFilterValuesModel) => {
+        const exist = await FilterValues.findById(data._id);
         if (exist) {
-            await Classifier.findByIdAndDelete(data._id);
+            await FilterValues.findByIdAndDelete(data._id);
         } else {
             throw new HTTP400Error('Filter item does not exist');
         }
     };
 
-    public getClassifier = async (data: IClassifierModel) => {
-        return await Classifier.find(data);
+    public getFilterValues = async (data: IFilterValuesModel) => {
+        return await FilterValues.find(data);
     };
 
-    public updateClassifier = async (data: IClassifierModel & { _id: Types.ObjectId }) => {
-        const exist = await Classifier.findByIdAndUpdate(data._id, data);
+    public updateFilterValues = async (data: IFilterValuesModel & { _id: Types.ObjectId }) => {
+        const exist = await FilterValues.findByIdAndUpdate(data._id, data);
         if (exist) {
             return 'Filter item updated';
         } else {
@@ -48,19 +48,14 @@ class ClassifierModel {
         }
     };
 
-    
     public activateFilter = async (data: { _id: Types.ObjectId; active: boolean }) => {
         try {
-                  const classifier=  await Classifier.findByIdAndUpdate(data._id, { active: data.active });
-                    return data.active ? 'Classfier activated' : 'Classfier deactivated';
+            const filterValues = await FilterValues.findByIdAndUpdate(data._id, { active: data.active });
+            return data.active ? 'Classfier activated' : 'Classfier deactivated';
         } catch (error) {
             throw new HTTP400Error('Filter does not exist');
         }
-              
-         
     };
-
-    
 }
 
-export default new ClassifierModel();
+export default new FilterValuesModel();

@@ -8,8 +8,7 @@ import { IShopModel } from './shop.interface';
 import { pruneFields } from '../../lib/helpers';
 import ShopMemberModel from '../shopmember/shopmember.model';
 import filterModel from '../catalogue/filter/filter/filter.model';
-import shop from '.';
-import e from 'express';
+
 
 export class ShopModel {
     public createShop = async (body: IShopModel) => {
@@ -28,8 +27,9 @@ export class ShopModel {
 
     public shopVerificationDetails = async (body: IShopModel) => {
         const shop: IShopModel | null = await Shop.findOne({ _id: body._id }, 'isVerified verificationStatus remarks');
-
+console.log("shop check here")
         if (shop) {
+            
             return shop;
         } else {
             throw new HTTP400Error('Shop does not exist');
@@ -40,18 +40,26 @@ export class ShopModel {
         const shop: IShopModel | null = await Shop.findById(body._id);
 
         if (shop) {
-            const populateString = 'sellingItems' + ' coOwner owner worker state city area ';
+            console.log("Shop",shop,body)
+            const populateString = 'sellingItems coOwner owner worker ';
             console.log('populate string', typeof populateString, populateString);
 
-            const populatedShop = await Shop.findById(body._id).populate({
-                path: populateString,
-                select: 'totalFilterAdded name image type firstName lastName gender email phoneNumber role permissions',
+            const populatedShop = await Shop.findById(body._id).populate([{
+                path: 'coOwner worker owner',
+                select: 'name image firstName lastName gender email phoneNumber role permissions',
+            },{
+               path:'sellingItems',
+               select:"totalFilterAdded type" ,
                 populate: {
                     path: 'path',
                     select: 'name ',
                 },
-            });
-            console.log('popu', populatedShop);
+            },{
+                path:'state city area',
+                select: "name"
+
+            }]).lean();
+         
 
             pruneFields(populatedShop, 'password');
             return populatedShop;
@@ -102,14 +110,14 @@ export class ShopModel {
         if (body._id) {
             if (body.catalogueId) {
                 console.log('bo', body);
-                const getCatalgoueAndValues: {filter:{}[],distribution:{}[]} = await filterModel.getAllFilterWithValue({ parent:Types.ObjectId(body.catalogueId) });
+                const getCatalgoueAndValues: {filter:{}[],distribution:{}[]} = await filterModel.getAllFilterWithValue({ parent:Types.ObjectId(body.catalogueId),active:true });
                 let allFilters : IFilter[] = [...getCatalgoueAndValues.filter,...getCatalgoueAndValues.distribution];
                
                 let filterKeys = allFilters.map(item => item.key);
                 let selectedValues = {}
                 if(filterKeys.length>0) {
                     let shopDetails:IShopModel | null = await Shop.findById(body._id).lean();
-                    console.log("shop details",shopDetails,filterKeys)
+                    //console.log("shop details",shopDetails,filterKeys)
                     if(shopDetails) {
                     filterKeys.forEach(item => {
                         if(shopDetails[item]) {
