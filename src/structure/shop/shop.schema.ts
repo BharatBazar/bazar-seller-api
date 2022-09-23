@@ -50,6 +50,9 @@ export const ShopSchema: Schema = new Schema(
         filterProvidedForSellingItems: { type: Object, default: {} },
         // subCategory: [[{ type: Types.ObjectId, ref: 'ProductCatalogue' }]],
         // subCategory1: [[[{ type: Types.ObjectId, ref: 'ProductCatalogue' }]]],
+        mens_footwear_sneaker_brand: { type: [Types.ObjectId], ref: 'FilterValues' },
+        mens_footwear_sneaker_color: { type: [Types.ObjectId], ref: 'FilterValues' },
+        mens_footwear_sneaker_size: { type: [Types.ObjectId], ref: 'FilterValues' },
     },
     {
         timestamps: true,

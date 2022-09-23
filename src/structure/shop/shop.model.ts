@@ -133,7 +133,7 @@ console.log("shop check here")
                     return isAinSelectedValue && isBinSelectedValue?0:!isAinSelectedValue && isBinSelectedValue?1:-1;
                 })
 
-               let currentIndex =  allFilters.findIndex(a => !selectedValues[a.key]);
+               let currentIndex =  allFilters.findIndex(a => !selectedValues[a.key] || selectedValues[a.key].length==0 );
                                  return {selectedValues,allFilters,currentIndex}
                 }else {
                     throw new Error("Shop does not exist with this id")
@@ -251,16 +251,19 @@ console.log("shop check here")
             let parent = data.parent;
             pruneFields(data,"_id parent");
 
-            console.log(data,id,parent)
+            
 
             const shopDetails:IShopModel | null = await Shop.findById(id).select("filterProvidedForSellingItems");
 
             if(shopDetails) {
                              let newSellingItemFilterProvideList = { ...shopDetails.filterProvidedForSellingItems };
              
-                             newSellingItemFilterProvideList[parent] = Object.keys(data).length;  
-                             console.log(newSellingItemFilterProvideList,"neww")
-
+                             if(newSellingItemFilterProvideList[parent]) {
+                                newSellingItemFilterProvideList[parent] +=1
+                             } else {
+                                 newSellingItemFilterProvideList[parent] = 1
+                             }
+                           
             const updateShop = await Shop.findByIdAndUpdate(id, {...data,filterProvidedForSellingItems: newSellingItemFilterProvideList},{strict:false});
            
 
