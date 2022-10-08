@@ -6,11 +6,13 @@ import productCatalogue from '../structure/catalogue/catalogue';
 // import productColor from '../structure/productColor';
 import address from '../structure/address';
 import productId from '../structure/shop/productId';
+import billdesk from '../structure/billdesk';
 
 export default [
     ...shop,
     ...shopMember,
     ...productCatalogue,
+    ...billdesk,
     // ...product,
     // ...productSize,
     // ...productColor,
