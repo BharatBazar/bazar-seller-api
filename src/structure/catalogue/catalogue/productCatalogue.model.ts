@@ -10,6 +10,7 @@ class ProductCatalogueModel {
 
 
     public async AddProductCatalogue(data: IProductCatalogue) {
+        console.log("PPOOO",data);
         if(!data.type) {
             throw new HTTP400Error("Please provide unique type for category you are adding");
         } else
@@ -74,13 +75,18 @@ class ProductCatalogueModel {
 
     public async GetProductCatalogue(query: IProductCatalogue) {
         console.log('query => ', query);
-        const data = await ProductCatalogue.find(query).populate({ path: 'parent child path', select: 'name description image child ',
-        populate:{
-            path:'child',
-            select:'name image description'
-        }
+        const data = await ProductCatalogue.find(query)
+        .populate
+        ({ path: 'parent child',
+           select: 'name child image description' ,
+           
+              populate: {
+                path: 'child',
+                select: 'name image description',
+            },
+    
     });
-        // const data = await ProductCatalogue.find(query)
+    console.log("GET_DATA",data)
         return data;
     }
 

@@ -16,7 +16,6 @@ interface Shop {
     verificationStatus: verificationStatus;
     remarks: string;
     // whatYouSell: string[];
-
     state: Types.ObjectId;
     city: Types.ObjectId;
     area: Types.ObjectId;

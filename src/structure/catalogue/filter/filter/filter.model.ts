@@ -6,7 +6,8 @@ import { Filter } from './filter.schema';
 import { FilterValues } from '../filtervalues/filtervalues.schema';
 import productCatalogueModel from '../../catalogue/productCatalogue.model';
 import { Shop } from '../../../shop/shop.schema';
-import { ProductCatalogue } from '../../catalogue/productCatalogue.schema';
+import filtervalues from '../filtervalues';
+
 
 class FilterModel {
     public filterExist = async (key: string) => {
@@ -46,35 +47,61 @@ class FilterModel {
     };
 
     public activateFilter = async (data: { _id: Types.ObjectId; active: boolean }) => {
-        console.log('FILTER ACTIVE', data);
-        const exist = await Filter.findById(data._id);
 
+
+        const exist:IFilter | null= await Filter.findById(data._id).lean();
+
+
+        console.log("exist ",exist)
         if (exist) {
             const filterItem: IFilterValuesModel[] = await FilterValues.find({ parent: exist._id });
-
+console.log("filter",filterItem)
             if (filterItem.length === 0) {
                 throw new HTTP400Error('No items in the filter');
             } else {
-                console.log('FI', filterItem);
+               
                 const flag = filterItem.some((item) => item.active);
-                console.log('FLLLLAG', flag);
+              
 
                 if (flag == true) {
-                    if (exist.filterActivatedCount == 0) {
-                        await productCatalogueModel.UpdateProductCatalogue({
-                            _id: filter.parent,
-                            $inc: { totalFilterAdded: 1 },
-                        });
-                    }
-                    await Filter.findByIdAndUpdate(data._id, {
-                        active: data.active,
-                        $inc: { filterActivatedCount: 1 },
-                    });
-                    return data.active ? 'Filter activated' : 'Filter deactivated';
-                } else {
+                    // const checkKeyExistQuery:FilterQuery<IShopModel>  = {};
+                    // checkKeyExistQuery[`reandom`] = { $exists: true,"$ne": null}
+
+                    // const doFilterKeyExistInShopSchema = await Shop.find(checkKeyExistQuery).countDocuments()>0;
+
+                    // console.log(doFilterKeyExistInShopSchema,await Shop.find({"randomfield":{$ne: null}}).lean(), await Shop.find({ mens_clothes_jeans_color: { '$eq': null } }).countDocuments())
+                    // if(doFilterKeyExistInShopSchema) {
+                        
+                    //     const doFilterKeyExistInProductSchema = await Product.find(checkKeyExistQuery).countDocuments()!=0;
+                    //        console.log(doFilterKeyExistInShopSchema,checkKeyExistQuery,doFilterKeyExistInProductSchema, )
+                    //     if(doFilterKeyExistInProductSchema) {
+
+                            if (exist.filterActivatedCount == 0) {
+
+                                await productCatalogueModel.UpdateProductCatalogue({
+                                    _id: exist.parent,
+                                    $inc: { totalFilterAdded: 1 },
+                                });
+
+                            }
+                                await Filter.findByIdAndUpdate(data._id, {
+                                    active: data.active,
+                                    $inc: { filterActivatedCount: 1 },
+                                });
+                        
+                                return data.active ? 'Filter activated' : 'Filter deactivated';
+                //         } else 
+                //             throw new HTTP400Error("Filter key does not exist in product schema")
+
+                //   } else 
+                //     throw new HTTP400Error("Filter key does not exist in shop schema")
+                
+                }
+                 else {
                     throw new HTTP400Error('None of the filter item is activated');
                 }
             }
+            
         } else {
             throw new HTTP400Error('Filter does not exist');
         }
@@ -139,6 +166,39 @@ class FilterModel {
         }
     };
 
+
+    public getFiltersAndValueForAShop = async (condition: {active:boolean,parentId:string, shopId:string}) => {
+        
+        if(condition.parentId) {
+            if(condition.shopId) {
+                const filters = await Filter.find({active:true, parent: condition.parentId}).lean();
+               if(filters.length!=0) {
+                let key = filters.reduce((ac,cv) => ac+cv.key+" ","")
+                key = key.trim();
+              
+                const filterValues = await Shop.findById(condition.shopId ,key).populate({
+                    path:key,
+                }).lean();
+            
+               filters.forEach(item => item["values"] = filterValues[item.key]);
+                 return {
+                    filter: filters.filter((filter: IFilter) => filter.filterLevel == 0),
+                    distribution: filters.filter((filter: IFilter) => filter.filterLevel > 0).sort((a, b) => a.filterLevel - b.filterLevel),
+                };
+               } else {
+                throw new HTTP400Error("No filter found")
+               }
+                
+            } else {
+                 throw new HTTP400Error("Shop id not found")
+            }
+        } else {
+            throw new HTTP400Error("Parent id not found")
+        }
+        
+
+    }
+
     public getAllFilterWithValue = async (condition: Partial<IFilter>) => {
         console.log(condition);
         const filterWithValue: { values: IClassfier }[] = await Filter.aggregate([
@@ -153,7 +213,7 @@ class FilterModel {
                 },
             },
         ]);
-        console.log('Filter =>', filterWithValue);
+       console.log('Filter =>', filterWithValue);
         return {
             filter: filterWithValue.filter((filter: IFilter) => filter.filterLevel == 0),
             distribution: filterWithValue

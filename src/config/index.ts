@@ -23,6 +23,7 @@ export const mongoUrl = (): string => {
     if (configs.dbAccess === 'local') {
         return `mongodb://localhost:27017/${configs.db}`;
     }
+
     let url = `mongodb+srv://${configs.user}:${configs.pass}@${configs.cluster}.mongodb.net/${configs.db}?retryWrites=true`;
     console.log('url', url);
     return url;
@@ -43,3 +44,10 @@ export const SALT_ROUNDS = 10;
 export interface IId {
     _id: Types.ObjectId;
 }
+
+export const s3Config = {
+    accessKey: process.env.S3_ACCEESS_ID || '',
+    secretKey: process.env.S3_SECRET_KEY || '',
+    bucketName: 'lababeen-admin-multimedia-bucket',
+    region: process.env.S3_REGION || 'ap-south-1',
+};
