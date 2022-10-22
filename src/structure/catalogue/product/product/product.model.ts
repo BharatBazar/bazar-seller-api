@@ -175,7 +175,7 @@ class ProductModel {
                           populate: {
                               path: 'color',
 
-                              select: 'description name',
+                              select: 'description name identificationPhoto',
                           },
                           select: 'color',
                       })
