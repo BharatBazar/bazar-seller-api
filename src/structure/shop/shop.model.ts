@@ -157,6 +157,8 @@ console.log("shop check here")
         } else {
             let shopId = body._id;
 
+            console.log(body,"Body")
+
             const shop: IShopModel = await Shop.findByIdAndUpdate({ _id: shopId }, body, { new: true })
                 .populate('sellingItems')
                 .select('sellingItems');
