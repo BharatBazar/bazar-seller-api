@@ -6,27 +6,13 @@ const BillSchema: Schema = new Schema(
         name: String,
         shop: { type: Types.ObjectId, ref: 'Shop' },
         totalPrice: Number,
-        products: [
-            {
-                // productName: {
-                //     type: Types.ObjectId,
-                //     ref: 'Product',
-                // },
-                productName: {
-                    type: String,
-                },
-                quantity: {
-                    type: Number,
-                },
-                price: {
-                    type: Number,
-                },
-            },
-        ],
+        products: { type: [Types.ObjectId], ref: 'ProductSize' },
     },
     {
         timestamps: true,
     },
 );
+
+// "products":[{"productName":"62c53cb0d5887173c62edebe","quantity":6,"price":300},{"productName":"62c53cb0d5887173c62edebe","quantity":6,"price":300},{"productName":"62c53cb0d5887173c62edebe","quantity":6,"price":300},{"productName":"62c53cb0d5887173c62edebe","quantity":6,"price":300}]
 
 export const Bill: Model<IBillModel> = model<IBillModel>('Bill', BillSchema);

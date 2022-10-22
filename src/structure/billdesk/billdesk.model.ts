@@ -34,7 +34,7 @@ class BillModel {
             //  $push: { products: data.k } }
             return bill;
         } catch (error) {
-            throw new HTTP400Error('Bill not created');
+            throw new HTTP400Error('Bill not updated');
         }
     };
 }

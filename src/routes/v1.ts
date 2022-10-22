@@ -7,6 +7,7 @@ import productCatalogue from '../structure/catalogue/catalogue';
 import address from '../structure/address';
 import productId from '../structure/shop/productId';
 import billdesk from '../structure/billdesk';
+import multimedia from '../structure/multimedia';
 
 export default [
     ...shop,
@@ -18,4 +19,5 @@ export default [
     // ...productColor,
     ...address,
     ...productId,
+    ...multimedia,
 ];

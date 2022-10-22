@@ -11,7 +11,7 @@ const ProductSizeSchema: Schema = new Schema(
         productId: { type: Types.ObjectId, ref: 'Product' },
 
         itemId: { type: String, default: undefined },
-        shopId: { type: String, default: 'Shop' },
+        shopId: { type: String, ref: 'Shop' },
     },
     {
         timestamps: true,

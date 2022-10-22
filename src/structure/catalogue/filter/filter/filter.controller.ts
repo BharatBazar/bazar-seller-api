@@ -87,6 +87,18 @@ class FilterController {
         }
     }
 
+    public async GetFiltersAndValueForAShop(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Here is all the filters!', await FilterModel.getFiltersAndValueForAShop(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
+
     public async GetAllFilter(req: Request, res: Response, next: NextFunction) {
         const responseHandler = new ResponseHandler();
         try {

@@ -1,4 +1,4 @@
-import { Types, FilterQuery } from 'mongoose';
+import { Types } from 'mongoose';
 import { IClassfier, IFilterValuesModel } from '../filtervalues/filtervalues.interface';
 import { HTTP400Error, HTTP404Error } from '../../../../lib/utils/httpErrors';
 import { IFilter, IFilterModel } from './filter.interface';
@@ -6,9 +6,8 @@ import { Filter } from './filter.schema';
 import { FilterValues } from '../filtervalues/filtervalues.schema';
 import productCatalogueModel from '../../catalogue/productCatalogue.model';
 import { Shop } from '../../../shop/shop.schema';
-import { ProductCatalogue } from '../../catalogue/productCatalogue.schema';
-import { IShopModel } from '../../../shop/shop.interface';
-import { Product } from '../../product/product/product.schema';
+import filtervalues from '../filtervalues';
+
 
 class FilterModel {
     public filterExist = async (key: string) => {
@@ -167,6 +166,39 @@ console.log("filter",filterItem)
         }
     };
 
+
+    public getFiltersAndValueForAShop = async (condition: {active:boolean,parentId:string, shopId:string}) => {
+        
+        if(condition.parentId) {
+            if(condition.shopId) {
+                const filters = await Filter.find({active:true, parent: condition.parentId}).lean();
+               if(filters.length!=0) {
+                let key = filters.reduce((ac,cv) => ac+cv.key+" ","")
+                key = key.trim();
+              
+                const filterValues = await Shop.findById(condition.shopId ,key).populate({
+                    path:key,
+                }).lean();
+            
+               filters.forEach(item => item["values"] = filterValues[item.key]);
+                 return {
+                    filter: filters.filter((filter: IFilter) => filter.filterLevel == 0),
+                    distribution: filters.filter((filter: IFilter) => filter.filterLevel > 0).sort((a, b) => a.filterLevel - b.filterLevel),
+                };
+               } else {
+                throw new HTTP400Error("No filter found")
+               }
+                
+            } else {
+                 throw new HTTP400Error("Shop id not found")
+            }
+        } else {
+            throw new HTTP400Error("Parent id not found")
+        }
+        
+
+    }
+
     public getAllFilterWithValue = async (condition: Partial<IFilter>) => {
         console.log(condition);
         const filterWithValue: { values: IClassfier }[] = await Filter.aggregate([
@@ -181,7 +213,7 @@ console.log("filter",filterItem)
                 },
             },
         ]);
-      //  console.log('Filter =>', filterWithValue);
+       console.log('Filter =>', filterWithValue);
         return {
             filter: filterWithValue.filter((filter: IFilter) => filter.filterLevel == 0),
             distribution: filterWithValue
