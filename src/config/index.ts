@@ -21,7 +21,7 @@ export const mongoUrl = (): string => {
     };
 
     if (configs.dbAccess === 'local') {
-        return `mongodb+srv://bazarUser:${configs.pass}@cluster0.ky3gnap.mongodb.net/?retryWrites=true&w=majority`;
+        return `mongodb+srv://${configs.user}:${configs.pass}@${configs.cluster}.mongodb.net/?retryWrites=true&w=majority`;
     }
 
     let url = `mongodb+srv://${configs.user}:${configs.pass}@${configs.cluster}.mongodb.net/${configs.db}?retryWrites=true`;
