@@ -24,7 +24,7 @@ export const ProductSchema: Schema = new Schema(
         productDiscount: [Number],
         bazarAssured: Boolean,
         productDiscountDeadline: [Date],
-        mens_jeans_color: { type: [Types.ObjectId], ref: 'FilterValues' },
+        means_jeans_color: { type: [Types.ObjectId], ref: 'FilterValues' },
         mens_jeans_size: { type: [Types.ObjectId], ref: 'FilterValues' },
     },
     {
