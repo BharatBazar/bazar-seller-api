@@ -54,6 +54,17 @@ class ProductSizeController {
             next(responseHandler.sendError(error));
         }
     }
+    public async GetItem(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Product size.', await productSizeModel.getItems(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
 }
 
 export default new ProductSizeController();

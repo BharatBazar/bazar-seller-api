@@ -6,6 +6,7 @@ import { HTTP400Error } from '../../../../lib/utils/httpErrors';
 import { ProductSizeModelInterface, ProductSizeInterface } from './product_size.interface';
 import { ProductSize } from './product_size.schema';
 import productModel from '../product/product.model';
+import e from 'express';
 
 class ProductSizeModel {
     public async createProductSize(data: ProductSizeInterface & ) {
@@ -53,6 +54,24 @@ class ProductSizeModel {
         } else {
             throw new HTTP400Error('Product size does not found.');
         }
+    }
+    public async getItems(data: any) {
+        const {shopId,itemId} = data
+        const productSize = await ProductSize.find({shopId})
+        if(productSize){
+                const findItemId = productSize.find(e=>e.itemId === itemId)?.populate({
+                    path:"productId",
+                    populate:[
+                        {
+                            path:"parentId"
+                        }
+                    ]
+                })
+                return findItemId
+        }else{
+            throw new HTTP400Error('Product size does not occur.');
+        }
+        return productSize
     }
 }
 

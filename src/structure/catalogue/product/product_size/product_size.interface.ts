@@ -37,7 +37,7 @@ export interface ProductSizeInterface {
     */
     itemId: string;
 
-    shopId: string;
+    shopId: Types.ObjectId;
 }
 
 export interface ProductSizeModelInterface extends Document, ProductSizeInterface {}
