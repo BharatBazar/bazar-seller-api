@@ -53,6 +53,8 @@ export const ShopSchema: Schema = new Schema(
         mens_footwear_sneaker_brand: { type: [Types.ObjectId], ref: 'FilterValues' },
         mens_footwear_sneaker_color: { type: [Types.ObjectId], ref: 'FilterValues' },
         mens_footwear_sneaker_size: { type: [Types.ObjectId], ref: 'FilterValues' },
+        mens_jeans_color: { type: [Types.ObjectId], ref: 'FilterValues' },
+        mens_jeans_size: { type: [Types.ObjectId], ref: 'FilterValues' },
     },
     {
         timestamps: true,
