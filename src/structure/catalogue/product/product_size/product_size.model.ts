@@ -58,9 +58,10 @@ class ProductSizeModel {
     public async getItems(data: any) {
      if(data !== null || undefined){
             const {shopId,itemId} = data
-        const productSize = await ProductSize.find({shopId})
-         if(productSize){
-                const findItemId = productSize.find(e=>e.itemId === itemId)?.populate({
+    
+        if(shopId && itemId){
+
+            const productSize = await ProductSize.find({shopId,itemId})?.populate({
                     path:"productId",
                     populate:[
                         {
@@ -73,14 +74,19 @@ class ProductSizeModel {
                         }
                     ]
                 })
-                if(findItemId === undefined || null){
-                    throw new HTTP400Error('Item not exist !!');
+                if(!productSize[0]){
+                   throw new HTTP400Error('Item not listed');
                 }
-                return findItemId
-        }else{
-            throw new HTTP400Error('Product size does not occur.');
-        }
+                else{
+                    return productSize
+                }
+            
+                
       
+        }else{
+            console.log("LP")
+             throw new HTTP400Error('Please provide ShopId or itemId');
+        }
      }else{
           throw new HTTP400Error('Data not exist');
      }
