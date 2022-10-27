@@ -4,7 +4,6 @@ import { Bill } from './billdesk.schema';
 
 class BillModel {
     public createBill = async (data: IBill) => {
-        console.log('ALL_DATA', data);
         try {
             const bill = new Bill(data);
             console.log('BILL', bill);
