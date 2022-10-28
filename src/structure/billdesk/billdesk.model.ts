@@ -14,10 +14,10 @@ class BillModel {
     };
 
     public showBill = async (req) => {
-        const id = req.params.id;
+        const shopId = req.params.id;
 
         try {
-            const bill = await Bill.findById(id);
+            const bill = await Bill.find({ shopId: shopId });
             return bill;
         } catch (error) {
             throw new HTTP400Error('Bill not created');

@@ -4,7 +4,7 @@ import { Schema, Document, model, Model, Types } from 'mongoose';
 const BillSchema: Schema = new Schema(
     {
         name: String,
-        shop: { type: Types.ObjectId, ref: 'Shop' },
+        shopId: { type: Types.ObjectId, ref: 'Shop' },
         totalPrice: Number,
         products: { type: [Types.ObjectId], ref: 'ProductSize' },
     },
