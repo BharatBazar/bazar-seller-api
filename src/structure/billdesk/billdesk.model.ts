@@ -21,14 +21,19 @@ class BillModel {
                 path: 'products',
                 populate: [
                     {
-                        path: 'productId',
+                        path: 'productSize',
                         populate: [
                             {
-                                path: 'parentId colors',
+                                path: 'productId',
                                 populate: [
                                     {
-                                        strictPopulate: false,
-                                        path: 'color',
+                                        path: 'parentId colors',
+                                        populate: [
+                                            {
+                                                strictPopulate: false,
+                                                path: 'color',
+                                            },
+                                        ],
                                     },
                                 ],
                             },

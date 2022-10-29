@@ -6,7 +6,21 @@ const BillSchema: Schema = new Schema(
         name: String,
         shopId: { type: Types.ObjectId, ref: 'Shop' },
         totalPrice: Number,
-        products: { type: [Types.ObjectId], ref: 'ProductSize' },
+        // products: { type: [Types.ObjectId], ref: 'ProductSize' },
+        products: [
+            {
+                productSize: {
+                    type: Types.ObjectId,
+                    ref: 'ProductSize',
+                },
+                quantity: {
+                    type: Number,
+                },
+                price: {
+                    type: Number,
+                },
+            },
+        ],
     },
     {
         timestamps: true,
