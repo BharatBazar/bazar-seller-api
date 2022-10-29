@@ -17,10 +17,29 @@ class BillModel {
         const shopId = req.params.id;
 
         try {
-            const bill = await Bill.find({ shopId: shopId });
+            const bill = await Bill.find({ shopId: shopId })?.populate({
+                path: 'products',
+                populate: [
+                    {
+                        path: 'productId',
+                        populate: [
+                            {
+                                path: 'parentId colors',
+                                populate: [
+                                    {
+                                        strictPopulate: false,
+                                        path: 'color',
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            });
+
             return bill;
         } catch (error) {
-            throw new HTTP400Error('Bill not created');
+            throw new HTTP400Error(error.message);
         }
     };
     public updateBill = async (req, data) => {
