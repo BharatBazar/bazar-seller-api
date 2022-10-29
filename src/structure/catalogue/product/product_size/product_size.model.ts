@@ -61,14 +61,17 @@ class ProductSizeModel {
     
         if(shopId && itemId){
 
-            const productSize = await ProductSize.find({shopId,itemId})?.populate({
-                    path:"productId",
+            const productSize = await ProductSize.find({shopId,itemId})
+            ?.populate({
+                    path:"productId",,
                     populate:[
                         {
-                            path:"colors",
+                            path:"parentId colors",
                             populate:[
+                                
                                 {
-                                    path:"color sizes"
+                                    strictPopulate: false,
+                                    path:"color",       
                                 }
                             ]
                         }
