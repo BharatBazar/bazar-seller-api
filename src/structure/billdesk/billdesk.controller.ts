@@ -10,7 +10,7 @@ class BillController {
                 .reqRes(req, res)
                 .onCreate('Bill created!', await billdeskModel.createBill(req.body))
                 .send();
-        } catch (error) {
+        } catch (error: any) {
             next(responseHandler.sendError(error));
         }
     }
@@ -22,7 +22,7 @@ class BillController {
                 .reqRes(req, res)
                 .onFetch('Bill found!', await billdeskModel.showBill(req))
                 .send();
-        } catch (error) {
+        } catch (error: any) {
             next(responseHandler.sendError(error));
         }
     }
@@ -33,7 +33,7 @@ class BillController {
                 .reqRes(req, res)
                 .onFetch('Bill updated!', await billdeskModel.updateBill(req, req.body))
                 .send();
-        } catch (error) {
+        } catch (error: any) {
             next(responseHandler.sendError(error));
         }
     }
