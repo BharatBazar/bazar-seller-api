@@ -91,15 +91,16 @@ class BillModel {
     };
     public updateBill = async (req: Request, data: Idata) => {
         const _id = req.params.id;
+        console.log('OP', _id);
+        console.log('DATA', data);
 
         try {
             const bill = await Bill.findById(_id);
-            var update = { quantity: 77777, price: 88888, productSize: '63579244da4858ec4dc7abd9' };
+            var update = { quantity: data.quantity, price: data.prices, productSize: data.itemId };
             const updateBill = await Bill.updateOne(
-                { 'products.productSize': '63579244da4858ec4dc7abd9' },
+                { 'products.productSize': data.itemId },
                 { $set: { 'products.$': update } },
             );
-            console.log('BILL', bill);
             return updateBill;
         } catch (error: any) {
             throw new HTTP400Error('Bill not updated', error.message);
