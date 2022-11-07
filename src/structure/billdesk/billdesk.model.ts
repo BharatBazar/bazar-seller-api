@@ -66,10 +66,37 @@ class BillModel {
                 },
                 { $set: { 'products.$': update, totalPrice: Number(quantity) * Number(price) } },
             );
-            console.log('UP', updateBill);
             return updateBill;
         } catch (error: any) {
             throw new HTTP400Error('Bill not updated', error.message);
+        }
+    };
+    public deleteBillProduct = async (req: Request, data: Idata) => {
+        const _id = req.params.id;
+        const { itemId } = data;
+        try {
+            const updateBill = await Bill.findOneAndUpdate(
+                {
+                    _id: _id,
+                },
+                { $pull: { products: { productSize: itemId } } },
+            );
+            return updateBill;
+        } catch (error: any) {
+            throw new HTTP400Error('Bill not updated', error.message);
+        }
+    };
+    public deleteBill = async (req: Request) => {
+        const _id = req.params.id;
+
+        try {
+            const updateBill = await Bill.findByIdAndDelete({
+                _id: _id,
+            });
+
+            return updateBill;
+        } catch (error: any) {
+            throw new HTTP400Error('Bill not deleted', error.message);
         }
     };
 }

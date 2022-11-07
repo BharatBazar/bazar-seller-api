@@ -37,6 +37,30 @@ class BillController {
             next(responseHandler.sendError(error));
         }
     }
+
+    public async deleteBillProduct(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Bill updated!', await billdeskModel.deleteBillProduct(req, req.body))
+                .send();
+        } catch (error: any) {
+            next(responseHandler.sendError(error));
+        }
+    }
+
+    public async deleteBill(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Bill Deleted!', await billdeskModel.deleteBill(req))
+                .send();
+        } catch (error: any) {
+            next(responseHandler.sendError(error));
+        }
+    }
 }
 
 export default new BillController();
