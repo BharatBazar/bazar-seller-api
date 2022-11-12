@@ -6,45 +6,32 @@ import { Request } from 'express';
 interface Idata {
     quantity: Number;
     price: Number;
+    itemId: String;
 }
 class BillModel {
-    // public createBill = async (data: IBill) => {
-    //     try {
-    //         const shopId = data.shopId;
-    //         const exist = await Bill.find({ shopId });
-    //         // console.log(
-    //         //     'EXIST',
-    //         //     exist[0].products.map((e) => {
-    //         //         return console.log('IDS', e.productSize === data.products[0].productSize);
-    //         //     }),
-    //         // );
-    //         if (exist[0]) {
-    //             const firstCheck = exist[0].products.map((e) => {
-    //                 return String(e.productSize);
-    //             });
 
-    //             const secondCheck = data.products.map((e) => {
-    //                 return e.productSize;
-    //             });
+    public checkBillProductExistOrNot = async(data:any)=>{
+        try {
+            const _id = data.shopId
+            const productId = data.productId
+            const fetchBill = await Bill.find({shopId:_id})
 
-    //             const mapCheck = firstCheck.map((e) => {
-    //                 return e === secondCheck[0];
-    //             });
+            const products = fetchBill.map((e:any)=>{
+                return (e.products[0].productSize).toString()
+            })
+            const include = products.includes(productId)
+            console.log("Lenghtyh",include)
+            if(include === false){
+                return false
+            }else{
+                return include
+            }
 
-    //             console.log('FIRST_CHECK', firstCheck);
-    //             console.log('SECOND_CHECK', secondCheck);
-    //             console.log('MAP_CHECK', mapCheck);
-    //             return firstCheck;
-    //             // const getConfirmation = exist[0].products;
-    //             // console.log('CONFIRM', getConfirmation);
-    //         } else {
-    //             const bill = new Bill(data);
-    //             return await bill.save();
-    //         }
-    //     } catch (error) {
-    //         throw new HTTP400Error('Bill not created', error.message);
-    //     }
-    // };
+        } catch (error:any) {
+             throw new HTTP400Error("Bill not fethced",error.message);
+        }
+    }
+
     public createBill = async (data: IBill) => {
         try {
             const bill = new Bill(data);
@@ -91,19 +78,48 @@ class BillModel {
     };
     public updateBill = async (req: Request, data: Idata) => {
         const _id = req.params.id;
-        console.log('OP', _id);
-        console.log('DATA', data);
+        const { quantity, price, itemId } = data;
 
         try {
-            const bill = await Bill.findById(_id);
-            var update = { quantity: data.quantity, price: data.prices, productSize: data.itemId };
-            const updateBill = await Bill.updateOne(
-                { 'products.productSize': data.itemId },
-                { $set: { 'products.$': update } },
+            var update = { quantity, price, productSize: itemId };
+            const updateBill = await Bill.findOneAndUpdate(
+                {
+                    _id: _id,
+                    'products.productSize': data.itemId,
+                },
+                { $set: { 'products.$': update, totalPrice: Number(quantity) * Number(price) } },
             );
             return updateBill;
         } catch (error: any) {
             throw new HTTP400Error('Bill not updated', error.message);
+        }
+    };
+    public deleteBillProduct = async (req: Request, data: Idata) => {
+        const _id = req.params.id;
+        const { itemId } = data;
+        try {
+            const updateBill = await Bill.findOneAndUpdate(
+                {
+                    _id: _id,
+                },
+                { $pull: { products: { productSize: itemId } } },
+            );
+            return updateBill;
+        } catch (error: any) {
+            throw new HTTP400Error('Bill not updated', error.message);
+        }
+    };
+    public deleteBill = async (req: Request) => {
+        const _id = req.params.id;
+
+        try {
+            const updateBill = await Bill.findByIdAndDelete({
+                _id: _id,
+            });
+
+            return updateBill;
+        } catch (error: any) {
+            throw new HTTP400Error('Bill not deleted', error.message);
         }
     };
 }

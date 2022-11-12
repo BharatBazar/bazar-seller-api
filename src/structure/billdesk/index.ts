@@ -19,4 +19,22 @@ export default [
         escapeAuth: true,
         handler: [billdeskController.updateBill],
     },
+    {
+        path: '/bill/product/delete/:id',
+        method: 'patch',
+        escapeAuth: true,
+        handler: [billdeskController.deleteBillProduct],
+    },
+    {
+        path: '/bill/delete/:id',
+        method: 'delete',
+        escapeAuth: true,
+        handler: [billdeskController.deleteBill],
+    },
+    {
+        path: '/bill/fetch',
+        method: 'post',
+        escapeAuth: true,
+        handler: [billdeskController.checkBillProductExistOrNot],
+    },
 ];
