@@ -9,6 +9,29 @@ interface Idata {
     itemId: String;
 }
 class BillModel {
+
+    public checkBillProductExistOrNot = async(data:any)=>{
+        try {
+            const _id = data.shopId
+            const productId = data.productId
+            const fetchBill = await Bill.find({shopId:_id})
+
+            const products = fetchBill.map((e:any)=>{
+                return (e.products[0].productSize).toString()
+            })
+            const include = products.includes(productId)
+            console.log("Lenghtyh",include)
+            if(include === false){
+                return false
+            }else{
+                return include
+            }
+
+        } catch (error:any) {
+             throw new HTTP400Error("Bill not fethced",error.message);
+        }
+    }
+
     public createBill = async (data: IBill) => {
         try {
             const bill = new Bill(data);

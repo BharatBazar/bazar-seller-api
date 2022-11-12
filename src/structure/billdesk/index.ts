@@ -31,4 +31,10 @@ export default [
         escapeAuth: true,
         handler: [billdeskController.deleteBill],
     },
+    {
+        path: '/bill/fetch',
+        method: 'post',
+        escapeAuth: true,
+        handler: [billdeskController.checkBillProductExistOrNot],
+    },
 ];

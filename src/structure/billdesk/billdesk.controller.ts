@@ -61,6 +61,18 @@ class BillController {
             next(responseHandler.sendError(error));
         }
     }
+
+    public async checkBillProductExistOrNot(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Bill Fetched!', await billdeskModel.checkBillProductExistOrNot(req.body))
+                .send();
+        } catch (error: any) {
+            next(responseHandler.sendError(error));
+        }
+    }
 }
 
 export default new BillController();
