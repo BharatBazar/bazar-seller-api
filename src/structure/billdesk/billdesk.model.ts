@@ -20,7 +20,7 @@ class BillModel {
                 return (e.products[0].productSize).toString()
             })
             const include = products.includes(productId)
-            console.log("Lenghtyh",include)
+            console.log("Lenght",include)
             if(include === false){
                 return false
             }else{
