@@ -1,4 +1,5 @@
 import { ProductSize } from './../catalogue/product/product_size/product_size.schema';
+import { Product } from './../catalogue/product/product/product.schema';
 import { IBill, IBillModel } from './billdesk.interface';
 import { HTTP400Error, HTTP404Error } from '../../lib/utils/httpErrors';
 import { Bill } from './billdesk.schema';
@@ -10,61 +11,64 @@ interface Idata {
     itemId: String;
 }
 class BillModel {
-
     public checkBillProductExistOrNot = async (data: any) => {
         try {
-            const _id = data.shopId
-            const productId = data.productId
-            const quan = data.quantity
-            const fetchBill = await Bill.find({ shopId: _id })
+            const _id = data.shopId;
+            const productId = data.productId;
+            const quan = data.quantity;
+            const fetchBill = await Bill.find({ shopId: _id });
 
-            const check1: any = await ProductSize.findById({ _id: productId })
+            const check1: any = await ProductSize.findById({ _id: productId });
             if (check1?.quantity === 0) {
-                throw new HTTP400Error("Out of stock");
+                throw new HTTP400Error('Out of stock');
             } else {
                 const products = fetchBill.map((e: any) => {
-                    return (e.products[0].productSize).toString()
-                })
+                    return e.products[0].productSize.toString();
+                });
 
-
-                const include = products.includes(productId)
-                console.log("Lenght", include)
+                const include = products.includes(productId);
+                console.log('Lenght', include);
                 if (include === false) {
-                    return false
+                    return false;
                 } else {
-                    return include
+                    return include;
                 }
-
-
             }
-
         } catch (error: any) {
             throw new HTTP400Error(error.message);
         }
-    }
+    };
 
     public createBill = async (data: IBill) => {
         try {
             const bill = data.products.map((e: {}) => {
-                return e
-            })
+                return e;
+            });
 
-            const billLength = bill?.length
+            const billLength = bill?.length;
             var i;
 
             for (i = 0; i < billLength; i++) {
-                const update = await ProductSize.findByIdAndUpdate({ _id: bill[i].productSize }, {
-
-                    $inc: { quantity: -bill[i].quantity, "metrics.orders": 1 }
-                })
-
-                console.log("UPDATE", update);
+                const update: any = await ProductSize.findByIdAndUpdate(
+                    { _id: bill[i].productSize },
+                    {
+                        $inc: { quantity: -bill[i].quantity, 'metrics.orders': 1 },
+                    },
+                    { new: true },
+                );
+                console.log('UPDATE-QUANTITY', update.quantity);
+                if (update && update.quantity === 0) {
+                    const updateProductStatus = await Product.findByIdAndUpdate(
+                        { _id: update?.productId },
+                        {
+                            status: 'out of stock',
+                        },
+                    );
+                }
             }
 
             const bills = new Bill(data);
             return await bills.save();
-
-
         } catch (error: any) {
             throw new HTTP400Error('Bill not created', error.message);
         }
