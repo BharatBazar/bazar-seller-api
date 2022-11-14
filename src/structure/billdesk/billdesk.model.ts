@@ -45,7 +45,7 @@ class BillModel {
 
     public createBill = async (data: IBill) => {
         try {
-            const bill = data.products.map((e: any) => {
+            const bill = data.products.map((e: {}) => {
                 return e
             })
 
@@ -118,6 +118,7 @@ class BillModel {
                 },
                 { $set: { 'products.$': update, totalPrice: Number(quantity) * Number(price) } },
             );
+
             return updateBill;
         } catch (error: any) {
             throw new HTTP400Error('Bill not updated', error.message);
