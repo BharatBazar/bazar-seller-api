@@ -34,11 +34,14 @@ export const ShopSchema: Schema = new Schema(
         googleLocation: {
             type: String,
         },
+
         owner: { type: Types.ObjectId, ref: 'ShopMember', unique: true },
         coOwner: [{ type: Types.ObjectId, ref: 'ShopMember' }],
         worker: [{ type: Types.ObjectId, ref: 'ShopMember' }],
+
         membersDetailSkipped: { type: Boolean, default: false },
         shopMemberOnBoardingDone: { type: Boolean, default: false },
+
         isVerified: { type: Boolean, default: false },
         verificationStatus: { type: String, enum: verificationStatus, default: verificationStatus.registered },
         remarks: { type: String, default: '' },
@@ -49,7 +52,7 @@ export const ShopSchema: Schema = new Schema(
 
         sellingItems: [{ type: Types.ObjectId, ref: 'ProductCatalogue' }],
 
-        //Here key is parent id and value is total filter added up to now
+        //Here key is parent id that is catalogue id and value is total filter added up to now
         filterProvidedForSellingItems: { type: Object, default: {} },
         // subCategory: [[{ type: Types.ObjectId, ref: 'ProductCatalogue' }]],
         // subCategory1: [[[{ type: Types.ObjectId, ref: 'ProductCatalogue' }]]],
