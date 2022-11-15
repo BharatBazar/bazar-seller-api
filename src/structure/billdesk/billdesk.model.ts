@@ -1,6 +1,6 @@
 import { ProductSize } from './../catalogue/product/product_size/product_size.schema';
 import { Product } from './../catalogue/product/product/product.schema';
-import { IBill, IBillModel } from './billdesk.interface';
+import { IBill } from './billdesk.interface';
 import { HTTP400Error, HTTP404Error } from '../../lib/utils/httpErrors';
 import { Bill } from './billdesk.schema';
 import { Request } from 'express';
