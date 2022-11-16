@@ -232,6 +232,18 @@ class FilterModel {
                 .sort((a, b) => a.filterLevel - b.filterLevel),
         };
     };
+
+
+    /*
+    * This is created for admin dashboard 
+    * on filter page when all filter is needed
+    * without any distribution on filterLevel
+    */
+
+    public getFiltersDashboard = async (condition: Partial<IFilter>) => {
+       return Filter.find(condition || {});
+    }
+
 }
 
 export default new FilterModel();

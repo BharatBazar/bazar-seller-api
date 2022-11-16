@@ -110,6 +110,18 @@ class FilterController {
             next(responseHandler.sendError(error));
         }
     }
+
+    public async GetFilterDashboard(req: Request, res: Response, next: NextFunction) {
+        const responseHandler = new ResponseHandler();
+        try {
+            responseHandler
+                .reqRes(req, res)
+                .onFetch('Filters..!', await FilterModel.getFiltersDashboard(req.body))
+                .send();
+        } catch (error) {
+            next(responseHandler.sendError(error));
+        }
+    }
 }
 
 export default new FilterController();

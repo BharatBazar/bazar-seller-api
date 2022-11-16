@@ -49,4 +49,10 @@ export default [
         escapeAuth: true,
         handler: [filterController.GetFiltersAndValueForAShop],
     },
+    {
+        path: '/filter/dashboard/getAll',
+        method: 'post',
+        escapeAuth: true,
+        handler: [filterController.GetFilterDashboard],
+    },
 ];
