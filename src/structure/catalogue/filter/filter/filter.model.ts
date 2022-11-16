@@ -1,4 +1,5 @@
-import { Types } from 'mongoose';
+
+import { FilterQuery, Types, _FilterQuery } from 'mongoose';
 import { IClassfier, IFilterValuesModel } from '../filtervalues/filtervalues.interface';
 import { HTTP400Error, HTTP404Error } from '../../../../lib/utils/httpErrors';
 import { IFilter, IFilterModel } from './filter.interface';
@@ -7,6 +8,8 @@ import { FilterValues } from '../filtervalues/filtervalues.schema';
 import productCatalogueModel from '../../catalogue/productCatalogue.model';
 import { Shop } from '../../../shop/shop.schema';
 import filtervalues from '../filtervalues';
+import {Product} from '../../product/product/product.schema';
+import { IShopModel } from '../../../shop/shop.interface';
 
 
 class FilterModel {
@@ -48,38 +51,42 @@ class FilterModel {
 
     public activateFilter = async (data: { _id: Types.ObjectId; active: boolean }) => {
 
-
+        if(data._id) {
+            
         const exist:IFilter | null= await Filter.findById(data._id).lean();
 
 
-        console.log("exist ",exist)
+        
         if (exist) {
-            const filterItem: IFilterValuesModel[] = await FilterValues.find({ parent: exist._id });
-console.log("filter",filterItem)
-            if (filterItem.length === 0) {
+            const filterItem: IFilterValuesModel[] = await FilterValues.find({ parent: exist._id }).select("active").lean();
+          
+            if (filterItem.length == 0) {
                 throw new HTTP400Error('No items in the filter');
             } else {
                
                 const flag = filterItem.some((item) => item.active);
               
 
-                if (flag == true) {
-                    // const checkKeyExistQuery:FilterQuery<IShopModel>  = {};
-                    // checkKeyExistQuery[`reandom`] = { $exists: true,"$ne": null}
+                if (flag) {
+                    const checkKeyExistQuery: FilterQuery<IShopModel> = {};
+                    checkKeyExistQuery[exist.key] = {$eq: null}
 
-                    // const doFilterKeyExistInShopSchema = await Shop.find(checkKeyExistQuery).countDocuments()>0;
+                    console.log(checkKeyExistQuery)
 
-                    // console.log(doFilterKeyExistInShopSchema,await Shop.find({"randomfield":{$ne: null}}).lean(), await Shop.find({ mens_clothes_jeans_color: { '$eq': null } }).countDocuments())
-                    // if(doFilterKeyExistInShopSchema) {
+                    const doFilterKeyExistInShopSchema = !(await Shop.find({}).countDocuments() == await Shop.find(checkKeyExistQuery).countDocuments());
+
+                    console.log(doFilterKeyExistInShopSchema,"Filter exist")
+                   
+                    if(doFilterKeyExistInShopSchema) {
                         
-                    //     const doFilterKeyExistInProductSchema = await Product.find(checkKeyExistQuery).countDocuments()!=0;
-                    //        console.log(doFilterKeyExistInShopSchema,checkKeyExistQuery,doFilterKeyExistInProductSchema, )
-                    //     if(doFilterKeyExistInProductSchema) {
+                        const doFilterKeyExistInProductSchema = !(await Product.find({}).countDocuments() == await Product.find(checkKeyExistQuery).countDocuments());
+                        console.log(doFilterKeyExistInProductSchema,"Filter exist ")
+                        if(doFilterKeyExistInProductSchema) {
 
                             if (exist.filterActivatedCount == 0) {
 
                                 await productCatalogueModel.UpdateProductCatalogue({
-                                    _id: exist.parent,
+                                    _id: exist.parent ,
                                     $inc: { totalFilterAdded: 1 },
                                 });
 
@@ -90,21 +97,25 @@ console.log("filter",filterItem)
                                 });
                         
                                 return data.active ? 'Filter activated' : 'Filter deactivated';
-                //         } else 
-                //             throw new HTTP400Error("Filter key does not exist in product schema")
+                        } else 
+                            throw new HTTP400Error("Filter key does not exist in product schema")
 
-                //   } else 
-                //     throw new HTTP400Error("Filter key does not exist in shop schema")
+                  } else 
+                    throw new HTTP400Error("Filter key does not exist in shop schema")
                 
                 }
                  else {
                     throw new HTTP400Error('None of the filter item is activated');
                 }
             }
+        
             
         } else {
             throw new HTTP400Error('Filter does not exist');
         }
+    } else {
+        throw new HTTP400Error("Provide correct data")
+    }
     };
 
     public getAllFilterValues = async () => {
@@ -213,7 +224,7 @@ console.log("filter",filterItem)
                 },
             },
         ]);
-       console.log('Filter =>', filterWithValue);
+       //console.log('Filter =>', filterWithValue);
         return {
             filter: filterWithValue.filter((filter: IFilter) => filter.filterLevel == 0),
             distribution: filterWithValue

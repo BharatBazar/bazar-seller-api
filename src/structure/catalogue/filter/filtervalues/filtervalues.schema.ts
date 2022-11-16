@@ -5,10 +5,11 @@ const FilterValuesSchema: Schema = new Schema(
     {
         name: String,
         description: String,
+        image: String,
         customerName: String,
         customerDescription: String,
         customerImage: String,
-        image: String,
+
         parent: { type: Types.ObjectId, ref: 'Filter' },
         active: { type: Boolean, default: false },
     },

@@ -3,6 +3,7 @@ import { Document } from 'mongoose';
 import { filterValuesTypes } from '../filtervalues/filtervalues.interface';
 
 export interface IFilter {
+    _id: ObjectId;
     name: string; //Filter name Like waist size
     description: string; // Filter details descipbing about filter
     image: string; // Image url
