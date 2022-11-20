@@ -146,7 +146,7 @@ export class ShopModel {
                         );
 
                         console.log(selectedValues, allFilters, currentIndex);
-                        return { selectedValues, allFilters, currentIndex };
+                        return { selectedValues, allFilters, currentIndex: currentIndex == -1 ? 0 : currentIndex };
                     } else {
                         throw new Error('Shop does not exist with this id');
                     }
