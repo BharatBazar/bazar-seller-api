@@ -62,8 +62,10 @@ class ProductSizeModel {
             } else if (!data.itemId) {
                 throw new HTTP400Error('Provide item id');
             } else {
-                console.log('data is here', data);
-                const productSize = await ProductSize.find(data)?.populate({
+                const productSize = await ProductSize.find({
+                    shopId: data.shopId,
+                    itemId: data.itemId,
+                }).populate({
                     path: 'productId',
                     populate: [
                         {

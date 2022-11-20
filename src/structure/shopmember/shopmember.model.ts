@@ -1,10 +1,10 @@
 import { keepFields } from './../../lib/helpers/index';
-import { IShopModel } from './../shop/shop.interface';
+import { IShopModel, ShopI } from './../shop/shop.interface';
 import { HTTP400Error } from './../../lib/utils/httpErrors';
 import ShopPermissionModel from './../permission/permission.model';
 import { ShopMember } from './shopmember.schema';
 import { IShopMemberModel, shopMemberInterface, shopMemberRole } from './shopmember.interface';
-import { FilterQuery, LeanDocument, Types, UpdateQuery } from 'mongoose';
+import { FilterQuery, Types, UpdateQuery } from 'mongoose';
 import { shopMember_message } from '../../lib/helpers/customMessage';
 import otpModel from '../otp/otp.model';
 import { pruneFields } from '../../lib/helpers';
@@ -221,13 +221,13 @@ export class ShopMemberModel {
         if (!phoneNumber) {
             throw new HTTP400Error('Phone number is required.');
         } else {
-            let member: LeanDocument<IShopMemberModel> | null;
+            let member: (shopMemberInterface & { shop: ShopI }) | null;
             member = await ShopMember.findOne({ phoneNumber }).populate({ path: 'permissions shop' }).lean();
             if (member) {
                 if (!member.password) {
                     return {
-                        passwordAvailable: true,
-                        data: member,
+                        notPasswordAvailable: true,
+                        data: {},
                     };
                 } else {
                     const isMatch = await ShopMember.comparePassword(password, member.password);
@@ -243,35 +243,35 @@ export class ShopMemberModel {
                                     'Shop verification is still pending our representative will come and verify your dukan.',
                                 );
                             } else {
-                                return { data: member };
+                                return { data: {} };
                             }
                         } else if (!member.shop.isVerified) {
                             if (!member.shop.shopName) {
                                 return {
                                     notShopNameAvailable: true,
-                                    data: member,
+                                    data: {},
                                 };
                             } else if (!member.shop.state) {
                                 return {
                                     notAddressAvailable: true,
-                                    data: member,
+                                    data: {},
                                 };
                             } else if (!member.shop.shopMemberOnBoardingDone && !member.shop.membersDetailSkipped) {
                                 return {
                                     notMemberDetails: true,
-                                    data: member,
+                                    data: {},
                                 };
                             } else if (!member.shop.isVerified) {
                                 return {
                                     notShopVerification: true,
-                                    data: member,
+                                    data: {},
                                 };
                             }
                         } else {
                             if (member.shop.sellingItems.length == 0) {
                                 return {
                                     notCategory: true,
-                                    data: member,
+                                    data: {},
                                 };
                             } else return { data: member };
                         }

@@ -7,7 +7,7 @@ export enum verificationStatus {
     rejected = 'Rejected',
     verified = 'Verified',
 }
-interface Shop {
+export interface ShopI {
     shopName: string;
     shopDescription: string;
     addressOfShop: string;
