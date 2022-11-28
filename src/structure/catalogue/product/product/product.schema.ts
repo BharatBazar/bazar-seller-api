@@ -8,8 +8,11 @@ export const ProductSchema: Schema = new Schema(
         status: { type: String, enum: productStatus, default: productStatus.INVENTORY },
         parentId: { type: Types.ObjectId, ref: 'ProductCatalogue' },
         colors: { type: [Types.ObjectId], ref: 'ProductColor' },
-        sellerIdentificationPhoto: String,
+
+        // identificationPhoto: String,
         customerIdentificationPhoto: String,
+        identificationPhoto: String,
+
         descriptionGivenByCustomer: String,
         descriptionShownToCustomer: String,
         titleGenerated: String,
@@ -19,6 +22,7 @@ export const ProductSchema: Schema = new Schema(
         newDeadline: Date,
         discount: [Number],
         discountDeadline: [Date],
+
         note: { type: [String], default: [] },
 
         //Mens Jeans Filter

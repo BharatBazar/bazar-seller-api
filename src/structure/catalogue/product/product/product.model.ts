@@ -163,6 +163,12 @@ class ProductModel {
             condition.createdAt = { $lt: dateObj };
         }
 
+        // const response = await Product.updateMany(
+        //     {},
+        //     { $rename: { sellerIdentificationPhoto: 'identificationPhoto' } },
+        //     { multi: true },
+        // );
+        // console.log('response from update', response);
         const searchCount = await Product.countDocuments({ $and: [query.query, condition] });
 
         const data =

@@ -70,6 +70,8 @@ export interface ProductInterface {
     */
     customerIdentificationPhoto: string;
 
+    identificationPhoto: string;
+
     /*
     Future plan is to let customer provide any kind of description
     like text, image, audio, video etc.
