@@ -26,11 +26,11 @@ class ProductColorModel {
                 productData.identificationPhoto = data.photos[0];
             }
 
-            if (data.filterKey) {
-                let query: Object = {};
-                query[data.filterKey as string] = data.color;
-                productData['$push'] = query;
-            }
+            // if (data.filterKey) {
+            //     let query: Object = {};
+            //     query[data.filterKey as string] = data.color;
+            //     productData['$push'] = query;
+            // }
             pruneFields(data, 'catalogueId shopId parentId photos');
             productData = { ...data, ...productData };
             console.log('product data', productData);
@@ -44,9 +44,9 @@ class ProductColorModel {
                 parentId: data.catalogueId,
                 identificationPhoto: data.photos[0],
             };
-            if (data.filterKey) {
-                productData[data.filterKey as string] = [data.color];
-            }
+            // if (data.filterKey) {
+            //     productData[data.filterKey as string] = [data.color];
+            // }
             pruneFields(data, 'catalogueId shopId parentId photos');
             productData = { ...data, ...productData };
             const product = await ProductModel.createProduct(productData);
@@ -83,21 +83,20 @@ class ProductColorModel {
     }
 
     public async deleteProductColor(data: IId & { parentId?: string }) {
-        const exist: ProductColorModelInterface | null = await ProductColor.findById(data._id)
-            .populate({
-                path: 'color',
-                populate: {
-                    path: 'parent',
-                    select: 'key',
-                },
-            })
-            .lean();
+        const exist: ProductColorModelInterface | null = await ProductColor.findById(data._id).populate({
+            path: 'color',
+            populate: {
+                path: 'parent',
+                select: 'key',
+            },
+        });
         if (exist) {
             if (data.parentId) {
                 let query = {};
                 query['colors'] = data._id;
                 query[exist.color.parent.key] = exist.color._id;
-                await Product.findByIdAndUpdate(data.parentId, { $pull: query });
+                const response = await Product.findByIdAndUpdate(data.parentId, { $pull: query }, { new: true });
+                console.log('Respnse', response, exist, query);
             }
             await exist.delete();
             return '';
