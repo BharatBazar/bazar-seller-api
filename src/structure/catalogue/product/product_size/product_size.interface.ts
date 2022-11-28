@@ -30,6 +30,8 @@ export interface ProductSizeInterface {
 
     parentId: Types.ObjectId;
 
+    productId: Types.ObjectId;
+
     /*
     This is a itemId that we will generated
     so that our system can identify the product

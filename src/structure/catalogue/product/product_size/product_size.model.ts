@@ -7,19 +7,40 @@ import { ProductSizeModelInterface, ProductSizeInterface } from './product_size.
 import { ProductSize } from './product_size.schema';
 import productModel from '../product/product.model';
 import e from 'express';
+import { Product } from '../product/product.schema';
 
 class ProductSizeModel {
-    public async createProductSize(data: ProductSizeInterface) {
-        if (data.parentId) {
-            const size: ProductSizeModelInterface = new ProductSize(data);
-
-            let sizes: [Types.ObjectId] = [];
-            sizes.push(size._id);
-            await productColorModel.updateProductColor({ sizes, _id: data.parentId });
-            await size.save();
-            return size;
+    public async createProductSize(data: ProductSizeInterface & { filterData: { filterKey: string; value: string } }) {
+        if (!data.filterData) {
+            throw new HTTP400Error('Please provide filterData.');
         } else {
-            throw new HTTP400Error('Please provide parentId.');
+            if (data.parentId) {
+                const size: ProductSizeModelInterface = new ProductSize(data);
+
+                let sizes: [Types.ObjectId] = [];
+                sizes.push(size._id);
+                await productColorModel.updateProductColor({ sizes, _id: data.parentId });
+
+                if (data.productId) {
+                    const exist = await Product.findById(data.productId).select(data.filterData.filterKey).lean();
+                    if (exist) {
+                        console.log('Exist', exist, data);
+                        const keyAlreadyExist =
+                            exist[data.filterData.filterKey].findIndex((item) => item == data.size) > -1;
+
+                        console.log(keyAlreadyExist, 'key already exist');
+                        if (!keyAlreadyExist) {
+                            let query = {};
+                            query[data.filterData.filterKey] = data.size;
+                            await Product.findByIdAndUpdate(data.productId, { $push: query });
+                        }
+                    }
+                }
+                await size.save();
+                return size;
+            } else {
+                throw new HTTP400Error('Please provide parentId.');
+            }
         }
     }
 

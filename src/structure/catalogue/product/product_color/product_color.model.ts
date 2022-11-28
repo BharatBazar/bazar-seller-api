@@ -12,6 +12,8 @@ import { ProductColor } from './product_color.schema';
 class ProductColorModel {
     public async createProductColor(data: ProductColorI & { catalogueId: Types.ObjectId; filterKey: string }) {
         let productData: Partial<ProductInterface> = {};
+
+        console.log('data', data);
         const color: ProductColorModelInterface = new ProductColor(data);
         if (data.parentId) {
             let colors: Types.ObjectId[] = [];
@@ -31,12 +33,12 @@ class ProductColorModel {
             //     query[data.filterKey as string] = data.color;
             //     productData['$push'] = query;
             // }
+
+            color.parentId = data.parentId;
             pruneFields(data, 'catalogueId shopId parentId photos');
             productData = { ...data, ...productData };
             console.log('product data', productData);
             const item = await ProductModel.updateProduct(productData);
-
-            color.parentId = data.parentId;
         } else {
             productData = {
                 colors: [color._id],
@@ -50,7 +52,10 @@ class ProductColorModel {
             pruneFields(data, 'catalogueId shopId parentId photos');
             productData = { ...data, ...productData };
             const product = await ProductModel.createProduct(productData);
+            color.parentId = product._id;
         }
+
+        console.log('color', color);
         await color.save();
         return { colorId: color._id, productId: color.parentId };
     }
@@ -66,12 +71,17 @@ class ProductColorModel {
             }
 
             if (data.photos) {
-                let productChange = {
-                    _id: exist.parentId,
-                    identificationPhoto: data.photos[0],
-                };
+                console.log('parent', exist);
+                if (exist.parentId) {
+                    let productChange = {
+                        _id: exist.parentId,
+                        identificationPhoto: data.photos[0],
+                    };
 
-                if (data.photos) await ProductModel.updateProduct(productChange);
+                    if (data.photos) await ProductModel.updateProduct(productChange);
+                } else {
+                    throw new HTTP400Error('Parent id not found');
+                }
             }
 
             productColor = { ...productColor, ...data };
