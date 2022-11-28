@@ -1,21 +1,23 @@
-import { UpdateQuery, Types } from 'mongoose';
+import { UpdateQuery, Types, ObjectId, Query } from 'mongoose';
 import { IId } from '../../../../config';
 import { pruneFields } from '../../../../lib/helpers';
 import ProductModel from '../product/product.model';
 import { HTTP400Error } from '../../../../lib/utils/httpErrors';
-import { ProductColorModelInterface } from './product_color.interface';
-import { ProductColor } from './product_color.schema';
+import { ProductColorI, ProductColorModelInterface } from './product_color.interface';
+
 import { Product } from '../product/product.schema';
 import { ProductInterface } from '../product/product.interface';
+import { ProductColor } from './product_color.schema';
 
 class ProductColorModel {
-    public async createProductColor(data: ProductColorModelInterface & { catalogueId: Types.ObjectId }) {
-        console.log(data);
+    public async createProductColor(data: ProductColorI & { catalogueId: Types.ObjectId; filterKey: string }) {
+        let productData: Partial<ProductInterface> = {};
+        const color: ProductColorModelInterface = new ProductColor(data);
         if (data.parentId) {
-            let colors: [Types.ObjectId] = [];
-            const color: ProductColorModelInterface = new ProductColor(data);
+            let colors: Types.ObjectId[] = [];
+
             colors.push(color._id);
-            let productData: Partial<ProductInterface> = {
+            productData = {
                 colors: colors,
                 _id: data.parentId,
             };
@@ -23,44 +25,53 @@ class ProductColorModel {
             if (data.photos) {
                 productData.identificationPhoto = data.photos[0];
             }
+
+            if (data.filterKey) {
+                let query: Object = {};
+                query[data.filterKey as string] = data.color;
+                productData['$push'] = query;
+            }
             pruneFields(data, 'catalogueId shopId parentId photos');
             productData = { ...data, ...productData };
             console.log('product data', productData);
             const item = await ProductModel.updateProduct(productData);
 
             color.parentId = data.parentId;
-
-            await color.save();
-            return { colorId: color._id, productId: color.parentId };
         } else {
-            const color: ProductColorModelInterface = new ProductColor(data);
-            // const filterExistInSchema = await Product.find({ ilter: { $exists: true } });
-            // console.log('fil4te exisrt in schem', filterExistInSchema);
-
-            let productData: Partial<ProductInterface> = {
+            productData = {
                 colors: [color._id],
                 shopId: data.shopId,
                 parentId: data.catalogueId,
                 identificationPhoto: data.photos[0],
             };
+            if (data.filterKey) {
+                productData[data.filterKey as string] = [data.color];
+            }
             pruneFields(data, 'catalogueId shopId parentId photos');
             productData = { ...data, ...productData };
             const product = await ProductModel.createProduct(productData);
-
-            await color.save();
-            return { colorId: color._id, productId: product._id };
         }
+        await color.save();
+        return { colorId: color._id, productId: color.parentId };
     }
 
-    public async updateProductColor(data: Partial<ProductColorModelInterface>) {
-        const exist = (await ProductColor.findById(data._id).countDocuments()) > 0;
+    public async updateProductColor(data: Partial<ProductColorModelInterface> & { parentData: any }) {
+        const exist = await ProductColor.findById(data._id).lean();
         if (exist) {
             let productColor: UpdateQuery<ProductColorModelInterface> | undefined = {};
 
-            console.log('Data', data, 'sizes');
             if (data.sizes) {
                 productColor['$push'] = { sizes: { $each: data.sizes } };
                 pruneFields(data, 'sizes');
+            }
+
+            if (data.photos) {
+                let productChange = {
+                    _id: exist.parentId,
+                    identificationPhoto: data.photos[0],
+                };
+
+                if (data.photos) await ProductModel.updateProduct(productChange);
             }
 
             productColor = { ...productColor, ...data };
@@ -72,10 +83,21 @@ class ProductColorModel {
     }
 
     public async deleteProductColor(data: IId & { parentId?: string }) {
-        const exist: ProductColorModelInterface | null = await ProductColor.findById(data._id);
+        const exist: ProductColorModelInterface | null = await ProductColor.findById(data._id)
+            .populate({
+                path: 'color',
+                populate: {
+                    path: 'parent',
+                    select: 'key',
+                },
+            })
+            .lean();
         if (exist) {
             if (data.parentId) {
-                await Product.findByIdAndUpdate(data.parentId, { $pull: { colors: data._id } });
+                let query = {};
+                query['colors'] = data._id;
+                query[exist.color.parent.key] = exist.color._id;
+                await Product.findByIdAndUpdate(data.parentId, { $pull: query });
             }
             await exist.delete();
             return '';

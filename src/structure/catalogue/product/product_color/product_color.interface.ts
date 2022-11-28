@@ -1,6 +1,6 @@
 import { Document, Types } from 'mongoose';
 
-export interface ProductColor {
+export interface ProductColorI {
     /*
     Refers to product which it belongs
     */
@@ -47,4 +47,4 @@ export interface ProductColor {
     _id: Types.ObjectId;
 }
 
-export interface ProductColorModelInterface extends Document, ProductColor {}
+export interface ProductColorModelInterface extends Document, ProductColorI {}

@@ -24,7 +24,7 @@ class ProductModel {
         return exist;
     }
 
-    public async updateProduct(data: ProductInterface) {
+    public async updateProduct(data: Partial<ProductInterface>) {
         const exist: boolean = await this.productIdExist(data._id);
         if (exist) {
             let product: UpdateQuery<IProductModel> | undefined = {};
