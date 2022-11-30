@@ -1,5 +1,6 @@
-import { ObjectId } from '../../../src/datatypes/index';
 import { Document } from 'mongoose';
+
+import { ObjectId } from '../../../src/datatypes';
 
 interface IProduct{
     map:Function

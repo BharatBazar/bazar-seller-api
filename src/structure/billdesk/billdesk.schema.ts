@@ -1,5 +1,6 @@
+import { Model, model, Schema, Types } from 'mongoose';
+
 import { IBillModel } from './billdesk.interface';
-import { Schema, Document, model, Model, Types } from 'mongoose';
 
 const BillSchema: Schema = new Schema(
     {

@@ -1,9 +1,10 @@
-import { ProductSize } from './../catalogue/product/product_size/product_size.schema';
-import { Product } from './../catalogue/product/product/product.schema';
-import { IBill } from './billdesk.interface';
-import { HTTP400Error, HTTP404Error } from '../../lib/utils/httpErrors';
-import { Bill } from './billdesk.schema';
 import { Request } from 'express';
+
+import { HTTP400Error } from '../../lib/utils/httpErrors';
+import { Product } from './../catalogue/product/product/product.schema';
+import { ProductSize } from './../catalogue/product/product_size/product_size.schema';
+import { IBill } from './billdesk.interface';
+import { Bill } from './billdesk.schema';
 
 interface Idata {
     quantity: Number;
@@ -22,8 +23,9 @@ class BillModel {
             if (check1?.quantity === 0) {
                 throw new HTTP400Error('Out of stock');
             } else {
-                const products = fetchBill.map((e: any) => {
-                    return e.products[0].productSize.toString();
+               if(fetchBill.length > 0){
+                 const products = fetchBill[0].products.map((e: any) => {
+                    return e.productSize.toString()
                 });
 
                 const include = products.includes(productId);
@@ -33,11 +35,47 @@ class BillModel {
                 } else {
                     return include;
                 }
+               }
             }
         } catch (error: any) {
             throw new HTTP400Error(error.message);
         }
     };
+
+
+    //  public checkBillProductExistOrNot = async (data: any) => {
+    //     try {
+    //         const _id = data.shopId._id;
+    //         const productId = data.productId;
+    //         const quan = data.quantity;
+    //         const fetchBill = await Bill.find({ shopId: _id });
+
+    //         const check1: any = await ProductSize.findById({ _id: productId });
+           
+    //         if (check1?.quantity === 0) {
+    //             throw new HTTP400Error('Out of stock');
+    //         } else {
+
+    //             const products = fetchBill.map((e: any) => {
+    //                 return e.products;
+    //             });
+
+    //             const productIds = products[0].map((e:any)=>{
+    //                 return e.productSize.toString()
+    //             })
+
+    //             const include = productIds.includes(productId);
+    //             console.log('Lenght', include);
+    //             if (include === false) {
+    //                 return false;
+    //             } else {
+    //                 return include;
+    //             }
+    //         }
+    //     } catch (error: any) {
+    //         throw new HTTP400Error(error.message);
+    //     }
+    // };
 
     public createBill = async (data: IBill) => {
         try {
