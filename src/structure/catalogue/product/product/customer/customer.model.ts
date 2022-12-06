@@ -54,17 +54,18 @@ class CustomerModel {
         size: [string];
         shop: boolean;
         status: productStatus;
+        parentId: string;
     }) {
         let query = {};
 
         console.log('data =>', data);
         if (data['size']) {
             console.log('data', data['size']);
-            let size = data['size'].map((item) => Types.ObjectId(item));
-            console.log('size', size);
+            let size = data['size'].map((item) => new Types.ObjectId(item));
+            // console.log('size', size);
             // return await ProductSize.find({size:{ $in :  size}})
             return await ProductSize.aggregate([
-                { $match: { size: { $in: data['size'].map((item) => Types.ObjectId(item)) } } },
+                { $match: { size: { $in: data['size'].map((item) => new Types.ObjectId(item)) } } },
                 { $group: { _id: '$productId', count: { $sum: 1 } } },
                 {
                     $lookup: {
@@ -135,7 +136,12 @@ class CustomerModel {
                 { $project: { shop: 0 } },
             ]);
         } else {
-            return await Product.find().populate({
+            return await Product.find({
+                status: data.status,
+                parentId: new Types.ObjectId(data.parentId),
+                mens_jeans_color: { $in: data.mens_jeans_color },
+                // ...data,
+            }).populate({
                 path: 'colors',
                 populate: {
                     path: 'color',

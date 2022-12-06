@@ -5,10 +5,10 @@ class FilterCustomerModel {
     public getFilterWithValue = async ({ parent }: { parent: string }) => {
         const product = await Filter.aggregate([
             {
-                $match: { parent: Types.ObjectId(parent), active: true },
+                $match: { parent: new Types.ObjectId(parent), active: true },
             },
             {
-                $project: { customerHeading: 1, customerDescription: 1, type: 1 },
+                $project: { customerHeading: 1, customerDescription: 1, type: 1, key: 1 },
             },
             {
                 $lookup: {
