@@ -1,4 +1,5 @@
 import filterController from './filter.controller';
+import filterCustomerController from './filter.customer.controller';
 
 export default [
     {
@@ -54,5 +55,12 @@ export default [
         method: 'post',
         escapeAuth: true,
         handler: [filterController.GetFilterDashboard],
+    },
+
+    {
+        path: '/customer/filter/getValue',
+        method: 'post',
+        escapeAuth: true,
+        handler: [filterCustomerController.GetFiltersAndValueForAShop],
     },
 ];
