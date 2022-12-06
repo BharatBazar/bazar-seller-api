@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import ResponseHandler from '../../../lib/helpers/responseHandler';
+import ResponseHandler from '../../../../lib/helpers/responseHandler';
 import productCatalogueModel from './productCatalogue.model';
 
 class ProductCatalogueController {

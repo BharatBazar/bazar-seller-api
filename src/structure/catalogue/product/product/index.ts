@@ -60,7 +60,7 @@ export default [
         handler: [customerController.getItemsOnFiltering],
     },
     {
-        path: '/customer/get',
+        path: '/customer/get/product',
         method: 'post',
         escapeAuth: true,
         handler: [customerController.GetProductDetailsForCustomer],

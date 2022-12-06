@@ -1,6 +1,7 @@
 import shop from '../structure/shop';
 import shopMember from '../structure/shopmember';
-import productCatalogue from '../structure/catalogue/catalogue';
+import productCatalogue from '../structure/catalogue/catalogue/seller';
+
 //import product from '../structure/catalogue/product';
 // import productSize from '../structure/productSize';
 // import productColor from '../structure/productColor';

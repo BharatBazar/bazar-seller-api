@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
-import { HTTP400Error } from '../../../lib/utils/httpErrors';
-import { categoryType, IProductCatalogue, IProductCatalogueModel } from './productCatalogue.interface';
-import { ProductCatalogue } from './productCatalogue.schema';
+import { HTTP400Error } from '../../../../lib/utils/httpErrors';
+import { categoryType, IProductCatalogue, IProductCatalogueModel } from '../productCatalogue.interface';
+import { ProductCatalogue } from '../productCatalogue.schema';
 class ProductCatalogueModel {
     public async CatalogueExistOrNot(_id: string) {
         return await ProductCatalogue.findById(_id);
