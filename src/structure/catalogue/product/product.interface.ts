@@ -47,6 +47,8 @@ export interface Product {
     releaseDate: string;
     note: [string]; //Note provided by us during rejection or approval
     alreadyRejected: boolean; // If product is rejected one time
+    updatedAt: Date;
+    createdAt: Date;
 }
 
 export interface IProductModelG extends Document, Product {}

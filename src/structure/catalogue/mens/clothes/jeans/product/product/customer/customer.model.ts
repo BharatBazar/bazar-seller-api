@@ -118,7 +118,6 @@ class CustomerModel {
                         as: 'shop',
                     },
                 },
-
                 { $replaceRoot: { newRoot: { $mergeObjects: [{ $arrayElemAt: ['$shop', 0] }, '$$ROOT'] } } },
                 { $project: { shop: 0 } },
             ]);

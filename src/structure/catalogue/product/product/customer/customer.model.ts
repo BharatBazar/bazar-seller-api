@@ -4,6 +4,7 @@ import { productStatus } from '../product.interface';
 import { ProductSize } from '../../product_size/product_size.schema';
 import { Product } from '../product.schema';
 import { Shop } from '../../../../shop/shop.schema';
+import { paginationConfig } from '../../../../../config';
 
 class CustomerModel {
     public async getProductDetailsForCustomer(data: { _id: string }) {
@@ -49,12 +50,55 @@ class CustomerModel {
         }
     }
 
+    public async getProductAfterApplyingFilter(data: {
+        query: {
+            lastTime: string;
+            parentId: string;
+        };
+    }) {
+        if (!data.query) {
+            throw new HTTP400Error('No query available');
+        } else {
+            let condition: any = {};
+            if (data.query.lastTime) {
+                const dateObj = new Date(parseInt(data.query.lastTime, 10));
+                condition.updatedAt = { $lt: dateObj };
+            }
+            const searchCount = await Product.countDocuments({ $and: [data.query, condition] });
+
+            const products =
+                searchCount > 0
+                    ? await Product.find({
+                          parentId: new Types.ObjectId(data.query.parentId),
+                          ...data,
+                      })
+                          .populate({
+                              path: 'colors',
+                              populate: {
+                                  path: 'color',
+                                  select: 'name description',
+                              },
+                          })
+                          .sort('-updatedAt')
+                          .limit(paginationConfig.MAX_PRODUCT)
+                    : [];
+
+            const lastTime = products.length > 0 ? products[products.length - 1].updatedAt.getTime() : undefined;
+
+            return {
+                payload: data,
+                searchCount,
+                lastTime,
+                maxCount: paginationConfig.MAX_PRODUCT,
+            };
+        }
+    }
+
     public async getItemsOnApplyingFilter(data: {
-        colors: [string];
-        size: [string];
-        shop: boolean;
-        status: productStatus;
-        parentId: string;
+        query: {
+            lastTime: string;
+            parentId: string;
+        };
     }) {
         let query = {};
 
@@ -136,18 +180,7 @@ class CustomerModel {
                 { $project: { shop: 0 } },
             ]);
         } else {
-            return await Product.find({
-                status: data.status,
-                parentId: new Types.ObjectId(data.parentId),
-                mens_jeans_color: { $in: data.mens_jeans_color },
-                // ...data,
-            }).populate({
-                path: 'colors',
-                populate: {
-                    path: 'color',
-                    select: 'name description',
-                },
-            });
+            return await this.getProductAfterApplyingFilter(data);
         }
     }
 }
