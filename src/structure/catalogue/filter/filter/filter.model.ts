@@ -6,7 +6,7 @@ import { HTTP400Error, HTTP404Error } from '../../../../lib/utils/httpErrors';
 import { IFilter, IFilterModel } from './filter.interface';
 import { Filter } from './filter.schema';
 import { FilterValues } from '../filtervalues/filtervalues.schema';
-import productCatalogueModel from '../../catalogue/productCatalogue.model';
+import productCatalogueModel from '../../catalogue/seller/productCatalogue.model';
 import { Shop } from '../../../shop/shop.schema';
 
 import { Product } from '../../product/product/product.schema';

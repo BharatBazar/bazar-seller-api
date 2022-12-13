@@ -31,7 +31,8 @@ class Connection {
             console.log(disconnected('Mongoose default connection is disconnected'));
         });
 
-        //Generated from the terminal is supported on all platforms, and can usually be generated with Ctrl+C (though this may be configurable). It is not generated when terminal raw mode is enabled and Ctrl+C is used.
+        //Generated from the terminal is supported on all platforms, and can usually be generated with Ctrl+C (though this may be configurable).
+        // It is not generated when terminal raw mode is enabled and Ctrl+C is used.
         process.on('SIGINT', () => {
             connection.close(() => {
                 console.log(termination('Mongoose default connection is disconnected due to application termination'));

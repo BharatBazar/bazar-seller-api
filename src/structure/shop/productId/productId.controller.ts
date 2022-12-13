@@ -3,11 +3,9 @@ import { NextFunction, Request, Response } from 'express';
 import productIdModel from './productId.model';
 
 class ProductIdController {
-    
-    public generateProductId = async(req: Request, res: Response, next: NextFunction)  => {
+    public generateProductId = async (req: Request, res: Response, next: NextFunction) => {
         const responseHandler = new ResponseHandler();
         try {
-            
             responseHandler
                 .reqRes(req, res)
                 .onFetch('Product id generated.', await productIdModel.generateProductId(req.body))
@@ -15,9 +13,7 @@ class ProductIdController {
         } catch (error) {
             next(responseHandler.sendError(error));
         }
-    }
-    }
-
+    };
 }
 
-export default new ProductIdController()
+export default new ProductIdController();

@@ -1,11 +1,11 @@
 import { Date, Types, Document, Model } from 'mongoose';
 
 export enum productStatus {
-    INVENTORY = 1,
-    REJECTED = 2,
-    OUTOFSTOCK = 3,
-    WAITINGFORAPPROVAL = 4,
-    LIVE = 5,
+    INVENTORY = '1',
+    REJECTED = '2',
+    OUTOFSTOCK = '3',
+    WAITINGFORAPPROVAL = '4',
+    LIVE = '5',
 }
 
 export const statusName = {

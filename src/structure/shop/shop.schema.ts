@@ -1,8 +1,5 @@
-import { ObjectId } from './../../datatypes/index';
 import { Schema, Model, model, Types } from 'mongoose';
 import { IShopModel, verificationStatus } from './shop.interface';
-
-type stringNum = { [key: String]: Number };
 
 export const ShopSchema: Schema = new Schema(
     {

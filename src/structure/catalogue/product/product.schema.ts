@@ -1,5 +1,3 @@
-import { HTTP400Error } from '../../../lib/utils/httpErrors';
-import { NextFunction } from 'express';
 import { Schema, Types, model } from 'mongoose';
 // import productColorModel from '../../productColor/productColor.model';
 import { IProductModel, IProductModelG, productStatus } from './product.interface';

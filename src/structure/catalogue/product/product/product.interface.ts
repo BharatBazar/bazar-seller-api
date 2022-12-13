@@ -93,6 +93,7 @@ export interface ProductInterface {
     discountDeadline: Date;
     createdAt: Date;
     note: [String];
+    updatedAt: Date;
 }
 
 export interface IProductModelG extends Document, ProductInterface {}
