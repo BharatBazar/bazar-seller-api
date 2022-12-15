@@ -97,7 +97,7 @@ class ProductCatalogueModel {
            // child:undefined,
            child:[],
             
-            active:false
+            active:true
         })
         .populate({
             path: 'parent',

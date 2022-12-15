@@ -6,13 +6,13 @@ import { HTTP400Error } from '../../../../lib/utils/httpErrors';
 import { ProductSizeModelInterface, ProductSizeInterface } from './product_size.interface';
 import { ProductSize } from './product_size.schema';
 import productModel from '../product/product.model';
+import e from 'express';
 
 class ProductSizeModel {
-    public async createProductSize(data: ProductSizeInterface & ) {
+    public async createProductSize(data: ProductSizeInterface) {
         if (data.parentId) {
             const size: ProductSizeModelInterface = new ProductSize(data);
 
-          
             let sizes: [Types.ObjectId] = [];
             sizes.push(size._id);
             await productColorModel.updateProductColor({ sizes, _id: data.parentId });
@@ -52,6 +52,42 @@ class ProductSizeModel {
             return await ProductSize.findById(data._id);
         } else {
             throw new HTTP400Error('Product size does not found.');
+        }
+    }
+
+    public async getItems(data: { shopId: string; itemId: string }) {
+        if (data) {
+            if (!data.shopId) {
+                throw new HTTP400Error('Provide shop id');
+            } else if (!data.itemId) {
+                throw new HTTP400Error('Provide item id');
+            } else {
+                console.log('data is here', data);
+                const productSize = await ProductSize.find(data)?.populate({
+                    path: 'productId',
+                    populate: [
+                        {
+                            path: 'parentId colors',
+                            populate: [
+                                {
+                                    strictPopulate: false,
+                                    path: 'color',
+                                },
+                            ],
+                        },
+                    ],
+                });
+
+                console.log('Product', productSize);
+                if (productSize.length == 0) {
+                    throw new HTTP400Error('Item not listed');
+                } else {
+                    return productSize;
+                }
+            }
+        } else {
+            console.log('LP');
+            throw new HTTP400Error('Please provide ShopId or itemId');
         }
     }
 }

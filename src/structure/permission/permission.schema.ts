@@ -1,5 +1,6 @@
+import { Model, model, Schema } from 'mongoose';
+
 import { IShopPermissionModel } from './permission.interface';
-import { Schema, model, Model } from 'mongoose';
 
 const ShopPermissionSchema: Schema = new Schema(
     {

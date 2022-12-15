@@ -25,4 +25,10 @@ export default [
         escapeAuth: true,
         handler: [productSizeController.GetProductSize],
     },
+    {
+        path: '/product/size/getItem',
+        method: 'post',
+        escapeAuth: true,
+        handler: [productSizeController.GetItem],
+    },
 ];

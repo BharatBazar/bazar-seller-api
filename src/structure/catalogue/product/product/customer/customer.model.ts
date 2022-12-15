@@ -1,5 +1,4 @@
 import { HTTP400Error } from './../../../../../lib/utils/httpErrors';
-
 import { Types } from 'mongoose';
 import { productStatus } from '../product.interface';
 import { ProductSize } from '../../product_size/product_size.schema';
@@ -8,16 +7,22 @@ import { Shop } from '../../../../shop/shop.schema';
 
 class CustomerModel {
     public async getProductDetailsForCustomer(data: { _id: string }) {
-        let a = await Product.findById(data._id).populate({
-            path: 'colors brand fit pattern shopId',
-            populate: {
-                path: 'sizes color includedColor owner coOwner area state city',
-
+        let a = await Product.findById(data._id).populate([{
+            path: 'colors',
+            populate: [{
+                path: 'sizes',
                 populate: {
                     path: 'size',
                 },
+            },{
+                path:"color"
+            }],
+        },{
+            path:'shopId',
+             populate: {
+                path: 'owner coOwner area state city',
             },
-        });
+        }]);
         if (!a) {
             throw new HTTP400Error('Product not found.');
         } else {
@@ -97,8 +102,7 @@ class CustomerModel {
         }
                 
             ]);
-        }
-        else if(data.shop) {
+        }else if(data.shop) {
             return await Product.aggregate([{
                 $group: {
                     _id: "$shopId",
@@ -117,7 +121,8 @@ class CustomerModel {
             ])
         }
     else {
-        return await Product.find({status:data.status}).populate({  path: 'colors shopId',
+        return await Product.find().populate({  
+                path: 'colors',
                 populate: {
                     path: 'color',
                     select: "name description"

@@ -15,6 +15,7 @@ class FilterValuesModel {
         //    return y
         return exist;
     };
+
     public createFilterValues = async (data: IFilterValuesModel) => {
         const exist = await this.filterValuesExist(data.name, data.parent, data.type);
         if (exist) {

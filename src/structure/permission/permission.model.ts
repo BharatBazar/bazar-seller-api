@@ -1,7 +1,6 @@
-import { log } from 'util';
+import { shopMemberRole } from '../shopmember/shopmember.interface';
 import { IShopPermissionModel, ShopPermissionSchemaInterface } from './permission.interface';
 import { ShopPermissions } from './permission.schema';
-import { shopMemberRole } from '../shopmember/shopmember.interface';
 
 export class ShopPermissionModel {
     ownerPermission: ShopPermissionSchemaInterface = {

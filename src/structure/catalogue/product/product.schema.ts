@@ -24,13 +24,16 @@ export const ProductSchema: Schema = new Schema(
         productDiscount: [Number],
         bazarAssured: Boolean,
         productDiscountDeadline: [Date],
+        means_jeans_color: { type: [Types.ObjectId], ref: 'FilterValues' },
+        mens_jeans_size: { type: [Types.ObjectId], ref: 'FilterValues' },
     },
     {
         timestamps: true,
     },
 );
 
-{/*ProductSchema.statics.productIdExist = async function (_id: Types.ObjectId) {
+{
+    /*ProductSchema.statics.productIdExist = async function (_id: Types.ObjectId) {
     return await this.findById(_id);
 };
 
@@ -46,6 +49,7 @@ ProductSchema.pre('remove', async function (next: NextFunction) {
         .catch((error) => {
             throw new HTTP400Error('Problem deleting produtct');
         });
-});*/}
+});*/
+}
 
 export const Product: IProductModel = model<IProductModelG, IProductModel>('Product', ProductSchema);

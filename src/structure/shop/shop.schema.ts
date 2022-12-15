@@ -46,13 +46,25 @@ export const ShopSchema: Schema = new Schema(
         isTerminated: { type: Boolean, default: false },
         rating: Number,
         numberOfRating: Number,
+
         sellingItems: [{ type: Types.ObjectId, ref: 'ProductCatalogue' }],
+
+        //Here key is parent id and value is total filter added up to now
         filterProvidedForSellingItems: { type: Object, default: {} },
         // subCategory: [[{ type: Types.ObjectId, ref: 'ProductCatalogue' }]],
         // subCategory1: [[[{ type: Types.ObjectId, ref: 'ProductCatalogue' }]]],
+
+        // All the filter type which is unique property for a filter has to be added here
+        // As we need to do indexing so we need to give name in index what exactly it is
+
+        // I am adding here this properties so that we can directly find shop
+        // if somebody tries to filter
+
         mens_footwear_sneaker_brand: { type: [Types.ObjectId], ref: 'FilterValues' },
         mens_footwear_sneaker_color: { type: [Types.ObjectId], ref: 'FilterValues' },
         mens_footwear_sneaker_size: { type: [Types.ObjectId], ref: 'FilterValues' },
+        mens_jeans_color: { type: [Types.ObjectId], ref: 'FilterValues' },
+        means_jeans_size: { type: [Types.ObjectId], ref: 'FilterValues' },
     },
     {
         timestamps: true,
